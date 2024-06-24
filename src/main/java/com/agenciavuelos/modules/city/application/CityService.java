@@ -23,13 +23,13 @@ public class CityService {
         return cityRepository.findAll();
     }
 
-    public Optional<City>  findCityById(String id) {
+    public Optional<City>  findCityById(int id) {
         Optional<City> optionalCity = this.cityRepository.findById(id);
         return optionalCity;
 
     }
 
-    public void deteleCity(String id){
+    public void deleteCity(int id){
         this.cityRepository.delete(id);
     }
 

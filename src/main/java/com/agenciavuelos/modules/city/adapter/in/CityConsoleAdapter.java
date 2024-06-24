@@ -71,7 +71,7 @@ public class CityConsoleAdapter {
                     Util.showWarning("No hay ciudades registradas");
 
                 else{
-                    String idCity = Util.getStringInput(">> Introduzca el código a buscar: ");
+                    int idCity = Util.getIntInput(">> Introduzca el código a buscar: ");
                     Optional<City> optionalCity = this.cityService.findCityById(idCity);
 
                 
@@ -97,7 +97,7 @@ public class CityConsoleAdapter {
 
             case 3: // BUSCAR POR ID
 
-                String SearchId = Util.getStringInput(">> Introduzca el ID a buscar: ");
+                int SearchId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<City> foundCity = this.cityService.findCityById(SearchId);
                 
                 // estoy empezando a creer que esta logica de validacion es mejor colocarla en una funcion aparte -_-
@@ -113,13 +113,13 @@ public class CityConsoleAdapter {
                 break;
             
             case 4: // ELIMINAR (por id, obviamente)
-                String deleteId = Util.getStringInput(">> Introduzca el ID a buscar: ");
+                int deleteId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<City> cityToDelete = this.cityService.findCityById(deleteId);
 
                 // TODO: hacer funcion de validacion de obj nulos
                 cityToDelete.ifPresentOrElse(
                     spottedCity -> {
-                        this.cityService.deteleCity(deleteId);
+                        this.cityService.deleteCity(deleteId);
                         System.out.println("Ciudad eliminada con éxito");
                     },
                     () -> {

@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.agenciavuelos.modules.city.domain.City;
 
 public interface CityRepository {
-    public Optional<City> findById(String id);
+    public Optional<City> findById(int id);
 
     public List<City> findAll();
 
@@ -14,5 +14,5 @@ public interface CityRepository {
 
     public void update(City country);
 
-    public void delete(String id);
+    public void delete(int id);
 }

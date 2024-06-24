@@ -52,11 +52,11 @@ public class CityMySQLRepository implements CityRepository {
     }
 
     @Override
-    public Optional<City> findById(String id) {
+    public Optional<City> findById(int id) {
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = "SELECT * FROM city WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, id);
+                statement.setInt(1, id);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
                         City city = new City(
@@ -75,11 +75,11 @@ public class CityMySQLRepository implements CityRepository {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(int id) {
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = "DELETE FROM city WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, id);
+                statement.setInt(1, id);
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
