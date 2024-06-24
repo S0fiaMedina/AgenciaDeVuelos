@@ -1,5 +1,9 @@
 package com.agenciavuelos.Console;
 
+import com.agenciavuelos.modules.city.adapter.in.CityConsoleAdapter;
+import com.agenciavuelos.modules.city.adapter.out.CityMySQLRepository;
+import com.agenciavuelos.modules.city.application.CityService;
+import com.agenciavuelos.modules.city.infrastructure.CityRepository;
 import com.agenciavuelos.modules.country.adapter.in.CountryConsoleAdapter;
 import com.agenciavuelos.modules.country.adapter.out.CountryMySQLRepository;
 import com.agenciavuelos.modules.country.application.CountryService;
@@ -20,15 +24,11 @@ public class Initializer {
     private String password;
     private String url;
 
-    
-
     public Initializer(String url, String user, String password) {
         this.user = user;
         this.password = password;
         this.url = url;
     }
-
-
 
     /**
      * FUNCIONAMIENTO GENERAL:
@@ -53,5 +53,14 @@ public class Initializer {
         CountryRepository countryRepository = new CountryMySQLRepository(url, user, password);
         CountryService countryService = new CountryService(countryRepository);
         return new CountryConsoleAdapter(countryService);
+    }
+
+    // CIUDADES
+    public CityConsoleAdapter startCityConsoleAdapter(){
+        CountryRepository countryRepository = new CountryMySQLRepository(url, user, password);
+        CountryService countryService = new CountryService(countryRepository);
+        CityRepository cityRepository = new CityMySQLRepository(url, user, password);
+        CityService cityService = new CityService(cityRepository, countryRepository);
+        return new CityConsoleAdapter(cityService, countryService);
     }
 }
