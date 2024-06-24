@@ -42,6 +42,11 @@ public class CustomerService {
         this.customerRepository.save(documentType);
     }
 
+    // verificar ids
+    public int verifyDocumentNumber(int number){
+        return this.customerRepository.verifyDocumentNumber(number);
+    }
+
     // SERVICIO RELACIONADO A LA RELACION ENTRE CUSTOMER Y TIPO DE DOCUMENTO
 
 

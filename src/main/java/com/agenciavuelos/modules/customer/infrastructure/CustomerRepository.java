@@ -14,5 +14,7 @@ public interface CustomerRepository {
 
     public void update(Customer documentType);
 
+    public int verifyDocumentNumber(int number);
+
    
 }

@@ -113,4 +113,32 @@ public class CustomerMySQLRepository  implements CustomerRepository{
         }
         return customers;
     }
+
+    /**
+     * Esta funcion verifica si el numero de documento del cliente esta repetido en la base de datos
+     * @param number Numero del documento de cliente
+     * @return numero de coincidencias de clientes con el mismo numero de id
+    */
+    @Override
+    public int verifyDocumentNumber (int number) {
+        int numberOfCoincidences = 0;
+        try (Connection connection = DriverManager.getConnection(url, user, password)){
+            String query= """
+            SELECT COUNT(id) FROM customer 
+            WHERE document_number = ?
+            """;
+            try(PreparedStatement statement =  connection.prepareStatement(query)){
+                statement.setInt(1,number);
+                
+                // Almacena el numero de coincidencias en una variable 
+                ResultSet rs = statement.executeQuery();
+                if(rs.next()) {
+                    numberOfCoincidences= rs.getInt(1);
+                  }
+            }
+       } catch (Exception e) {
+            System.out.println("Se ha producido un error :(, Motivo \n" + e.getMessage() );
+       }
+        return numberOfCoincidences;
+    }
 }
