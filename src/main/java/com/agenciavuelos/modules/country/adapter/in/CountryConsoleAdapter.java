@@ -7,8 +7,6 @@ import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.country.application.CountryService;
 import com.agenciavuelos.modules.country.domain.Country;
 
-
-
 public class CountryConsoleAdapter {
      private final CountryService countryService;
 
@@ -44,9 +42,8 @@ public class CountryConsoleAdapter {
 
             case 1: // CREAR
                 // TODO: validacion de no repeticion de codigo de pais
-                String id = Util.getStringInput(">> Ingrese el codigo del pais. ");
                 String name = Util.getStringInput(">> Ingrese el nombre del pais:");
-                Country  country = new Country(id,name); // no le prestes atencion al id xd, solo es para que me acepte el parametro
+                Country  country = new Country(name);
                 this.countryService.createCountry(country);
                 break;
         
@@ -57,31 +54,26 @@ public class CountryConsoleAdapter {
                 // esa linea se podria eliminar luego para mejorar rendimeinto
 
                 if (countries == null || countries.isEmpty()  ) // valida que hayan manufacturadores antes de cualquier cosa
-                    Util.showWarning("No hay paises registrados");
+                    Util.showWarning("No hay países registrados");
 
                 else{
-                    String idCountry = Util.getStringInput(">> Introduzca el codigo de  a buscar: ");
-                    Optional<Country> optionalManufacturer = this.countryService.findCountryById(idCountry);
+                    String idCountry = Util.getStringInput(">> Introduzca el código a buscar: ");
+                    Optional<Country> optionalCountry = this.countryService.findCountryById(idCountry);
 
                 
-                    optionalManufacturer.ifPresentOrElse( // Aqui esta la funcion lambda
+                    optionalCountry.ifPresentOrElse( // Aqui esta la funcion lambda
 
                         // ¿Es realmente necesario editar paises?
                         // XXX: revisar para poder cambiar el codigo del pais
                         updatedCountry -> {
-                            System.out.println("Esta es la información actual del manufacturero:\n " + updatedCountry);
+                            System.out.println("Esta es la información actual del pais:\n " + updatedCountry);
 
-                            String newId = Util.getStringInput(">> Ingrese el nuevo codigo del pais");
                             String newName = Util.getStringInput(">> Ingrese el nuevo nombre del pais: ");
-
                             
                             updatedCountry.setName(newName);
-                            updatedCountry.setId(newId);
 
-                            
                             this.countryService.updateCountry(updatedCountry);
                         },
-
                         
                         () -> {
                             System.out.println("ID no encontrado");
@@ -91,32 +83,34 @@ public class CountryConsoleAdapter {
 
             case 3: // BUSCAR POR ID
 
-                String SearchId = Util.getStringInput(">> Introduzca el codigo a buscar: ");
+                String SearchId = Util.getStringInput(">> Introduzca el ID a buscar: ");
                 Optional<Country> foundCountry = this.countryService.findCountryById(SearchId);
                 
                 // estoy empezando a creer que esta logica de validacion es mejor colocarla en una funcion aparte -_-
                 foundCountry.ifPresentOrElse(
                     spottedCountry -> { 
-                    System.out.println("Esta es la información del fabricante encontrado:\n" + spottedCountry);
+                    System.out.println("Esta es la información del país encontrado:\n" + spottedCountry);
                     },
                     ()-> {
-                        Util.showWarning("Id no encontrado o fabricante inexistente");
+                        Util.showWarning("ID no encontrado o país inexistente");
                     }
                 
                 );
                 break;
             
             case 4: // ELIMINAR (por id, obviamente)
-                String deleteId = Util.getStringInput(">> Introduzca el id a buscar: ");
-                Optional<Country> manufacturerToDelete = this.countryService.findCountryById(deleteId);
-              
+                String deleteId = Util.getStringInput(">> Introduzca el ID a buscar: ");
+                Optional<Country> countryToDelete = this.countryService.findCountryById(deleteId);
+
                 // TODO: hacer funcion de validacion de obj nulos
-                manufacturerToDelete.ifPresent(spottedCountry -> {
-                    this.countryService.deteleCountry(deleteId);
-                    System.out.println("fabricante eliminado con exito");
-                });
-                
-                
+                countryToDelete.ifPresentOrElse(
+                    spottedCountry -> {
+                        this.countryService.deteleCountry(deleteId);
+                        System.out.println("País eliminado con éxito");
+                    },
+                    () -> {
+                        Util.showWarning("ID no encontrado o país inexistente");
+                    });
         }
     }
 }

@@ -9,6 +9,11 @@ public class Country {
     }
 
 
+    public Country(String name) {
+        this.name = name;
+    }
+
+
     public Country(String id, String name) {
         this.id = id;
         this.name = name;
