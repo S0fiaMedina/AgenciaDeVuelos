@@ -12,7 +12,7 @@ public interface CountryRepository {
  * La interfaz que contiene el "contrato" entre la base de datos y el programa
 */
 
-    public Optional<Country> findById(String id);
+    public Optional<Country> findById(int id);
 
     public List<Country> findAll();
 
@@ -20,5 +20,5 @@ public interface CountryRepository {
 
     public void update(Country country);
 
-    public void delete(String id);
+    public void delete(int id);
 }

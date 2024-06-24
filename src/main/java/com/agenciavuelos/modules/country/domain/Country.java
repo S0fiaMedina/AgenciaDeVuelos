@@ -1,7 +1,7 @@
 package com.agenciavuelos.modules.country.domain;
 
 public class Country {
-    private String id; 
+    private int id; 
     private String name;
 
     
@@ -14,18 +14,18 @@ public class Country {
     }
 
 
-    public Country(String id, String name) {
+    public Country(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

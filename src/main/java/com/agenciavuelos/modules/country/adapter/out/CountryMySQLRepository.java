@@ -44,7 +44,7 @@ public class CountryMySQLRepository implements CountryRepository{
             String query = "UPDATE country SET name = ? WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, country.getName());
-                statement.setString(2, country.getId());
+                statement.setInt(2, country.getId());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -53,15 +53,15 @@ public class CountryMySQLRepository implements CountryRepository{
     }
 
     @Override
-    public Optional<Country> findById(String id) {
+    public Optional<Country> findById(int id) {
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = "SELECT * FROM country WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, id);
+                statement.setInt(1, id);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
                         Country country = new Country(
-                            resultSet.getString("id"),
+                            resultSet.getInt("id"),
                             resultSet.getString("name")
                         );
                         return Optional.of(country);
@@ -75,11 +75,11 @@ public class CountryMySQLRepository implements CountryRepository{
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(int id) {
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = "DELETE FROM country WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, id);
+                statement.setInt(1, id);
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -96,7 +96,7 @@ public class CountryMySQLRepository implements CountryRepository{
                     ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Country country = new Country(
-                        resultSet.getString("id"),
+                        resultSet.getInt("id"),
                         resultSet.getString("name")
                     );
                     countries.add(country);

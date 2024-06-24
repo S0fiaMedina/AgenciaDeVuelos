@@ -21,13 +21,13 @@ public class CountryService {
         return countryRepository.findAll();
     }
 
-    public Optional<Country>  findCountryById(String id) {
+    public Optional<Country>  findCountryById(int id) {
         Optional<Country> optionalCountry = this.countryRepository.findById(id);
         return optionalCountry;
 
     }
 
-    public void deteleCountry(String id){
+    public void deleteCountry(int id){
         this.countryRepository.delete(id);
     }
 

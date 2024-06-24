@@ -57,7 +57,7 @@ public class CountryConsoleAdapter {
                     Util.showWarning("No hay países registrados");
 
                 else{
-                    String idCountry = Util.getStringInput(">> Introduzca el código a buscar: ");
+                    int idCountry = Util.getIntInput(">> Introduzca el código a buscar: ");
                     Optional<Country> optionalCountry = this.countryService.findCountryById(idCountry);
 
                 
@@ -83,7 +83,7 @@ public class CountryConsoleAdapter {
 
             case 3: // BUSCAR POR ID
 
-                String SearchId = Util.getStringInput(">> Introduzca el ID a buscar: ");
+                int SearchId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<Country> foundCountry = this.countryService.findCountryById(SearchId);
                 
                 // estoy empezando a creer que esta logica de validacion es mejor colocarla en una funcion aparte -_-
@@ -99,13 +99,13 @@ public class CountryConsoleAdapter {
                 break;
             
             case 4: // ELIMINAR (por id, obviamente)
-                String deleteId = Util.getStringInput(">> Introduzca el ID a buscar: ");
+                int deleteId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<Country> countryToDelete = this.countryService.findCountryById(deleteId);
 
                 // TODO: hacer funcion de validacion de obj nulos
                 countryToDelete.ifPresentOrElse(
                     spottedCountry -> {
-                        this.countryService.deteleCountry(deleteId);
+                        this.countryService.deleteCountry(deleteId);
                         System.out.println("País eliminado con éxito");
                     },
                     () -> {
