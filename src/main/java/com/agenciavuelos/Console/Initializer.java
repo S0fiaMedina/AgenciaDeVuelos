@@ -1,4 +1,4 @@
-package com.agenciavuelos.modules.manufacturer;
+package com.agenciavuelos.Console;
 
 import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
 import com.agenciavuelos.modules.manufacturer.adapter.out.ManufacturerMySQLRepository;

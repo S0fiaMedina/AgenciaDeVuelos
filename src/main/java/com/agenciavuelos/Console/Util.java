@@ -1,4 +1,4 @@
-package com.agenciavuelos.modules.manufacturer;
+package com.agenciavuelos.Console;
 
 import java.util.List;
 import java.util.Scanner;
