@@ -8,8 +8,8 @@ public class TestMain {
         // No se si sea necesario realizar una clase de menus
 
     String url = "jdbc:mysql://localhost:3306/AGENCIA_VUELOS";
-    String user = "root";
-    String password = "Germangie*738023";
+    String user = "";
+    String password = "";
     Initializer initializer = new Initializer(url, user, password);
 
     // inicializados
