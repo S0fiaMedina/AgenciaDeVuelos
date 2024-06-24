@@ -12,6 +12,10 @@ public class Manufacturer {
     public Manufacturer() {
     }
 
+    public Manufacturer(String name) {
+        this.name = name;
+    }
+
 
     public Manufacturer(int id, String name) {
         this.id = id;

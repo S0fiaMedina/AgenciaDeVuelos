@@ -43,7 +43,7 @@ public class ManufacturerConsoleAdapter {
 
             case 1: // CREAR
                 String name = Util.getStringInput(">> Ingrese el nombre del manufacturero:");
-                Manufacturer  manufacturer = new Manufacturer(0,name); // no le prestes atencion al id xd, solo es para que me acepte el parametro
+                Manufacturer manufacturer = new Manufacturer(name);
                 this.manufacturerService.createManufacturer(manufacturer);
                 break;
         
