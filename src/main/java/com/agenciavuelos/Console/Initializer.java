@@ -1,5 +1,18 @@
 package com.agenciavuelos.Console;
 
+import com.agenciavuelos.modules.airport.adapter.in.AirportConsoleAdapter;
+import com.agenciavuelos.modules.airport.adapter.out.AirportMySQLRepository;
+import com.agenciavuelos.modules.airport.application.AirportService;
+import com.agenciavuelos.modules.airport.domain.Airport;
+import com.agenciavuelos.modules.airport.infrastructure.AirportRepository;
+import com.agenciavuelos.modules.city.adapter.in.CityConsoleAdapter;
+import com.agenciavuelos.modules.city.adapter.out.CityMySQLRepository;
+import com.agenciavuelos.modules.city.application.CityService;
+import com.agenciavuelos.modules.city.infrastructure.CityRepository;
+import com.agenciavuelos.modules.country.adapter.in.CountryConsoleAdapter;
+import com.agenciavuelos.modules.country.adapter.out.CountryMySQLRepository;
+import com.agenciavuelos.modules.country.application.CountryService;
+import com.agenciavuelos.modules.country.infrastructure.CountryRepository;
 import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
 import com.agenciavuelos.modules.manufacturer.adapter.out.ManufacturerMySQLRepository;
 import com.agenciavuelos.modules.manufacturer.application.ManufacturerService;
@@ -42,5 +55,30 @@ public class Initializer {
         ManufacturerRepository manufacturerRepository = new ManufacturerMySQLRepository(url, user, password);
         ManufacturerService manufacturerService = new ManufacturerService(manufacturerRepository);
         return new ManufacturerConsoleAdapter(manufacturerService);
+    }
+
+    // PAISES 
+    public CountryConsoleAdapter startCountryConsoleAdapter(){
+        CountryRepository countryRepository = new CountryMySQLRepository(url, user, password);
+        CountryService countryService = new CountryService(countryRepository);
+        return new CountryConsoleAdapter(countryService);
+    }
+
+    // CIUDADES
+    public CityConsoleAdapter startCityConsoleAdapter(){
+        CountryRepository countryRepository = new CountryMySQLRepository(url, user, password);
+        CountryService countryService = new CountryService(countryRepository);
+        CityRepository cityRepository = new CityMySQLRepository(url, user, password);
+        CityService cityService = new CityService(cityRepository, countryRepository);
+        return new CityConsoleAdapter(cityService, countryService);
+    }
+
+    public AirportConsoleAdapter startAirportConsoleAdapter() {
+        CountryRepository countryRepository = new CountryMySQLRepository(url, user, password);
+        CityRepository cityRepository = new CityMySQLRepository(url, user, password);
+        CityService cityService = new CityService(cityRepository, countryRepository);
+        AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
+        AirportService airportService = new AirportService(airportRepository, cityRepository);
+        return new AirportConsoleAdapter(airportService, cityService);
     }
 }
