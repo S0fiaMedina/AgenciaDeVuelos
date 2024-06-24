@@ -37,11 +37,9 @@ public class DocumentType {
 
 
     @Override
-    public String toString() {
-        return "DocumentType [ id="  + id + ", name =" + name + "]";
+    public String toString() { // un toString bien bonito :3 para darselo al usuario
+        StringBuilder sb = new StringBuilder();
+        sb.append("id: " + this.id ).append("\nnombre: " + this.name);
+        return sb.toString();
     }
-
-    
-
-    
 }

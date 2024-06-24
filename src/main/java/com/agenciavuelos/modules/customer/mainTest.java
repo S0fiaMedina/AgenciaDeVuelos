@@ -1,4 +1,4 @@
-package com.agenciavuelos.modules.documentType;
+package com.agenciavuelos.modules.customer;
 
 import com.agenciavuelos.Console.Initializer;
 import com.agenciavuelos.modules.customer.adapter.in.CustomerConsoleAdapter;

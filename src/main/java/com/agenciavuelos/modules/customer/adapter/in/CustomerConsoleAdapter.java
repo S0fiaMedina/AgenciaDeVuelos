@@ -15,11 +15,10 @@ public class CustomerConsoleAdapter {
     private final CustomerService customerService;
 
     private final  String[] customerOptions = { 
-        "1. Crear tipo de documento",
-        "2. Actualizar tipo de documento",
-        "3. Buscar tipo de documento por ID",
-        "4. Eliminar tipo de documento",
-        "5. Salir"
+        "1. Registrar cliente",
+        "2. Consultar cliente",
+        "3. Actualizar cliente",
+        "4. Salir"
     };
 
     public CustomerConsoleAdapter(CustomerService customerService) {
@@ -76,9 +75,86 @@ public class CustomerConsoleAdapter {
                 this.customerService.createCustomer(customer);
 
                 break;
-
+            
+            /**
+             * CASO 5 : Consultar Información de Cliente
+             */
             case 2:
+                idFound = Util.getIntInput(">> Ingresa el id a buscar: ");
+                Optional<Customer> foundCustomer = this.customerService.findCustomerById(idFound);
+                    
+                foundCustomer.ifPresentOrElse(
+                    spottedCustomer -> { // Si el tipo de documento fue encontrado...
+                    System.out.println("Esta es la información del cliente encontrado:\n" + spottedCustomer);
+                    },
+                    ()-> {
+                        Util.showWarning("Id no encontrado o cliente inexistente");
+                    }
+                );
                 break;
+            
+            /**
+             * CASO DE USO 13/22 pq Estan repetidos :p : Actualizar informacion del cliente
+            */
+            case 3:
+                List<Customer> customers = this.customerService.findAllCustomers();
+                if (customers == null || customers.isEmpty()  ){ // valida que hayan manufacturadores antes de cualquier cosa
+                    Util.showWarning("No hay clientes registrados");
+                } else{
+
+                    // busca id
+                    int id = Util.getIntInput(">> Introduzca el id a buscar: ");
+                    Optional<Customer> optionalCustomer = this.customerService.findCustomerById(id);
+
+                    // mostrar informacion actual
+                    System.out.println(">> Cliente encontrado. esta es su información actual");
+                    System.out.println(optionalCustomer);
+
+                    // validacion id
+                    optionalCustomer.ifPresentOrElse(
+
+                        updatedCustomer -> {
+                            int idFound2; // pongo esto porque a java no le gusta usar variables del exterior en lambdas
+
+                             // solicita al agente ingresar los detalles del cliente:
+                            String updateName = Util.getStringInput(">> Ingrese el nuevo nombre del cliente: ");
+                            int updateAge = Util.getIntInput(">> Ingrese la nueva edad del cliente: ");
+
+                            // solicitando datos de tipo de documento
+                            List<DocumentType>  updateDocumentTypes = this.customerService.findAllDocumentTypes();
+                            updateDocumentTypes.forEach(document -> { System.out.println(document); }); 
+
+                            int updateDocumentId;
+                            
+                            do{ // validacion id de tipo de documento
+                                updateDocumentId = Util.getIntInput(">> Ingrese el nuevo id que corresponda al tipo de documento: ");
+                                idFound2 = this.customerService.getDocumentTypeId(updateDocumentId);
+                            } while (idFound2 == -1);
+                            
+
+                            // solicitando numero de documento y  validacion de que el numero de dodumento sea unico
+                            int updatedDocNumber = 0;
+                            do {
+                                updatedDocNumber = Util.getIntInput(">> Introduzca el numero de indentificacion del cliente\n NOTA: debe ser un numero unico"); 
+                            }while (this.customerService.verifyDocumentNumber(updatedDocNumber) != 0); 
+
+                            // setteando los datos
+                            updatedCustomer.setName(updateName);
+                            updatedCustomer.setAge(updateAge);
+                            updatedCustomer.setDocumentTypeId(updateDocumentId);
+                            updatedCustomer.setDocumentNumber(updatedDocNumber);
+
+                            this.customerService.updateCustomer(updatedCustomer);
+                            
+
+                        }, 
+                        () -> {
+                            Util.showWarning("id no encontrado o cliente inexistente");
+                        });
+
+                }
+                break;
+
             }
 
  

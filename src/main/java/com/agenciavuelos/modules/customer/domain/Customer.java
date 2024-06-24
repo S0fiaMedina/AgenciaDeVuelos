@@ -10,7 +10,9 @@ public class Customer {
     int age;
     int documentTypeId;
     int documentNumber;
+    String typeOfDoc; // esto es para mostrarlo en el toString -_-
 
+    public Customer(){};
     // customer con id
     public Customer(int id, String name, int age, int documentTypeId, int documentNumber) {
         this.id = id;
@@ -68,6 +70,30 @@ public class Customer {
     public void setDocumentNumber(int documentNumber) {
         this.documentNumber = documentNumber;
     }
+
+    public String gettypeOfDoc() {
+        return typeOfDoc;
+    }
+
+    public void settypeOfDoc(String typeOfDoc) {
+        this.typeOfDoc = typeOfDoc;
+    }
+
+    @Override
+    public String toString() { // un toString bien bonito :3 para darselo al usuario
+        StringBuilder sb = new StringBuilder();
+        sb.append("Detalles del cliente:");
+        sb.append("\n=================");
+        sb.append("\nID:\t" +  this.id);
+        sb.append("\nNombre:\t"+ this.name);
+        sb.append("\nEdad:\t" + this.age);
+        sb.append("\nTipo de documento:\t"+ this.typeOfDoc);
+        sb.append("\nNumero de documento:\t" + this.documentNumber);
+        sb.append("\n=================");
+        return sb.toString();
+    }
+
+
 
     
 

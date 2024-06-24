@@ -60,25 +60,25 @@ public class CustomerMySQLRepository  implements CustomerRepository{
         }
     }
 
-    @Override
+    @Override // pues esta funcion trae el cliente en un formato muy bonito
     public Optional<Customer> findById(int id) {
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = """
-                SELECT id, name, age, id_document_type, document_number FROM customer 
-                WHERE id = ?
+                SELECT cu.id, cu.name, cu.age, dt.name, cu.document_number FROM customer  AS cu 
+                INNER JOIN document_type AS dt ON dt.id = cu.id_document_type
+                WHERE cu.id = ?
                     """;
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, id);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        Customer documentType = new Customer(
-                            resultSet.getInt("id"),
-                            resultSet.getString("name"),
-                            resultSet.getInt("age"),
-                            resultSet.getInt("id_document_type"),
-                            resultSet.getInt("document_number")
-                        );
-                        return Optional.of(documentType);
+                        Customer customer = new Customer();
+                        customer.setId(  resultSet.getInt("id") );
+                        customer.setName( resultSet.getString("name") );
+                        customer.setAge(  resultSet.getInt("age") );  
+                        customer.settypeOfDoc( resultSet.getString("dt.name") );
+                        customer.setDocumentNumber(resultSet.getInt("document_number") );
+                        return Optional.of(customer);
                     }
                 }
             }
