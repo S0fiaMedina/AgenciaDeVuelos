@@ -1,5 +1,9 @@
 package com.agenciavuelos.Console;
 
+import com.agenciavuelos.modules.documentType.adapter.in.DocumentTypeConsoleAdapter;
+import com.agenciavuelos.modules.documentType.adapter.out.DocumentTypeMySQLRepository;
+import com.agenciavuelos.modules.documentType.application.DocumentTypeService;
+import com.agenciavuelos.modules.documentType.infrastructure.DocumentTypeRepository;
 import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
 import com.agenciavuelos.modules.manufacturer.adapter.out.ManufacturerMySQLRepository;
 import com.agenciavuelos.modules.manufacturer.application.ManufacturerService;
@@ -42,5 +46,12 @@ public class Initializer {
         ManufacturerRepository manufacturerRepository = new ManufacturerMySQLRepository(url, user, password);
         ManufacturerService manufacturerService = new ManufacturerService(manufacturerRepository);
         return new ManufacturerConsoleAdapter(manufacturerService);
+    }
+
+    // TIPO DE DOCUMENTO 
+    public DocumentTypeConsoleAdapter startDocumentTypeModule(){
+        DocumentTypeRepository documentTypeRepository = new DocumentTypeMySQLRepository(url, user, password);
+        DocumentTypeService documentTypeService = new DocumentTypeService(documentTypeRepository);
+        return new DocumentTypeConsoleAdapter(documentTypeService);
     }
 }
