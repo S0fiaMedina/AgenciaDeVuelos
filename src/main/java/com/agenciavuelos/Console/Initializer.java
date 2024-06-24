@@ -17,6 +17,14 @@ import com.agenciavuelos.modules.country.adapter.in.CountryConsoleAdapter;
 import com.agenciavuelos.modules.country.adapter.out.CountryMySQLRepository;
 import com.agenciavuelos.modules.country.application.CountryService;
 import com.agenciavuelos.modules.country.infrastructure.CountryRepository;
+import com.agenciavuelos.modules.city.adapter.in.CityConsoleAdapter;
+import com.agenciavuelos.modules.city.adapter.out.CityMySQLRepository;
+import com.agenciavuelos.modules.city.application.CityService;
+import com.agenciavuelos.modules.city.infrastructure.CityRepository;
+import com.agenciavuelos.modules.country.adapter.in.CountryConsoleAdapter;
+import com.agenciavuelos.modules.country.adapter.out.CountryMySQLRepository;
+import com.agenciavuelos.modules.country.application.CountryService;
+import com.agenciavuelos.modules.country.infrastructure.CountryRepository;
 import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
 import com.agenciavuelos.modules.manufacturer.adapter.out.ManufacturerMySQLRepository;
 import com.agenciavuelos.modules.manufacturer.application.ManufacturerService;
@@ -33,15 +41,11 @@ public class Initializer {
     private String password;
     private String url;
 
-    
-
     public Initializer(String url, String user, String password) {
         this.user = user;
         this.password = password;
         this.url = url;
     }
-
-
 
     /**
      * FUNCIONAMIENTO GENERAL:
