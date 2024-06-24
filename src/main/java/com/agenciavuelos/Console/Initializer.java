@@ -1,5 +1,9 @@
 package com.agenciavuelos.Console;
 
+import com.agenciavuelos.modules.airline.adapter.in.AirlineConsoleAdapter;
+import com.agenciavuelos.modules.airline.adapter.out.AirlineMySQLRepository;
+import com.agenciavuelos.modules.airline.application.AirlineService;
+import com.agenciavuelos.modules.airline.infrastructure.AirlineRepository;
 import com.agenciavuelos.modules.airport.adapter.in.AirportConsoleAdapter;
 import com.agenciavuelos.modules.airport.adapter.out.AirportMySQLRepository;
 import com.agenciavuelos.modules.airport.application.AirportService;
@@ -58,7 +62,7 @@ public class Initializer {
     }
 
     // PAISES 
-    public CountryConsoleAdapter startCountryConsoleAdapter(){
+    /* public CountryConsoleAdapter startCountryConsoleAdapter(){
         CountryRepository countryRepository = new CountryMySQLRepository(url, user, password);
         CountryService countryService = new CountryService(countryRepository);
         return new CountryConsoleAdapter(countryService);
@@ -80,5 +84,11 @@ public class Initializer {
         AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
         AirportService airportService = new AirportService(airportRepository, cityRepository);
         return new AirportConsoleAdapter(airportService, cityService);
+    } */
+
+    public AirlineConsoleAdapter startAirlineConsoleAdapter() {
+        AirlineRepository airlineRepository = new AirlineMySQLRepository(url, user, password);
+        AirlineService airlineService = new AirlineService(airlineRepository);
+        return new AirlineConsoleAdapter(airlineService);
     }
 }
