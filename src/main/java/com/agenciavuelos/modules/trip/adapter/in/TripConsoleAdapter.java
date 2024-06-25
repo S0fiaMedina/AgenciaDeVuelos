@@ -37,22 +37,22 @@ public class TripConsoleAdapter {
     }
 
     public void run(){
-        String date;
-        int price;
-        String idAirportD;
-        String idAirportA;
-        String idSD = "";
-        String idSA = "";
         boolean isCorrect = true;
         int optionSelected = getChoiceFromUser();
         switch (optionSelected) {
 
             case 1: // CREAR
+                String date;
+                Double price;
+                String idAirportD;
+                String idAirportA;
+                String idSD = "";
+                String idSA = "";
                 do {
-                    date = Util.getStringInput(">> Ingrese la fecha del vuelo:");
+                    date = Util.getStringInput(">> Ingrese la fecha del vuelo (yyyy-MM-dd):");
                     isCorrect = Util.checkDateFormat(date, "yyyy-MM-dd");
                 } while (isCorrect == false);
-                price = Util.getIntInput(">> Ingrese el precio del vuelo:");
+                price = Util.getDoubleInput(">> Ingrese el precio del vuelo:");
                 do {
                     idAirportD = Util.getStringInput(">> Ingrese el ID del aeropuerto de salida: ");
                     idSD = tripService.getAirportId(idAirportD);
@@ -65,35 +65,55 @@ public class TripConsoleAdapter {
                         idSA = "";
                     }
                 } while (idSA == "");
-                Trip trip = new Trip(date, price, idSD, idSA); // no le prestes atencion al id xd, solo es para que me acepte el parametro
+                Trip trip = new Trip(date, price, idSD, idSA);
                 this.tripService.createTrip(trip);
                 break;
         
-            /* case 2: // ACTUALIZAR
-
+            case 2: // ACTUALIZAR
                 List<Trip> trips = this.tripService.findAllTrips();
                 // Aqui se podria colocar una funcion para imprimir los tripos, pero me da pereza xd, esto es solo para mostrar
                 // esa linea se podria eliminar luego para mejorar rendimeinto
 
                 if (trips == null || trips.isEmpty()  ) // valida que hayan manufacturadores antes de cualquier cosa
-                    Util.showWarning("No hay fabricantes registrados");
+                    Util.showWarning("No hay vuelos registrados");
 
                 else{
-                    int id = Util.getIntInput(">> Introduzca el id a buscar: ");
+                    int id = Util.getIntInput(">> Introduzca el ID a buscar: ");
                     Optional<Trip> optionalTrip = this.tripService.findTripById(id);
 
-                
-                    optionalTrip.ifPresentOrElse( // Aqui esta la funcion lambda
-
-                        // Acción si el fabricante está presente
+                    optionalTrip.ifPresentOrElse(
                         updatedTrip -> {
-                            System.out.println("Esta es la información actual del fabricante:\n " + updatedTrip);
-                            String newName = Util.getStringInput(">> Ingrese el nuevo nombre del tripo: ");
+                            String dateA;
+                            Double priceA;
+                            String idAirportDA;
+                            String idAirportAA;
+                            String idSDA = "";
+                            String idSAA = "";
+                            boolean iCorrect = true;
+                            System.out.println("Esta es la información actual del vuelo:\n " + updatedTrip);
+                            do {
+                                dateA = Util.getStringInput(">> Ingrese la fecha del vuelo (yyyy-MM-dd):");
+                                iCorrect = Util.checkDateFormat(dateA, "yyyy-MM-dd");
+                            } while (iCorrect == false);
+                            priceA = Util.getDoubleInput(">> Ingrese el precio del vuelo:");
+                            do {
+                                idAirportDA = Util.getStringInput(">> Ingrese el ID del aeropuerto de salida: ");
+                                idSDA = tripService.getAirportId(idAirportDA);
+                            } while (idSDA == "");
+                            do {
+                                idAirportAA= Util.getStringInput(">> Ingrese el ID del aeropuerto de llegada: ");
+                                idSAA = tripService.getAirportId(idAirportAA);
+                                if (idSAA.equals(idSDA)) {
+                                    Util.showWarning("El aeropuerto de llegada no puede ser el mismo que el de salida");
+                                    idSAA = "";
+                                }
+                            } while (idSAA == "");
 
-                            // Cambiar el nombre del fabricante
-                            updatedTrip.setName(newName);
+                            updatedTrip.setDate(dateA);
+                            updatedTrip.setPrice(priceA);
+                            updatedTrip.setIdAirportD(idSDA);
+                            updatedTrip.setIdAirportA(idSAA);
 
-                            // Actualizar el fabricante en la base de datos
                             this.tripService.updateTrip(updatedTrip);
                         },
 
@@ -103,26 +123,26 @@ public class TripConsoleAdapter {
                         });
                     }
                 break;
-
+            
             case 3: // BUSCAR POR ID
 
-                int id = Util.getIntInput(">> Introduzca el id a buscar: ");
+                int id = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<Trip> foundTrip = this.tripService.findTripById(id);
                 
                 // estoy empezando a creer que esta logica de validacion es mejor colocarla en una funcion aparte -_-
                 foundTrip.ifPresentOrElse(
                     spottedTrip -> { // Si el fabricante fue encontrado...
-                    System.out.println("Esta es la información del fabricante encontrado:\n" + spottedTrip);
+                    System.out.println("Esta es la información del vuelo encontrado:\n" + spottedTrip);
                     },
                     ()-> {
-                        Util.showWarning("Id no encontrado o fabricante inexistente");
+                        Util.showWarning("ID no encontrado o vuelo inexistente");
                     }
                 
                 );
                 break;
             
             case 4: // ELIMINAR (por id, obviamente)
-                int deleteId = Util.getIntInput(">> Introduzca el id a buscar: ");
+                int deleteId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<Trip> tripToDelete = this.tripService.findTripById(deleteId);
                 // Utilizar ifPresent para manejar el caso cuando el fabricante está presente
                 // TODO: hacer funcion de validacion de obj nulos
@@ -131,8 +151,8 @@ public class TripConsoleAdapter {
                         this.tripService.deleteTrip(deleteId);
                     },
                     () -> {
-                        Util.showWarning("ID no encontrado o fabricante inexistente");
-                    }); */
+                        Util.showWarning("ID no encontrado o vuelo inexistente");
+                    });
         } 
     }
 }

@@ -45,6 +45,25 @@ public class Util {
         }
     }
 
+    public static double getDoubleInput(String message) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(message);
+        while (true) {
+            try {
+                String input = scanner.nextLine().trim(); 
+                Double num = Double.parseDouble(input);  
+                if (num >= 0){
+                    return num;
+                }
+                System.out.println("!\tERROR: Ingresa un numero positivo");
+
+            } catch (NumberFormatException e) {
+                System.out.println("!\tERROR: Debes ingresar un número válido. Intenta de nuevo.");
+                System.out.println(message);
+            }
+        }
+    }
+
  
     /**
      * Solicita al usuario ingresar un texto desde la consola.

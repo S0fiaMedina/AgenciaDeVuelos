@@ -30,7 +30,7 @@ public class TripMySQLRepository implements TripRepository{
             String query = "INSERT INTO trip (tripe_date, price_tripe, departure_airport_id, arrival_airport_id) VALUES (?,?,?,?)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, trip.getDate());
-                statement.setInt(2, trip.getPrice());
+                statement.setDouble(2, trip.getPrice());
                 statement.setString(3, trip.getIdAirportD());
                 statement.setString(4, trip.getIdAirportA());
                 statement.executeUpdate();
@@ -47,7 +47,7 @@ public class TripMySQLRepository implements TripRepository{
             String query = "UPDATE trip SET tripe_date = ?, price_tripe = ?, departure_airport_id = ?, arrival_airport_id = ? WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, trip.getDate());
-                statement.setInt(2, trip.getPrice());
+                statement.setDouble(2, trip.getPrice());
                 statement.setString(3, trip.getIdAirportD());
                 statement.setString(4, trip.getIdAirportA());
                 statement.setInt(5, trip.getId());
@@ -69,10 +69,10 @@ public class TripMySQLRepository implements TripRepository{
                     if (resultSet.next()) {
                         Trip trip = new Trip(
                             resultSet.getInt("id"),
-                            resultSet.getString("date"),
-                            resultSet.getInt("price"),
-                            resultSet.getString("idAirportD"),
-                            resultSet.getString("idAirportA")
+                            resultSet.getString("tripe_date"),
+                            resultSet.getDouble("price_tripe"),
+                            resultSet.getString("departure_airport_id"),
+                            resultSet.getString("arrival_airport_id")
                         );
                         return Optional.of(trip);
                     }
@@ -108,10 +108,10 @@ public class TripMySQLRepository implements TripRepository{
                 while (resultSet.next()) {
                     Trip trip = new Trip(
                         resultSet.getInt("id"),
-                        resultSet.getString("date"),
-                        resultSet.getInt("price"),
-                        resultSet.getString("idAirportD"),
-                        resultSet.getString("idAirportA")
+                        resultSet.getString("tripe_date"),
+                        resultSet.getDouble("price_tripe"),
+                        resultSet.getString("departure_airport_id"),
+                        resultSet.getString("arrival_airport_id")
                     );
                     trips.add(trip);
                 }

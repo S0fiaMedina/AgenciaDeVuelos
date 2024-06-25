@@ -20,6 +20,10 @@ import com.agenciavuelos.modules.employee.adapter.in.EmployeeConsoleAdapter;
 import com.agenciavuelos.modules.employee.adapter.out.EmployeeMySQLRepository;
 import com.agenciavuelos.modules.employee.application.EmployeeService;
 import com.agenciavuelos.modules.employee.infrastructure.EmployeeRepository;
+import com.agenciavuelos.modules.flightFare.adapter.in.FlightFareConsoleAdapter;
+import com.agenciavuelos.modules.flightFare.adapter.out.FlightFareMySQLRepository;
+import com.agenciavuelos.modules.flightFare.application.FlightFareService;
+import com.agenciavuelos.modules.flightFare.infrastructure.FlightFareRepository;
 import com.agenciavuelos.modules.gate.adapter.in.GateConsoleAdapter;
 import com.agenciavuelos.modules.gate.adapter.out.GateMySQLRepository;
 import com.agenciavuelos.modules.gate.application.GateService;
@@ -174,5 +178,12 @@ public class Initializer {
         TripRepository tripRepository = new TripMySQLRepository(url, user, password);
         TripService tripService = new TripService(tripRepository, airportRepository);
         return new TripConsoleAdapter(tripService);
+    }
+
+    // TARIFAS
+    public FlightFareConsoleAdapter startFlightFareModule() {
+        FlightFareRepository flightFareRepository = new FlightFareMySQLRepository(url, user, password);
+        FlightFareService flightFareService = new FlightFareService(flightFareRepository);
+        return new FlightFareConsoleAdapter(flightFareService);
     }
 }

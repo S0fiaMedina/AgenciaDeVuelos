@@ -3,18 +3,18 @@ package com.agenciavuelos.modules.trip.domain;
 public class Trip {
     private int id;
     private String date;
-    private int price;
+    private Double price;
     private String idAirportD;
     private String idAirportA;
 
-    public Trip(String date, int price, String idAirportD, String idAirportA) {
+    public Trip(String date, Double price, String idAirportD, String idAirportA) {
         this.date = date;
         this.price = price;
         this.idAirportD = idAirportD;
         this.idAirportA = idAirportA;
     }
 
-    public Trip(int id, String date, int price, String idAirportD, String idAirportA) {
+    public Trip(int id, String date, Double price, String idAirportD, String idAirportA) {
         this.id = id;
         this.date = date;
         this.price = price;
@@ -38,11 +38,11 @@ public class Trip {
         this.date = date;
     }
 
-    public int getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
