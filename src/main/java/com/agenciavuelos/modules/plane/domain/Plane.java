@@ -8,25 +8,30 @@ public class Plane {
     int idModel;
     int idStatus;
     int idAirline;
+    String modelStr;
+    String statusStr;
+    String airlineStr;
     
     public Plane() {
     }
 
-    public Plane(int id, String plates, int capacity, String fabricationDate, int idModel, int idStatus) {
+    public Plane(int id, String plates, int capacity, String fabricationDate, int idModel, int idStatus, int idAirline) {
         this.id = id;
         this.plates = plates;
         this.capacity = capacity;
         this.fabricationDate = fabricationDate;
         this.idModel = idModel;
         this.idStatus = idStatus;
+        this.idAirline = idAirline;
     }
 
-    public Plane(String plates, int capacity, String fabricationDate, int idModel, int idStatus) {
+    public Plane(String plates, int capacity, String fabricationDate, int idModel, int idStatus, int idAirline) {
         this.plates = plates;
         this.capacity = capacity;
         this.fabricationDate = fabricationDate;
         this.idModel = idModel;
         this.idStatus = idStatus;
+        this.idAirline = idAirline;
     }
 
     public int getId() {
@@ -84,7 +89,46 @@ public class Plane {
     public void setIdAirline(int idAirline) {
         this.idAirline = idAirline;
     }
-
     
+
+    public String getModelStr() {
+        return modelStr;
+    }
+
+    public void setModelStr(String modelStr) {
+        this.modelStr = modelStr;
+    }
+
+    public String getStatusStr() {
+        return statusStr;
+    }
+
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
+    }
+
+    public String getAirlineStr() {
+        return airlineStr;
+    }
+
+    public void setAirlineStr(String airlineStr) {
+        this.airlineStr = airlineStr;
+    }
+
+    @Override
+    public String toString() { // un toString bien bonito :3 para darselo al usuario
+        StringBuilder sb = new StringBuilder();
+        sb.append("Detalles del cliente:");
+        sb.append("\n=================");
+        sb.append("\nID:\t" +  this.id);
+        sb.append("\nMatricula:\t"+ this.plates);
+        sb.append("\nCapacidad:\t" + this.capacity);
+        sb.append("\nEstado,:\t"+ this.statusStr);
+        sb.append("\nAerolínea,:\t" + this.airlineStr);
+        sb.append("\nModelo,:\t" + this.modelStr);
+
+        sb.append("\n=================");
+        return sb.toString();
+    }
 
 }

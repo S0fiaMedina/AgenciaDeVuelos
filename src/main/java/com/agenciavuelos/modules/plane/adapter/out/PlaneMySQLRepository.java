@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-
+import com.agenciavuelos.modules.customer.domain.Customer;
 import com.agenciavuelos.modules.plane.domain.Plane;
 import com.agenciavuelos.modules.plane.infrastructure.PlaneRepository;
 
@@ -38,6 +38,7 @@ public class PlaneMySQLRepository implements PlaneRepository{
                 statement.setString(3, plane.getFabricationDate());
                 statement.setInt(4, plane.getIdStatus());
                 statement.setInt(5, plane.getIdModel());
+                statement.setInt(6, plane.getIdAirline());
 
 
                 statement.executeUpdate();
@@ -66,8 +67,34 @@ public class PlaneMySQLRepository implements PlaneRepository{
     }
 
     @Override
-    public Optional<Plane> findById(int id) {
-        // TODO Auto-generated method stub
+    public Optional<Plane> findById(String plate) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                SELECT p.id, p.plates, p.capacity, p.fabrication_date, s.name, m.name, a.name FROM plane AS p
+                INNER JOIN airline AS a ON a.id = p.id_airline
+                INNER JOIN status AS s ON s.id = p.id_status
+                INNER JOIN model AS m ON m.id = p.id_model 
+                WHERE p.plates = ?
+                """;
+
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, plate);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        Plane plane = new Plane();
+                        plane.setId(  resultSet.getInt("id") );
+                        plane.setPlates( resultSet.getString("p.plates") );
+                        plane.setCapacity(  resultSet.getInt("p.capacity") );  
+                        plane.setStatusStr( resultSet.getString("s.name") );
+                        plane.setModelStr(resultSet.getString("m.name") );
+                        plane.setAirlineStr( resultSet.getString("a.name") );
+                        return Optional.of(plane);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
+        }
         return Optional.empty();
     }
 
@@ -82,7 +109,7 @@ public class PlaneMySQLRepository implements PlaneRepository{
             
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, plate);
-                statement.executeUpdate();
+                
 
                 // Almacena el numero de coincidencias en una variable 
                 ResultSet rs = statement.executeQuery();

@@ -42,8 +42,8 @@ public class PlaneService {
         return planeRepository.findAll();
     }
 
-    public Optional<Plane>  findPlaneById(int id) {
-        Optional<Plane> optionalPlane = this.planeRepository.findById(id);
+    public Optional<Plane>  findPlaneById(String plate) {
+        Optional<Plane> optionalPlane = this.planeRepository.findById(plate);
         return optionalPlane;
 
     }

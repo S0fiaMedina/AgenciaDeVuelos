@@ -1,5 +1,9 @@
 package com.agenciavuelos.Console;
 
+import com.agenciavuelos.modules.airline.adapter.in.AirlineConsoleAdapter;
+import com.agenciavuelos.modules.airline.adapter.out.AirlineMySQLRepository;
+import com.agenciavuelos.modules.airline.application.AirlineService;
+import com.agenciavuelos.modules.airline.infrastructure.AirlineRepository;
 import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
 import com.agenciavuelos.modules.manufacturer.adapter.out.ManufacturerMySQLRepository;
 import com.agenciavuelos.modules.manufacturer.application.ManufacturerService;
@@ -8,6 +12,10 @@ import com.agenciavuelos.modules.model.adapter.in.ModelConsoleAdapter;
 import com.agenciavuelos.modules.model.adapter.out.ModelMySQLRepository;
 import com.agenciavuelos.modules.model.application.ModelService;
 import com.agenciavuelos.modules.model.infrastructure.ModelRepository;
+import com.agenciavuelos.modules.plane.adapter.in.PlaneConsoleAdapter;
+import com.agenciavuelos.modules.plane.adapter.out.PlaneMySQLRepository;
+import com.agenciavuelos.modules.plane.application.PlaneService;
+import com.agenciavuelos.modules.plane.infrastructure.PlaneRepository;
 import com.agenciavuelos.modules.status.adapter.in.StatusConsoleAdapter;
 import com.agenciavuelos.modules.status.adapter.out.StatusMySQLRepository;
 import com.agenciavuelos.modules.status.application.StatusService;
@@ -60,10 +68,34 @@ public class Initializer {
         return new StatusConsoleAdapter(statusService);
     }
 
+    // modelos
     public ModelConsoleAdapter starModelConsoleAdapter(){
         ManufacturerRepository manufacturerRepository = new ManufacturerMySQLRepository(url, user, password);
         ModelRepository modelRepository = new ModelMySQLRepository(url, user, password);
         ModelService modelService = new ModelService(modelRepository, manufacturerRepository);
         return new ModelConsoleAdapter(modelService);
+    }
+
+        // AEROLINEAS
+    public AirlineConsoleAdapter startAirlineConsoleAdapter() {
+        AirlineRepository airlineRepository = new AirlineMySQLRepository(url, user, password);
+        AirlineService airlineService = new AirlineService(airlineRepository);
+        return new AirlineConsoleAdapter(airlineService);
+    }
+
+
+    public PlaneConsoleAdapter startPlaneModule(){
+        // incializacion de repositorios
+        StatusRepository statusRepository = new StatusMySQLRepository(url, user, password);
+        ManufacturerRepository manufacturerRepository = new ManufacturerMySQLRepository(url, user, password);
+        ModelRepository modelRepository = new ModelMySQLRepository(url, user, password);
+        AirlineRepository airlineRepository = new AirlineMySQLRepository(url, user, password);
+        PlaneRepository planeRepository = new PlaneMySQLRepository(url, user, password);
+
+        PlaneService planeService = new PlaneService(planeRepository, statusRepository, modelRepository, manufacturerRepository, airlineRepository);
+
+        return new PlaneConsoleAdapter(planeService);
+
+
     }
 }

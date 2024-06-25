@@ -7,7 +7,7 @@ import com.agenciavuelos.modules.plane.domain.Plane;
 
 public interface PlaneRepository {
     
-    public Optional<Plane> findById(int id);
+    public Optional<Plane> findById(String plate);
 
     public List<Plane> findAll();
 

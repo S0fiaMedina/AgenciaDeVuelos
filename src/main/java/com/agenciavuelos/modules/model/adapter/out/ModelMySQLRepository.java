@@ -89,9 +89,9 @@ public class ModelMySQLRepository implements ModelRepository{
         List<Model> models = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = """
-                SELECT mo.id, mo.name FROM model AS mo
+                SELECT mo.id, mo.name, manufacturer_id FROM model AS mo
                 INNER JOIN manufacturer AS ma ON mo.manufacturer_id = ma.id
-                WHERE ma.id = 
+                WHERE ma.id = ?
                 """;
             try (PreparedStatement statement = connection.prepareStatement(query);) {
                 statement.setInt(1, idManufacturer);
