@@ -1,5 +1,6 @@
 package com.agenciavuelos.modules.manufacturer;
 
+import com.agenciavuelos.Console.Initializer;
 import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
 
 public class TestMain {

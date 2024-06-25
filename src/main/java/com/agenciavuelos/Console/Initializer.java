@@ -1,9 +1,13 @@
-package com.agenciavuelos.modules.manufacturer;
+package com.agenciavuelos.Console;
 
 import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
 import com.agenciavuelos.modules.manufacturer.adapter.out.ManufacturerMySQLRepository;
 import com.agenciavuelos.modules.manufacturer.application.ManufacturerService;
 import com.agenciavuelos.modules.manufacturer.infrastructure.ManufacturerRepository;
+import com.agenciavuelos.modules.status.adapter.in.StatusConsoleAdapter;
+import com.agenciavuelos.modules.status.adapter.out.StatusMySQLRepository;
+import com.agenciavuelos.modules.status.application.StatusService;
+import com.agenciavuelos.modules.status.infrastructure.StatusRepository;
 
 
 /**
@@ -42,5 +46,13 @@ public class Initializer {
         ManufacturerRepository manufacturerRepository = new ManufacturerMySQLRepository(url, user, password);
         ManufacturerService manufacturerService = new ManufacturerService(manufacturerRepository);
         return new ManufacturerConsoleAdapter(manufacturerService);
+    }
+
+    // ESTADOS TODO: fusionar con aviones
+
+    public StatusConsoleAdapter startConsoleAdapter(){
+        StatusRepository statusRepository = new StatusMySQLRepository(url, user, password);
+        StatusService statusService = new StatusService(statusRepository);
+        return new StatusConsoleAdapter(statusService);
     }
 }
