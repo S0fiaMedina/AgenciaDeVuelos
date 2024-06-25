@@ -1,7 +1,7 @@
 package com.agenciavuelos.modules.manufacturer;
 
 import com.agenciavuelos.Console.Initializer;
-import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
+import com.agenciavuelos.modules.model.adapter.in.ModelConsoleAdapter;
 
 public class TestMain {
 
@@ -10,14 +10,14 @@ public class TestMain {
 
     String url = "jdbc:mysql://localhost:3306/AGENCIA_VUELOS";
     String user = "root";
-    String password = "queteimporta";
+    String password = "R00T_12345";
     Initializer initializer = new Initializer(url, user, password);
 
     // inicializados
     
 
-    ManufacturerConsoleAdapter manufacturerConsoleAdapter = initializer.startManufacturerModule(); // se inicializan todas las cosas
-    manufacturerConsoleAdapter.run();
+    ModelConsoleAdapter modelConsoleAdapter = initializer.starModelConsoleAdapter();
+    modelConsoleAdapter.run();
 
     /**
      * INSERTS DE PRUEBA

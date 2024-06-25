@@ -4,6 +4,10 @@ import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdap
 import com.agenciavuelos.modules.manufacturer.adapter.out.ManufacturerMySQLRepository;
 import com.agenciavuelos.modules.manufacturer.application.ManufacturerService;
 import com.agenciavuelos.modules.manufacturer.infrastructure.ManufacturerRepository;
+import com.agenciavuelos.modules.model.adapter.in.ModelConsoleAdapter;
+import com.agenciavuelos.modules.model.adapter.out.ModelMySQLRepository;
+import com.agenciavuelos.modules.model.application.ModelService;
+import com.agenciavuelos.modules.model.infrastructure.ModelRepository;
 import com.agenciavuelos.modules.status.adapter.in.StatusConsoleAdapter;
 import com.agenciavuelos.modules.status.adapter.out.StatusMySQLRepository;
 import com.agenciavuelos.modules.status.application.StatusService;
@@ -50,9 +54,16 @@ public class Initializer {
 
     // ESTADOS TODO: fusionar con aviones
 
-    public StatusConsoleAdapter startConsoleAdapter(){
+    public StatusConsoleAdapter startStatusConsoleAdapter(){
         StatusRepository statusRepository = new StatusMySQLRepository(url, user, password);
         StatusService statusService = new StatusService(statusRepository);
         return new StatusConsoleAdapter(statusService);
+    }
+
+    public ModelConsoleAdapter starModelConsoleAdapter(){
+        ManufacturerRepository manufacturerRepository = new ManufacturerMySQLRepository(url, user, password);
+        ModelRepository modelRepository = new ModelMySQLRepository(url, user, password);
+        ModelService modelService = new ModelService(modelRepository, manufacturerRepository);
+        return new ModelConsoleAdapter(modelService);
     }
 }
