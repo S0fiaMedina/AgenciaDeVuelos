@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.manufacturer.domain.Manufacturer;
 import com.agenciavuelos.modules.manufacturer.infrastructure.ManufacturerRepository;
 
@@ -30,6 +31,7 @@ public class ManufacturerMySQLRepository implements ManufacturerRepository{
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, manufacturer.getName());
                 statement.executeUpdate();
+                Util.showSuccess("Se ha registrado correctamente la información");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -44,6 +46,7 @@ public class ManufacturerMySQLRepository implements ManufacturerRepository{
                 statement.setString(1, manufacturer.getName());
                 statement.setInt(2, manufacturer.getId());
                 statement.executeUpdate();
+                Util.showSuccess("Se ha registrado correctamente la información");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,9 +82,10 @@ public class ManufacturerMySQLRepository implements ManufacturerRepository{
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, id);
                 statement.executeUpdate();
+                Util.showSuccess("Se ha eliminado el registro");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Util.showWarning("No se puede eliminar un registro que se encuentra relacionado con otra tabla");
         }
     }
 

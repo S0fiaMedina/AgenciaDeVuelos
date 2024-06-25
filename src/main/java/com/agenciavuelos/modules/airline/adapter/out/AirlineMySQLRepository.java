@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.agenciavuelos.modules.airline.infrastructure.AirlineRepository;
+import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.airline.domain.Airline;
 
 public class AirlineMySQLRepository implements AirlineRepository {
@@ -30,6 +31,7 @@ public class AirlineMySQLRepository implements AirlineRepository {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, airline.getName());
                 statement.executeUpdate();
+                Util.showSuccess("Se ha registrado correctamente la información");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -44,6 +46,7 @@ public class AirlineMySQLRepository implements AirlineRepository {
                 statement.setString(1, airline.getName());
                 statement.setInt(2, airline.getId());
                 statement.executeUpdate();
+                Util.showSuccess("Se ha registrado correctamente la información");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,9 +82,10 @@ public class AirlineMySQLRepository implements AirlineRepository {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, id);
                 statement.executeUpdate();
+                Util.showSuccess("Se ha eliminado el registro");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Util.showWarning("No se puede eliminar un registro que se encuentra relacionado con otra tabla");
         }
     }
 
@@ -101,7 +105,7 @@ public class AirlineMySQLRepository implements AirlineRepository {
                 }
             }
         } catch (SQLException e) {
-        e.printStackTrace();
+            e.printStackTrace();
         }
         return airlines;
     }

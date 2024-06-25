@@ -13,10 +13,10 @@ public class ManufacturerConsoleAdapter {
 
     // lista que contiene las opciones del menu
     private final  String[] manufacturerOptions = { 
-        "1. Crear manufacturador",
-        "2. Actualizar manufacturador",
-        "3. Buscar manufacturador por ID",
-        "4. Eliminar manufacturador",
+        "1. Crear fabricante",
+        "2. Actualizar fabricante",
+        "3. Buscar fabricante por ID",
+        "4. Eliminar fabricante",
         "5. Salir"
     };
 
@@ -31,7 +31,7 @@ public class ManufacturerConsoleAdapter {
     */
     public int getChoiceFromUser(){
         System.out.println("-------------------------------------");
-        System.out.println("MENU DE MANUFACTURADORES");
+        System.out.println("MENU DE FABRICANTE");
         System.out.println("-------------------------------------");
         Util.printOptions(this.manufacturerOptions); 
         return Util.rangeValidator(1, manufacturerOptions.length);
@@ -42,7 +42,7 @@ public class ManufacturerConsoleAdapter {
         switch (optionSelected) {
 
             case 1: // CREAR
-                String name = Util.getStringInput(">> Ingrese el nombre del manufacturero:");
+                String name = Util.getStringInput(">> Ingrese el nombre del fabricante:");
                 Manufacturer  manufacturer = new Manufacturer(0,name); // no le prestes atencion al id xd, solo es para que me acepte el parametro
                 this.manufacturerService.createManufacturer(manufacturer);
                 break;
@@ -54,7 +54,7 @@ public class ManufacturerConsoleAdapter {
                 // esa linea se podria eliminar luego para mejorar rendimeinto
 
                 if (manufacturers == null || manufacturers.isEmpty()  ) // valida que hayan manufacturadores antes de cualquier cosa
-                    Util.showWarning("No hay manufactureros registrados");
+                    Util.showWarning("No hay fabricantes registrados");
 
                 else{
                     int id = Util.getIntInput(">> Introduzca el id a buscar: ");
@@ -65,7 +65,7 @@ public class ManufacturerConsoleAdapter {
 
                         // Acción si el fabricante está presente
                         updatedmManufacturer -> {
-                            System.out.println("Esta es la información actual del manufacturero:\n " + updatedmManufacturer);
+                            System.out.println("Esta es la información actual del fabricante:\n " + updatedmManufacturer);
                             String newName = Util.getStringInput(">> Ingrese el nuevo nombre del manufacturero: ");
 
                             // Cambiar el nombre del fabricante
@@ -77,7 +77,7 @@ public class ManufacturerConsoleAdapter {
 
                         // Acción si el fabricante no está presente (ID no encontrado)
                         () -> {
-                            System.out.println("ID no encontrado");
+                            Util.showWarning("ID no encontrado");
                         });
                     }
                 break;
@@ -104,12 +104,13 @@ public class ManufacturerConsoleAdapter {
                 Optional<Manufacturer> manufacturerToDelete = this.manufacturerService.findManufacturerById(deleteId);
                 // Utilizar ifPresent para manejar el caso cuando el fabricante está presente
                 // TODO: hacer funcion de validacion de obj nulos
-                manufacturerToDelete.ifPresent(spottedManufacturer -> {
-                    this.manufacturerService.deteleManufacturer(deleteId);
-                    System.out.println("fabricante eliminado con exito");
-                });
-                
-                
+                manufacturerToDelete.ifPresentOrElse(
+                    spottedManufacturer -> {
+                        this.manufacturerService.deteleManufacturer(deleteId);
+                    },
+                    () -> {
+                        Util.showWarning("ID no encontrado o fabricante inexistente");
+                    }); 
         }
     }
 
