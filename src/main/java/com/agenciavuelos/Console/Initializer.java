@@ -24,6 +24,14 @@ import com.agenciavuelos.modules.gate.adapter.in.GateConsoleAdapter;
 import com.agenciavuelos.modules.gate.adapter.out.GateMySQLRepository;
 import com.agenciavuelos.modules.gate.application.GateService;
 import com.agenciavuelos.modules.gate.infrastructure.GateRepository;
+import com.agenciavuelos.modules.customer.adapter.in.CustomerConsoleAdapter;
+import com.agenciavuelos.modules.customer.adapter.out.CustomerMySQLRepository;
+import com.agenciavuelos.modules.customer.application.CustomerService;
+import com.agenciavuelos.modules.customer.infrastructure.CustomerRepository;
+import com.agenciavuelos.modules.documentType.adapter.in.DocumentTypeConsoleAdapter;
+import com.agenciavuelos.modules.documentType.adapter.out.DocumentTypeMySQLRepository;
+import com.agenciavuelos.modules.documentType.application.DocumentTypeService;
+import com.agenciavuelos.modules.documentType.infrastructure.DocumentTypeRepository;
 import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
 import com.agenciavuelos.modules.manufacturer.adapter.out.ManufacturerMySQLRepository;
 import com.agenciavuelos.modules.manufacturer.application.ManufacturerService;
@@ -135,4 +143,25 @@ public class Initializer {
         EmployeeService employeeService = new EmployeeService(employeeRepository, tripulationRoleRepository, airlineRepository, airportRepository);
         return new EmployeeConsoleAdapter(employeeService, tripulationRoleService, airlineService, airportService);
     }
+
+
+    /**
+     * RELACIONADOS A CLIENTES 
+    */
+
+    // TIPO DE DOCUMENTO 
+    public DocumentTypeConsoleAdapter startDocumentTypeModule(){
+        DocumentTypeRepository documentTypeRepository = new DocumentTypeMySQLRepository(url, user, password);
+        DocumentTypeService documentTypeService = new DocumentTypeService(documentTypeRepository);
+        return new DocumentTypeConsoleAdapter(documentTypeService);
+    }
+
+    // CUSTOMER 
+    public CustomerConsoleAdapter startCustomerModule(){
+        DocumentTypeRepository documentTypeRepository = new DocumentTypeMySQLRepository(url, user, password); // re instancia repo de tipos de documentos (XXX: revisar en fututo)
+        CustomerRepository customerRepository = new CustomerMySQLRepository(url, user, password);
+        CustomerService customerService = new CustomerService(customerRepository, documentTypeRepository);
+        return new CustomerConsoleAdapter(customerService);
+    }
+
 }
