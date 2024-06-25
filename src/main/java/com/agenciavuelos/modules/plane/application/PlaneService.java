@@ -47,6 +47,10 @@ public class PlaneService {
         return optionalPlane;
 
     }
+
+    public void deletePlane(String plate){
+        this.planeRepository.delete(plate);
+    }
     public void updatePlane(Plane plane){
         this.planeRepository.update(plane);
     }

@@ -17,5 +17,5 @@ public interface PlaneRepository {
 
     public int verifyPlate(String plate);
 
-    public void delete(Plane plane);
+    public void delete(String plate);
 }

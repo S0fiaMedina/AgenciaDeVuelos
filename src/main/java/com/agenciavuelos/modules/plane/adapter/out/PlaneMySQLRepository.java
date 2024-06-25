@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,15 +79,50 @@ public class PlaneMySQLRepository implements PlaneRepository{
     }
 
     @Override
-    public void delete(Plane plane) {
-        // TODO Auto-generated method stub
+    public void delete(String plate) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                    DELETE FROM plane WHERE plates = ?
+                    """;
+            
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, plate);
+
+
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
+        }
         
     }
 
     @Override
     public List<Plane> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+        List<Plane> planes = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = "SELECT * FROM plane";
+            try (PreparedStatement statement = connection.prepareStatement(query);
+                    ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Plane plane = new Plane();
+                    plane.setId(  resultSet.getInt("id") );
+                    plane.setPlates( resultSet.getString("plates") );
+                    plane.setCapacity(  resultSet.getInt("capacity") );  
+                    plane.setIdStatus( resultSet.getInt("id_status") );
+                    plane.setIdModel( resultSet.getInt("id_model") );
+                    plane.setIdAirline( resultSet.getInt("id_airline") );
+
+
+                  
+                       
+                    planes.add(plane);
+                }
+            }
+        } catch (SQLException e) {
+        e.printStackTrace();
+        }
+        return planes;
     }
 
 

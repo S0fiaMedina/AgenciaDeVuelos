@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.agenciavuelos.Console.Util;
-import com.agenciavuelos.modules.customer.domain.Customer;
 import com.agenciavuelos.modules.manufacturer.domain.Manufacturer;
 import com.agenciavuelos.modules.model.application.ModelService;
 import com.agenciavuelos.modules.model.domain.Model;

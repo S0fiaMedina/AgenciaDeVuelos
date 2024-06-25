@@ -3,7 +3,7 @@ package com.agenciavuelos.modules.model.application;
 import java.util.List;
 import java.util.Optional;
 
-import com.agenciavuelos.modules.customer.domain.Customer;
+
 import com.agenciavuelos.modules.manufacturer.domain.Manufacturer;
 import com.agenciavuelos.modules.manufacturer.infrastructure.ManufacturerRepository;
 import com.agenciavuelos.modules.model.domain.Model;

@@ -5,12 +5,10 @@ import java.util.Optional;
 
 import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.airline.domain.Airline;
-import com.agenciavuelos.modules.customer.domain.Customer;
 import com.agenciavuelos.modules.manufacturer.domain.Manufacturer;
 import com.agenciavuelos.modules.model.domain.Model;
 import com.agenciavuelos.modules.plane.application.PlaneService;
 import com.agenciavuelos.modules.plane.domain.Plane;
-import com.agenciavuelos.modules.plane.infrastructure.PlaneRepository;
 import com.agenciavuelos.modules.status.domain.Status;
 
 public class PlaneConsoleAdapter {
@@ -39,6 +37,7 @@ public class PlaneConsoleAdapter {
     public void run(){
         // establecimiento de variables
 
+
         int optionSelected = getChoiceFromUser();
         int idFound;
         int capacity;
@@ -52,6 +51,8 @@ public class PlaneConsoleAdapter {
     
 
         switch (optionSelected) {
+            // TODO: validar estados, aerolineas y modelos y fabricantes
+            // cuando se vaya a usar la listas solo se muestra el id y placa
 
             /**
              * CASO DE USO #1: Registrar aviones :(
@@ -119,6 +120,7 @@ public class PlaneConsoleAdapter {
                 Plane newPlane = new Plane(plate, capacity, fabricationDate, modelId, statusId, airlineId);
 
                 this.planeService.createPlane(newPlane);
+                Util.showWarning("Avion registrado con exito.");
 
                 break;
 
@@ -238,8 +240,23 @@ public class PlaneConsoleAdapter {
             );
                 break;
             
+            /**
+             * Caso de Uso 16: Eliminar Avión
+            */
             case 4:
-                break;
+                String deletePlate; 
+                deletePlate = Util.getStringInput(">> Ingresa la matricula  del avion: ");
+                Optional<Plane> deletePlane = this.planeService.findPlaneById(deletePlate);
+                    
+                deletePlane.ifPresentOrElse(
+                spottedPlane -> { 
+                    this.planeService.deletePlane(deletePlate);
+                },
+                ()-> {
+                    Util.showWarning("Id no encontrado o avion inexistente");
+                }
+            );
+         
         
             default:
                 break;

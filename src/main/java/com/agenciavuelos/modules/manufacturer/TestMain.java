@@ -1,7 +1,6 @@
 package com.agenciavuelos.modules.manufacturer;
 
 import com.agenciavuelos.Console.Initializer;
-import com.agenciavuelos.modules.model.adapter.in.ModelConsoleAdapter;
 import com.agenciavuelos.modules.plane.adapter.in.PlaneConsoleAdapter;
 
 public class TestMain {
@@ -19,6 +18,8 @@ public class TestMain {
 
     PlaneConsoleAdapter planeConsoleAdapter = initializer.startPlaneModule();
     planeConsoleAdapter.run();
+
+
 
     /**
      * INSERTS DE PRUEBA
