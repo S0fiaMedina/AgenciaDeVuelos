@@ -42,8 +42,8 @@ public class ManufacturerConsoleAdapter {
         switch (optionSelected) {
 
             case 1: // CREAR
-                String name = Util.getStringInput(">> Ingrese el nombre del fabricante:");
-                Manufacturer  manufacturer = new Manufacturer(0,name); // no le prestes atencion al id xd, solo es para que me acepte el parametro
+                String name = Util.getStringInput(">> Ingrese el nombre del manufacturero:");
+                Manufacturer manufacturer = new Manufacturer(name);
                 this.manufacturerService.createManufacturer(manufacturer);
                 break;
         

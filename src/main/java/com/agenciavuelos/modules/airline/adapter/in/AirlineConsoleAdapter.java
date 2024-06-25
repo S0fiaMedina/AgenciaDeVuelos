@@ -106,6 +106,7 @@ public class AirlineConsoleAdapter {
                 airlineToDelete.ifPresentOrElse(
                     spottedAirline -> {
                         this.airlineService.deleteAirline(deleteId);
+                        System.out.println("Aerolinea eliminada con éxito");
                     },
                     () -> {
                         Util.showWarning("ID no encontrado o aerolinea inexistente");

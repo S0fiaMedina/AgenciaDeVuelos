@@ -16,14 +16,6 @@ import com.agenciavuelos.modules.country.adapter.in.CountryConsoleAdapter;
 import com.agenciavuelos.modules.country.adapter.out.CountryMySQLRepository;
 import com.agenciavuelos.modules.country.application.CountryService;
 import com.agenciavuelos.modules.country.infrastructure.CountryRepository;
-import com.agenciavuelos.modules.employee.adapter.in.EmployeeConsoleAdapter;
-import com.agenciavuelos.modules.employee.adapter.out.EmployeeMySQLRepository;
-import com.agenciavuelos.modules.employee.application.EmployeeService;
-import com.agenciavuelos.modules.employee.infrastructure.EmployeeRepository;
-import com.agenciavuelos.modules.gate.adapter.in.GateConsoleAdapter;
-import com.agenciavuelos.modules.gate.adapter.out.GateMySQLRepository;
-import com.agenciavuelos.modules.gate.application.GateService;
-import com.agenciavuelos.modules.gate.infrastructure.GateRepository;
 import com.agenciavuelos.modules.customer.adapter.in.CustomerConsoleAdapter;
 import com.agenciavuelos.modules.customer.adapter.out.CustomerMySQLRepository;
 import com.agenciavuelos.modules.customer.application.CustomerService;
@@ -32,10 +24,30 @@ import com.agenciavuelos.modules.documentType.adapter.in.DocumentTypeConsoleAdap
 import com.agenciavuelos.modules.documentType.adapter.out.DocumentTypeMySQLRepository;
 import com.agenciavuelos.modules.documentType.application.DocumentTypeService;
 import com.agenciavuelos.modules.documentType.infrastructure.DocumentTypeRepository;
+import com.agenciavuelos.modules.employee.adapter.in.EmployeeConsoleAdapter;
+import com.agenciavuelos.modules.employee.adapter.out.EmployeeMySQLRepository;
+import com.agenciavuelos.modules.employee.application.EmployeeService;
+import com.agenciavuelos.modules.employee.infrastructure.EmployeeRepository;
+import com.agenciavuelos.modules.gate.adapter.in.GateConsoleAdapter;
+import com.agenciavuelos.modules.gate.adapter.out.GateMySQLRepository;
+import com.agenciavuelos.modules.gate.application.GateService;
+import com.agenciavuelos.modules.gate.infrastructure.GateRepository;
 import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
 import com.agenciavuelos.modules.manufacturer.adapter.out.ManufacturerMySQLRepository;
 import com.agenciavuelos.modules.manufacturer.application.ManufacturerService;
 import com.agenciavuelos.modules.manufacturer.infrastructure.ManufacturerRepository;
+import com.agenciavuelos.modules.model.adapter.in.ModelConsoleAdapter;
+import com.agenciavuelos.modules.model.adapter.out.ModelMySQLRepository;
+import com.agenciavuelos.modules.model.application.ModelService;
+import com.agenciavuelos.modules.model.infrastructure.ModelRepository;
+import com.agenciavuelos.modules.plane.adapter.in.PlaneConsoleAdapter;
+import com.agenciavuelos.modules.plane.adapter.out.PlaneMySQLRepository;
+import com.agenciavuelos.modules.plane.application.PlaneService;
+import com.agenciavuelos.modules.plane.infrastructure.PlaneRepository;
+import com.agenciavuelos.modules.status.adapter.in.StatusConsoleAdapter;
+import com.agenciavuelos.modules.status.adapter.out.StatusMySQLRepository;
+import com.agenciavuelos.modules.status.application.StatusService;
+import com.agenciavuelos.modules.status.infrastructure.StatusRepository;
 import com.agenciavuelos.modules.tripulationRole.adapter.in.TripulationRoleConsoleAdapter;
 import com.agenciavuelos.modules.tripulationRole.adapter.out.TripulationRoleMySQLRepository;
 import com.agenciavuelos.modules.tripulationRole.application.TripulationRoleService;
@@ -80,6 +92,7 @@ public class Initializer {
         return new ManufacturerConsoleAdapter(manufacturerService);
     }
 
+
     // PAISES 
     public CountryConsoleAdapter startCountryConsoleAdapter(){
         CountryRepository countryRepository = new CountryMySQLRepository(url, user, password);
@@ -107,6 +120,23 @@ public class Initializer {
     }
 
     // AEROLINEAS
+    // ESTADOS TODO: fusionar con aviones
+
+    public StatusConsoleAdapter startStatusConsoleAdapter(){
+        StatusRepository statusRepository = new StatusMySQLRepository(url, user, password);
+        StatusService statusService = new StatusService(statusRepository);
+        return new StatusConsoleAdapter(statusService);
+    }
+
+    // modelos
+    public ModelConsoleAdapter starModelConsoleAdapter(){
+        ManufacturerRepository manufacturerRepository = new ManufacturerMySQLRepository(url, user, password);
+        ModelRepository modelRepository = new ModelMySQLRepository(url, user, password);
+        ModelService modelService = new ModelService(modelRepository, manufacturerRepository);
+        return new ModelConsoleAdapter(modelService);
+    }
+
+        // AEROLINEAS
     public AirlineConsoleAdapter startAirlineConsoleAdapter() {
         AirlineRepository airlineRepository = new AirlineMySQLRepository(url, user, password);
         AirlineService airlineService = new AirlineService(airlineRepository);
@@ -162,6 +192,22 @@ public class Initializer {
         CustomerRepository customerRepository = new CustomerMySQLRepository(url, user, password);
         CustomerService customerService = new CustomerService(customerRepository, documentTypeRepository);
         return new CustomerConsoleAdapter(customerService);
+    }
+
+
+    public PlaneConsoleAdapter startPlaneModule(){
+        // incializacion de repositorios
+        StatusRepository statusRepository = new StatusMySQLRepository(url, user, password);
+        ManufacturerRepository manufacturerRepository = new ManufacturerMySQLRepository(url, user, password);
+        ModelRepository modelRepository = new ModelMySQLRepository(url, user, password);
+        AirlineRepository airlineRepository = new AirlineMySQLRepository(url, user, password);
+        PlaneRepository planeRepository = new PlaneMySQLRepository(url, user, password);
+
+        PlaneService planeService = new PlaneService(planeRepository, statusRepository, modelRepository, manufacturerRepository, airlineRepository);
+
+        return new PlaneConsoleAdapter(planeService);
+
+
     }
 
 }

@@ -1,8 +1,6 @@
 package com.agenciavuelos.Console;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -107,6 +105,15 @@ public class Util {
         } while (true);
     }
 
+
+    /**
+     * Verifica si una cadena de fecha dada coincide con el patrón de formato especificado.
+     *
+     * @param date   La cadena de fecha que se va a verificar.
+     * @param format El patrón de formato esperado para la cadena de fecha (en formato DateTimeFormatter de Java).
+     * @return {@code true} si la cadena de fecha coincide con el formato especificado,
+     *         {@code false} si no coincide o si ocurre un error de análisis.
+     */
     public static boolean checkDateFormat(String date, String format) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format);
         try {
@@ -116,6 +123,7 @@ public class Util {
             return false;
         }
     }
+
 
     /**
      * Muestra un mensaje de advertencia en la consola y espera a que el usuario presione Enter para continuar.

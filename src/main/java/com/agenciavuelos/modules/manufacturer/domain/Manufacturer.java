@@ -12,6 +12,10 @@ public class Manufacturer {
     public Manufacturer() {
     }
 
+    public Manufacturer(String name) {
+        this.name = name;
+    }
+
 
     public Manufacturer(int id, String name) {
         this.id = id;
@@ -36,6 +40,13 @@ public class Manufacturer {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() { // un toString bien bonito :3 para darselo al usuario
+        StringBuilder sb = new StringBuilder();
+        sb.append("id: " + this.id ).append(", nombre: " + this.name);
+        return sb.toString();
     }
 
 
