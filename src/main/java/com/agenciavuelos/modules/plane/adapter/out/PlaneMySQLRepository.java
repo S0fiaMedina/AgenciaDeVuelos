@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import com.agenciavuelos.modules.customer.domain.Customer;
+
 import com.agenciavuelos.modules.plane.domain.Plane;
 import com.agenciavuelos.modules.plane.infrastructure.PlaneRepository;
 
@@ -50,7 +50,30 @@ public class PlaneMySQLRepository implements PlaneRepository{
 
     @Override
     public void update(Plane plane) {
-        // TODO Auto-generated method stub
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                UPDATE plane SET plates = ?, capacity = ?, fabrication_date = ?, id_status = ?, id_model = ?, id_airline = ?
+                WHERE id = ?
+                    """;
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, plane.getPlates());
+                statement.setInt(2, plane.getCapacity());
+                statement.setString(3, plane.getFabricationDate());
+                statement.setInt(4, plane.getIdStatus());
+                statement.setInt(5, plane.getIdModel());
+                statement.setInt(6, plane.getIdAirline());
+                statement.setInt(7, plane.getId());
+
+                int rowsUpdated = statement.executeUpdate();
+                
+
+                System.out.println("Filas actualizadas: " + rowsUpdated); // Mensaje de depuración
+
+                
+            }
+        } catch (SQLException e) {
+            System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
+        }
         
     }
 
@@ -65,6 +88,7 @@ public class PlaneMySQLRepository implements PlaneRepository{
         // TODO Auto-generated method stub
         return null;
     }
+
 
     @Override
     public Optional<Plane> findById(String plate) {

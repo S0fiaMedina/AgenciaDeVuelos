@@ -141,8 +141,101 @@ public class PlaneConsoleAdapter {
                     }
                 );
                 break;
-            
+
+
+            /**
+             * Caso de Uso 15: Actualizar Información de Avión
+            */
             case 3:
+                plate = Util.getStringInput(">> Ingresa la matricula a buscar: ");
+                Optional<Plane> updatePlane = this.planeService.findPlaneById(plate);
+                    
+                updatePlane.ifPresentOrElse(
+
+                spottedPlane -> { 
+                    int newIdFound;
+                    String newPlate;
+                    int newCapacity;
+                    String newFabricationDate;
+                    int newManufacturerId;
+                    int newModelId;
+                    int newAirlineId;
+                    int newStatusId;
+
+                    System.out.println("Esta es la información del avion encontrado:\n" + spottedPlane);
+
+                    int nPlates2;
+                    do {
+                        newPlate = Util.getStringInput(">> Introduzca la  NUEVA matricula del avion\n NOTA: debe ser  unico"); 
+                        nPlates2 = this.planeService.verifyPlate(newPlate);
+                        if (nPlates2 != 0){
+                            Util.showWarning("La matricula debe ser unica.");
+                        }
+                    }while (nPlates2 != 0);
+
+                    // capacidad del avion
+                    newCapacity = Util.getIntInput(">> Digite la capacidad del avión");
+
+                    // FECHA DE FABRICACIÓN
+                    do {
+                        newFabricationDate = Util.getStringInput(">> Ingrese la fecha de fabricacion: (yyyy- mm - dd)");
+                    } while (Util.checkDateFormat(newFabricationDate, "yyyy-MM-dd") == false);
+
+                    // Fabricante de avión
+                    List<Manufacturer>  updateManufacturers = this.planeService.findAllManufacturers();
+                    updateManufacturers.forEach(manufacturer -> { System.out.println(manufacturer); }); 
+
+                    do {
+                        newManufacturerId = Util.getIntInput(">> Ingrese el id del fabricante del avión: ");
+                        newIdFound = this.planeService.getIdManufacturer(newManufacturerId);
+                    } while (newIdFound == -1);
+
+
+                    // modelo de avion
+                    List<Model>  modelUpdate = this.planeService.getModelsByManufacturer(newManufacturerId);
+                    modelUpdate.forEach(model -> { System.out.println(model); }); 
+
+                    do {
+                        newModelId = Util.getIntInput(">> Ingrese el id del modelo del avión: ");
+                        newIdFound = this.planeService.getIdModel(newModelId);
+                    } while (newIdFound == -1);
+
+
+                    // aerolinea
+                    List<Airline>  updateAirlines = this.planeService.getAllAirlines();
+                    updateAirlines.forEach(airline -> { System.out.println(airline); });  // TOD
+
+                    do {
+                        newAirlineId = Util.getIntInput(">> Ingrese el id de la aerolinea del avión: ");
+                        newIdFound = this.planeService.getIdAirline(newAirlineId);
+                    } while (newIdFound == -1);
+
+                    // status
+                    List<Status>  updateStatus = this.planeService.getAllStatuses();
+                    updateStatus.forEach(airline -> { System.out.println(airline); });  // TOD
+
+                    do {
+                        newStatusId = Util.getIntInput(">> Ingrese el id del estado del avión: ");
+                        newIdFound = this.planeService.getIdStatus(newStatusId);
+                    } while (newIdFound == -1);
+
+                    // guardado de datos
+                    spottedPlane.setPlates(newPlate);
+                    spottedPlane.setCapacity(newCapacity);
+                    spottedPlane.setFabricationDate(newFabricationDate);
+                    spottedPlane.setIdAirline(newAirlineId);
+                    spottedPlane.setIdModel(newModelId);
+                    spottedPlane.setIdStatus(newStatusId);
+
+                    System.out.println(spottedPlane);
+
+                    this.planeService.updatePlane(spottedPlane);
+                    Util.showWarning("Avion actualizado exitosamente");
+                },
+                ()-> {
+                    Util.showWarning("Id no encontrado o avion inexistente");
+                }
+            );
                 break;
             
             case 4:

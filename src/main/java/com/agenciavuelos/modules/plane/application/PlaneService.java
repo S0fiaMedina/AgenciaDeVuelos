@@ -47,12 +47,12 @@ public class PlaneService {
         return optionalPlane;
 
     }
-    public void updatePlane(Plane documentType){
-        this.planeRepository.update(documentType);
+    public void updatePlane(Plane plane){
+        this.planeRepository.update(plane);
     }
 
-    public void createPlane(Plane documentType){
-        this.planeRepository.save(documentType);
+    public void createPlane(Plane plane){
+        this.planeRepository.save(plane);
     }
 
     // verificar matricula
