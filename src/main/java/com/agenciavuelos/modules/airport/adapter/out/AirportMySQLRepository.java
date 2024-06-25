@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.agenciavuelos.modules.airport.infrastructure.AirportRepository;
+import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.airport.domain.Airport;
 
 public class AirportMySQLRepository implements AirportRepository {
@@ -32,6 +33,7 @@ public class AirportMySQLRepository implements AirportRepository {
                 statement.setString(2, airport.getName());
                 statement.setInt(3, airport.getIdCity());
                 statement.executeUpdate();
+                Util.showSuccess("Se ha registrado correctamente la información");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,6 +48,7 @@ public class AirportMySQLRepository implements AirportRepository {
                 statement.setString(1, airport.getName());
                 statement.setString(2, airport.getId());
                 statement.executeUpdate();
+                Util.showSuccess("Se ha registrado correctamente la información");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,6 +85,7 @@ public class AirportMySQLRepository implements AirportRepository {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, id);
                 statement.executeUpdate();
+                Util.showSuccess("Se ha eliminado el registro");
             }
         } catch (SQLException e) {
             e.printStackTrace();

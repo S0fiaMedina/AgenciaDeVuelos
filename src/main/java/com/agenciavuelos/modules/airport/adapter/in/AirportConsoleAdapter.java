@@ -96,7 +96,7 @@ public class AirportConsoleAdapter {
                         },
                         
                         () -> {
-                            System.out.println("ID no encontrado");
+                            Util.showWarning("ID no encontrado");
                         });
                     }
                 break;
@@ -112,7 +112,7 @@ public class AirportConsoleAdapter {
                     System.out.println("Esta es la información del aeropuerto encontrado:\n" + spottedAirport);
                     },
                     ()-> {
-                        Util.showWarning("ID no encontrado o aerppuerto inexistente");
+                        Util.showWarning("ID no encontrado o aeropuerto inexistente");
                     }
                 
                 );

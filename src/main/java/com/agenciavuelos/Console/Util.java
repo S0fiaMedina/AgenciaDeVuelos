@@ -107,18 +107,6 @@ public class Util {
         } while (true);
     }
 
-    /* public static boolean checkDateFormat(String d, String dateFormat) {
-        DateFormat df = new SimpleDateFormat(dateFormat);
-        df.setLenient(false);
-        try {
-            df.parse(d);
-            return false;
-        } catch (ParseException e) {
-            return true;
-        }
-        // return true;
-        } */
-
     public static boolean checkDateFormat(String date, String format) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format);
         try {
@@ -134,6 +122,15 @@ public class Util {
      * 
      * @param mensaje El mensaje de advertencia que se mostrará.
      */
+
+    public static void showSuccess(String mensaje) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("************* PROCESO EXITOSO *************");
+        System.out.println(mensaje);
+        System.out.println("*************************************\nPresiona Enter para continuar...");
+        scanner.nextLine();
+    }
+
     public static void showWarning(String mensaje) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("************* AVISO *************");
@@ -141,9 +138,4 @@ public class Util {
         System.out.println("*************************************\nPresiona Enter para continuar...");
         scanner.nextLine();
     }
-
-    
-
-    
-
 }
