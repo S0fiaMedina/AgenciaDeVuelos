@@ -16,6 +16,10 @@ import com.agenciavuelos.modules.country.adapter.in.CountryConsoleAdapter;
 import com.agenciavuelos.modules.country.adapter.out.CountryMySQLRepository;
 import com.agenciavuelos.modules.country.application.CountryService;
 import com.agenciavuelos.modules.country.infrastructure.CountryRepository;
+import com.agenciavuelos.modules.employee.adapter.in.EmployeeConsoleAdapter;
+import com.agenciavuelos.modules.employee.adapter.out.EmployeeMySQLRepository;
+import com.agenciavuelos.modules.employee.application.EmployeeService;
+import com.agenciavuelos.modules.employee.infrastructure.EmployeeRepository;
 import com.agenciavuelos.modules.gate.adapter.in.GateConsoleAdapter;
 import com.agenciavuelos.modules.gate.adapter.out.GateMySQLRepository;
 import com.agenciavuelos.modules.gate.application.GateService;
@@ -116,5 +120,19 @@ public class Initializer {
         TripulationRoleRepository tripulationRoleRepository = new TripulationRoleMySQLRepository(url, user, password);
         TripulationRoleService tripulationRoleService = new TripulationRoleService(tripulationRoleRepository);
         return new TripulationRoleConsoleAdapter(tripulationRoleService);
+    }
+
+    // EMPLEADOS
+    public EmployeeConsoleAdapter startEmployeeConsoleAdapter() {
+        CityRepository cityRepository = new CityMySQLRepository(url, user, password);
+        AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
+        AirportService airportService = new AirportService(airportRepository, cityRepository);
+        AirlineRepository airlineRepository = new AirlineMySQLRepository(url, user, password);
+        AirlineService airlineService = new AirlineService(airlineRepository);
+        TripulationRoleRepository tripulationRoleRepository = new TripulationRoleMySQLRepository(url, user, password);
+        TripulationRoleService tripulationRoleService = new TripulationRoleService(tripulationRoleRepository);
+        EmployeeRepository employeeRepository = new EmployeeMySQLRepository(url, user, password);
+        EmployeeService employeeService = new EmployeeService(employeeRepository, tripulationRoleRepository, airlineRepository, airportRepository);
+        return new EmployeeConsoleAdapter(employeeService, tripulationRoleService, airlineService, airportService);
     }
 }
