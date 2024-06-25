@@ -7,7 +7,6 @@ import com.agenciavuelos.modules.airline.infrastructure.AirlineRepository;
 import com.agenciavuelos.modules.airport.adapter.in.AirportConsoleAdapter;
 import com.agenciavuelos.modules.airport.adapter.out.AirportMySQLRepository;
 import com.agenciavuelos.modules.airport.application.AirportService;
-import com.agenciavuelos.modules.airport.domain.Airport;
 import com.agenciavuelos.modules.airport.infrastructure.AirportRepository;
 import com.agenciavuelos.modules.city.adapter.in.CityConsoleAdapter;
 import com.agenciavuelos.modules.city.adapter.out.CityMySQLRepository;
@@ -17,18 +16,18 @@ import com.agenciavuelos.modules.country.adapter.in.CountryConsoleAdapter;
 import com.agenciavuelos.modules.country.adapter.out.CountryMySQLRepository;
 import com.agenciavuelos.modules.country.application.CountryService;
 import com.agenciavuelos.modules.country.infrastructure.CountryRepository;
-import com.agenciavuelos.modules.city.adapter.in.CityConsoleAdapter;
-import com.agenciavuelos.modules.city.adapter.out.CityMySQLRepository;
-import com.agenciavuelos.modules.city.application.CityService;
-import com.agenciavuelos.modules.city.infrastructure.CityRepository;
-import com.agenciavuelos.modules.country.adapter.in.CountryConsoleAdapter;
-import com.agenciavuelos.modules.country.adapter.out.CountryMySQLRepository;
-import com.agenciavuelos.modules.country.application.CountryService;
-import com.agenciavuelos.modules.country.infrastructure.CountryRepository;
+import com.agenciavuelos.modules.gate.adapter.in.GateConsoleAdapter;
+import com.agenciavuelos.modules.gate.adapter.out.GateMySQLRepository;
+import com.agenciavuelos.modules.gate.application.GateService;
+import com.agenciavuelos.modules.gate.infrastructure.GateRepository;
 import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
 import com.agenciavuelos.modules.manufacturer.adapter.out.ManufacturerMySQLRepository;
 import com.agenciavuelos.modules.manufacturer.application.ManufacturerService;
 import com.agenciavuelos.modules.manufacturer.infrastructure.ManufacturerRepository;
+import com.agenciavuelos.modules.tripulationRole.adapter.in.TripulationRoleConsoleAdapter;
+import com.agenciavuelos.modules.tripulationRole.adapter.out.TripulationRoleMySQLRepository;
+import com.agenciavuelos.modules.tripulationRole.application.TripulationRoleService;
+import com.agenciavuelos.modules.tripulationRole.infrastructure.TripulationRoleRepository;
 
 
 /**
@@ -41,11 +40,15 @@ public class Initializer {
     private String password;
     private String url;
 
+    
+
     public Initializer(String url, String user, String password) {
         this.user = user;
         this.password = password;
         this.url = url;
     }
+
+
 
     /**
      * FUNCIONAMIENTO GENERAL:
@@ -66,7 +69,7 @@ public class Initializer {
     }
 
     // PAISES 
-    /* public CountryConsoleAdapter startCountryConsoleAdapter(){
+    public CountryConsoleAdapter startCountryConsoleAdapter(){
         CountryRepository countryRepository = new CountryMySQLRepository(url, user, password);
         CountryService countryService = new CountryService(countryRepository);
         return new CountryConsoleAdapter(countryService);
@@ -81,6 +84,7 @@ public class Initializer {
         return new CityConsoleAdapter(cityService, countryService);
     }
 
+    // AEROPUERTOS
     public AirportConsoleAdapter startAirportConsoleAdapter() {
         CountryRepository countryRepository = new CountryMySQLRepository(url, user, password);
         CityRepository cityRepository = new CityMySQLRepository(url, user, password);
@@ -88,11 +92,29 @@ public class Initializer {
         AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
         AirportService airportService = new AirportService(airportRepository, cityRepository);
         return new AirportConsoleAdapter(airportService, cityService);
-    } */
+    }
 
+    // AEROLINEAS
     public AirlineConsoleAdapter startAirlineConsoleAdapter() {
         AirlineRepository airlineRepository = new AirlineMySQLRepository(url, user, password);
         AirlineService airlineService = new AirlineService(airlineRepository);
         return new AirlineConsoleAdapter(airlineService);
+    }
+
+    // PUERTAS DE EMBARQUE
+    public GateConsoleAdapter startGateConsoleAdapter() {
+        CityRepository cityRepository = new CityMySQLRepository(url, user, password);
+        AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
+        AirportService airportService = new AirportService(airportRepository, cityRepository);
+        GateRepository gateRepository = new GateMySQLRepository(url, user, password);
+        GateService gateService = new GateService(gateRepository, airportRepository);
+        return new GateConsoleAdapter(gateService, airportService);
+    }
+
+    // ROLES DE TRIPULACION
+    public TripulationRoleConsoleAdapter startTripulationRoleConsoleAdapter() {
+        TripulationRoleRepository tripulationRoleRepository = new TripulationRoleMySQLRepository(url, user, password);
+        TripulationRoleService tripulationRoleService = new TripulationRoleService(tripulationRoleRepository);
+        return new TripulationRoleConsoleAdapter(tripulationRoleService);
     }
 }

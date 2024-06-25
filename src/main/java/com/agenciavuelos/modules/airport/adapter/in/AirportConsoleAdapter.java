@@ -8,8 +8,6 @@ import com.agenciavuelos.modules.airport.application.AirportService;
 import com.agenciavuelos.modules.airport.domain.Airport;
 import com.agenciavuelos.modules.city.application.CityService;
 import com.agenciavuelos.modules.city.domain.City;
-import com.agenciavuelos.modules.country.application.CountryService;
-import com.agenciavuelos.modules.country.domain.Country;
 
 public class AirportConsoleAdapter {
     private final AirportService airportService;
