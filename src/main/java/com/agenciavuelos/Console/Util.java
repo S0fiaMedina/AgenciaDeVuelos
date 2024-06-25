@@ -1,5 +1,11 @@
 package com.agenciavuelos.Console;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 /**
@@ -101,6 +107,27 @@ public class Util {
         } while (true);
     }
 
+    /* public static boolean checkDateFormat(String d, String dateFormat) {
+        DateFormat df = new SimpleDateFormat(dateFormat);
+        df.setLenient(false);
+        try {
+            df.parse(d);
+            return false;
+        } catch (ParseException e) {
+            return true;
+        }
+        // return true;
+        } */
+
+    public static boolean checkDateFormat(String date, String format) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format);
+        try {
+            LocalDate.parse(date, dateTimeFormatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
 
     /**
      * Muestra un mensaje de advertencia en la consola y espera a que el usuario presione Enter para continuar.
@@ -115,7 +142,7 @@ public class Util {
         scanner.nextLine();
     }
 
-
+    
 
     
 
