@@ -46,9 +46,7 @@ public class ModelService {
         return manufacturerRepository.findAll();
     }
 
-    public List<Model> findByManufacturer(){
-        return modelRepository.findAllByManufacturer();
-    }
+
 
     public int getIdManufacturerId(int id){
         int foundId = -1;

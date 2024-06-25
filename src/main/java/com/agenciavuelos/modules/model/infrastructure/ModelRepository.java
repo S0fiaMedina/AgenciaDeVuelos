@@ -11,7 +11,7 @@ public interface ModelRepository {
     
     public Optional<Model> findById(int id);
 
-    public List<Model> findAllByManufacturer(); // esta funcion busca los modelos por fabricante
+    public List<Model> findAllByManufacturer(int id); // esta funcion busca los modelos por fabricante
 
     public void save(Model model);
 

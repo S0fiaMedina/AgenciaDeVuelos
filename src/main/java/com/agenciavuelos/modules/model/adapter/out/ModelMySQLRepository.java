@@ -85,15 +85,17 @@ public class ModelMySQLRepository implements ModelRepository{
     }
 
     @Override
-    public List<Model> findAllByManufacturer() {
+    public List<Model> findAllByManufacturer(int idManufacturer) {
         List<Model> models = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = """
                 SELECT mo.id, mo.name FROM model AS mo
                 INNER JOIN manufacturer AS ma ON mo.manufacturer_id = ma.id
+                WHERE ma.id = 
                 """;
-            try (PreparedStatement statement = connection.prepareStatement(query);
-                    ResultSet resultSet = statement.executeQuery()) {
+            try (PreparedStatement statement = connection.prepareStatement(query);) {
+                statement.setInt(1, idManufacturer);
+                ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()) {
                     Model documentType = new Model(
                             resultSet.getInt("id"),
