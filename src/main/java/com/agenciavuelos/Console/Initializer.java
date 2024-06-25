@@ -36,6 +36,10 @@ import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdap
 import com.agenciavuelos.modules.manufacturer.adapter.out.ManufacturerMySQLRepository;
 import com.agenciavuelos.modules.manufacturer.application.ManufacturerService;
 import com.agenciavuelos.modules.manufacturer.infrastructure.ManufacturerRepository;
+import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapter;
+import com.agenciavuelos.modules.trip.adapter.out.TripMySQLRepository;
+import com.agenciavuelos.modules.trip.application.TripService;
+import com.agenciavuelos.modules.trip.infrastructure.TripRepository;
 import com.agenciavuelos.modules.tripulationRole.adapter.in.TripulationRoleConsoleAdapter;
 import com.agenciavuelos.modules.tripulationRole.adapter.out.TripulationRoleMySQLRepository;
 import com.agenciavuelos.modules.tripulationRole.application.TripulationRoleService;
@@ -164,4 +168,11 @@ public class Initializer {
         return new CustomerConsoleAdapter(customerService);
     }
 
+    // VUELOS
+    public TripConsoleAdapter startTripModule() {
+        AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
+        TripRepository tripRepository = new TripMySQLRepository(url, user, password);
+        TripService tripService = new TripService(tripRepository, airportRepository);
+        return new TripConsoleAdapter(tripService);
+    }
 }
