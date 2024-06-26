@@ -24,12 +24,10 @@ public class RevisionService {
         this.employeeRepository = employeeRepository;
     }
 
-
-    public Optional<Revision>  findRevisionById(int id) {
-        Optional<Revision> optionalRevision = this.revisionRepository.findById(id);
-        return optionalRevision;
-
+    public Optional<Revision> findRevisionById(int id){
+        return this.revisionRepository.findByid(id);
     }
+
 
     public void deleteRevision(int id){
         this.revisionRepository.delete(id);
@@ -50,7 +48,7 @@ public class RevisionService {
     }
 
     // verificar placa de avion
-    public String getPlanePlate(String planePlate){
+    public String getPlatePlane(String planePlate){
         String foundPlate = "";
         Optional<Plane> foundPlane = planeRepository.findById(planePlate);
         if (foundPlane.isPresent()) {
@@ -64,7 +62,7 @@ public class RevisionService {
 
 
     // verificar empleado
-    public String getEmployee(String id){
+    public String getIdEmployee(String id){
         String foundId = "";
         Optional<Employee> foundEmployee = employeeRepository.findById(id);
         if (foundEmployee.isPresent()) {

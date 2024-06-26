@@ -6,7 +6,6 @@ import java.util.Optional;
 import com.agenciavuelos.modules.revision.domain.Revision;
 
 public interface RevisionRepository {
-    public Optional<Revision> findById(int id);
 
     public List<Revision> findAllByPlane(String plate);
 
@@ -15,4 +14,6 @@ public interface RevisionRepository {
     public void update(Revision revision);
 
     public void delete(int id);
+
+    public  Optional<Revision> findByid(int id);
 }

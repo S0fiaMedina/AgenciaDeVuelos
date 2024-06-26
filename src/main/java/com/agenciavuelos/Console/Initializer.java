@@ -44,6 +44,10 @@ import com.agenciavuelos.modules.plane.adapter.in.PlaneConsoleAdapter;
 import com.agenciavuelos.modules.plane.adapter.out.PlaneMySQLRepository;
 import com.agenciavuelos.modules.plane.application.PlaneService;
 import com.agenciavuelos.modules.plane.infrastructure.PlaneRepository;
+import com.agenciavuelos.modules.revision.adapter.in.RevisionConsoleAdapter;
+import com.agenciavuelos.modules.revision.adapter.out.RevisionMySQLRepository;
+import com.agenciavuelos.modules.revision.application.RevisionService;
+import com.agenciavuelos.modules.revision.infrastructure.RevisionRepository;
 import com.agenciavuelos.modules.status.adapter.in.StatusConsoleAdapter;
 import com.agenciavuelos.modules.status.adapter.out.StatusMySQLRepository;
 import com.agenciavuelos.modules.status.application.StatusService;
@@ -194,7 +198,7 @@ public class Initializer {
         return new CustomerConsoleAdapter(customerService);
     }
 
-
+    // AVIONES
     public PlaneConsoleAdapter startPlaneModule(){
         // incializacion de repositorios
         StatusRepository statusRepository = new StatusMySQLRepository(url, user, password);
@@ -206,8 +210,15 @@ public class Initializer {
         PlaneService planeService = new PlaneService(planeRepository, statusRepository, modelRepository, manufacturerRepository, airlineRepository);
 
         return new PlaneConsoleAdapter(planeService);
+    }
 
-
+    // REVISIONES
+    public RevisionConsoleAdapter startRevisionModule(){
+        PlaneRepository planeRepository = new PlaneMySQLRepository(url, user, password);
+        EmployeeRepository employeeRepository = new EmployeeMySQLRepository(url, user, password);
+        RevisionRepository revisionRepository = new RevisionMySQLRepository(url, user, password);
+        RevisionService revisionService = new RevisionService(revisionRepository, planeRepository, employeeRepository);
+        return new RevisionConsoleAdapter(revisionService);
     }
 
 }
