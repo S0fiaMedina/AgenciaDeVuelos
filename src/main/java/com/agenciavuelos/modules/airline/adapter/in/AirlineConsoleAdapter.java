@@ -10,12 +10,11 @@ import com.agenciavuelos.modules.airline.domain.Airline;
 public class AirlineConsoleAdapter {
     private final AirlineService airlineService;
 
-    // lista que contiene las opciones del menu
     private final  String[] airlineOptions = { 
-        "1. Crear aerolinea",
-        "2. Actualizar aerolinea",
-        "3. Buscar aerolinea por ID",
-        "4. Eliminar aerolinea",
+        "1. Registrar Aerolinea",
+        "2. Actualizar Aerolinea",
+        "3. Consultar Aerolinea",
+        "4. Eliminar Aerolinea",
         "5. Salir"
     };
 
@@ -24,8 +23,6 @@ public class AirlineConsoleAdapter {
     }
 
     /**
-     * Muestra un menú de opciones de fabricantes y solicita al usuario que elija una opción válida.
-     * 
      * @return El número de opción seleccionado por el usuario, validado dentro del rango de opciones disponibles.
     */
     public int getChoiceFromUser(){
@@ -50,23 +47,17 @@ public class AirlineConsoleAdapter {
             case 2: // ACTUALIZAR
 
                 List<Airline> airlines = this.airlineService.findAllAirlines();
-                // Aqui se podria colocar una funcion para imprimir los manufactureros, pero me da pereza xd, esto es solo para mostrar
-                // esa linea se podria eliminar luego para mejorar rendimeinto
 
-                if (airlines == null || airlines.isEmpty()  ) // valida que hayan manufacturadores antes de cualquier cosa
+                if (airlines == null || airlines.isEmpty())
                     Util.showWarning("No hay aerolineas registradas");
 
                 else{
                     int idAirline = Util.getIntInput(">> Introduzca el código a buscar: ");
                     Optional<Airline> optionalAirline = this.airlineService.findAirlineById(idAirline);
 
-                
-                    optionalAirline.ifPresentOrElse( // Aqui esta la funcion lambda
-
-                        // ¿Es realmente necesario editar paises?
-                        // XXX: revisar para poder cambiar el codigo del pais
+                    optionalAirline.ifPresentOrElse(
                         updatedAirline -> {
-                            System.out.println("Esta es la información actual de la aerolinea:\n " + updatedAirline);
+                            System.out.println("Esta es la información actual de la aerolinea:\n " + updatedAirline.getId() + " - " + updatedAirline.getName());
 
                             String newName = Util.getStringInput(">> Ingrese el nuevo nombre de la aerolinea: ");
                             
@@ -86,10 +77,9 @@ public class AirlineConsoleAdapter {
                 int SearchId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<Airline> foundAirline = this.airlineService.findAirlineById(SearchId);
                 
-                // estoy empezando a creer que esta logica de validacion es mejor colocarla en una funcion aparte -_-
                 foundAirline.ifPresentOrElse(
                     spottedAirline -> { 
-                    System.out.println("Esta es la información de la aerolinea encontrada:\n" + spottedAirline);
+                    System.out.println("Esta es la información de la aerolinea encontrada:\n" + spottedAirline.getId() + " - " + spottedAirline.getName());
                     },
                     ()-> {
                         Util.showWarning("ID no encontrado o aerolinea inexistente");
@@ -98,7 +88,7 @@ public class AirlineConsoleAdapter {
                 );
                 break;
             
-            case 4: // ELIMINAR (por id, obviamente)
+            case 4: // ELIMINAR
                 int deleteId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<Airline> airlineToDelete = this.airlineService.findAirlineById(deleteId);
 
