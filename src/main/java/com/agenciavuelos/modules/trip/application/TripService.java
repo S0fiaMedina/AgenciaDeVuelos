@@ -38,10 +38,7 @@ public class TripService {
     public void createTrip(Trip trip){
         this.tripRepository.save(trip);
     }
-
-
-    // getters
-
+    
     public TripRepository getTripRepositoryById() {
         return this.tripRepository;
     }

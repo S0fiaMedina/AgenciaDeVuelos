@@ -10,12 +10,11 @@ import com.agenciavuelos.modules.trip.domain.Trip;
 public class TripConsoleAdapter {
     private final TripService tripService;
 
-    // lista que contiene las opciones del menu
     private final  String[] tripOptions = { 
-        "1. Crear vuelo",
-        "2. Actualizar vuelo",
-        "3. Buscar vuelo por ID",
-        "4. Eliminar vuelo",
+        "1. Registrar Vuelo",
+        "2. Actualizar Vuelo",
+        "3. Consultar Vuelo",
+        "4. Eliminar Vuelo",
         "5. Salir"
     };
 
@@ -24,7 +23,6 @@ public class TripConsoleAdapter {
     }
 
     /**
-     * Muestra un menú de opciones de fabricantes y solicita al usuario que elija una opción válida.
      * 
      * @return El número de opción seleccionado por el usuario, validado dentro del rango de opciones disponibles.
     */
@@ -71,10 +69,8 @@ public class TripConsoleAdapter {
         
             case 2: // ACTUALIZAR
                 List<Trip> trips = this.tripService.findAllTrips();
-                // Aqui se podria colocar una funcion para imprimir los tripos, pero me da pereza xd, esto es solo para mostrar
-                // esa linea se podria eliminar luego para mejorar rendimeinto
 
-                if (trips == null || trips.isEmpty()  ) // valida que hayan manufacturadores antes de cualquier cosa
+                if (trips == null || trips.isEmpty())
                     Util.showWarning("No hay vuelos registrados");
 
                 else{
@@ -90,7 +86,7 @@ public class TripConsoleAdapter {
                             String idSDA = "";
                             String idSAA = "";
                             boolean iCorrect = true;
-                            System.out.println("Esta es la información actual del vuelo:\n " + updatedTrip);
+                            System.out.println("Esta es la información actual del vuelo:\n " + updatedTrip.getDate() + " - " + updatedTrip.getIdAirportD() + " - " + updatedTrip.getIdAirportA());
                             do {
                                 dateA = Util.getStringInput(">> Ingrese la fecha del vuelo (yyyy-MM-dd):");
                                 iCorrect = Util.checkDateFormat(dateA, "yyyy-MM-dd");
@@ -116,8 +112,6 @@ public class TripConsoleAdapter {
 
                             this.tripService.updateTrip(updatedTrip);
                         },
-
-                        // Acción si el fabricante no está presente (ID no encontrado)
                         () -> {
                             Util.showWarning("ID no encontrado");
                         });
@@ -125,14 +119,12 @@ public class TripConsoleAdapter {
                 break;
             
             case 3: // BUSCAR POR ID
-
                 int id = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<Trip> foundTrip = this.tripService.findTripById(id);
                 
-                // estoy empezando a creer que esta logica de validacion es mejor colocarla en una funcion aparte -_-
                 foundTrip.ifPresentOrElse(
-                    spottedTrip -> { // Si el fabricante fue encontrado...
-                    System.out.println("Esta es la información del vuelo encontrado:\n" + spottedTrip);
+                    spottedTrip -> {
+                    System.out.println("Esta es la información del vuelo encontrado:\n" + spottedTrip.getDate() + " - " + spottedTrip.getIdAirportD() + " - " + spottedTrip.getIdAirportA());
                     },
                     ()-> {
                         Util.showWarning("ID no encontrado o vuelo inexistente");
@@ -141,10 +133,9 @@ public class TripConsoleAdapter {
                 );
                 break;
             
-            case 4: // ELIMINAR (por id, obviamente)
+            case 4: // ELIMINAR
                 int deleteId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<Trip> tripToDelete = this.tripService.findTripById(deleteId);
-                // Utilizar ifPresent para manejar el caso cuando el fabricante está presente
                 // TODO: hacer funcion de validacion de obj nulos
                 tripToDelete.ifPresentOrElse(
                     spottedTrip -> {
