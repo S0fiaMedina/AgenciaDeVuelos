@@ -1,10 +1,12 @@
 package com.agenciavuelos.modules.revision.adapter.out;
 
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,19 +26,27 @@ public class RevisionMySQLRepository implements RevisionRepository{
     }
 
     @Override
-    public void save(Revision revision) {
+    public int save(Revision revision) {
         // ingreso de daatos a la tabla de revision
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = "INSERT INTO revision (revision_date, plane_plates, description) VALUES (?, ?, ?)";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
+            try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, revision.getRevisionDate());
                 statement.setString(2, revision.getPlanePlate());
                 statement.setString(3, revision.getDescription());
                 statement.executeUpdate();
+
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int id =  generatedKeys.getInt(1); // Devuelve el ID generado
+                    return id;
+                }
             }
+
         } catch (SQLException e) {
             System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
         }
+        return 0;
     }
 
     @Override
@@ -44,11 +54,12 @@ public class RevisionMySQLRepository implements RevisionRepository{
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = "UPDATE revision SET revision_date = ?, plane_plates = ?, description = ? WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                System.out.println("--------------------------------");
+                
                 statement.setString(1, revision.getRevisionDate());
                 statement.setString(2, revision.getPlanePlate());
                 statement.setString(3, revision.getDescription());
-                System.out.println(revision);
+                statement.setInt(4, revision.getId());
+                
                 statement.executeUpdate();
                 
             }

@@ -9,7 +9,7 @@ public interface RevisionRepository {
 
     public List<Revision> findAllByPlane(String plate);
 
-    public void save(Revision revision);
+    public int save(Revision revision);
 
     public void update(Revision revision);
 

@@ -9,19 +9,23 @@ import com.agenciavuelos.modules.plane.domain.Plane;
 import com.agenciavuelos.modules.plane.infrastructure.PlaneRepository;
 import com.agenciavuelos.modules.revision.domain.Revision;
 import com.agenciavuelos.modules.revision.infrastructure.RevisionRepository;
+import com.agenciavuelos.modules.revisionDetail.domain.RevisionDetail;
+import com.agenciavuelos.modules.revisionDetail.infrastructure.RevisionDetailRepository;
 
 public class RevisionService {
     private final RevisionRepository revisionRepository;
     private final PlaneRepository planeRepository;
     private final EmployeeRepository employeeRepository;
+    private final RevisionDetailRepository revisionDetailRepository;
 
     
 
      public RevisionService(RevisionRepository revisionRepository, PlaneRepository planeRepository,
-            EmployeeRepository employeeRepository) {
+        EmployeeRepository employeeRepository, RevisionDetailRepository revisionDetailRepository) {
         this.revisionRepository = revisionRepository;
         this.planeRepository = planeRepository;
         this.employeeRepository = employeeRepository;
+        this.revisionDetailRepository = revisionDetailRepository;
     }
 
     public Optional<Revision> findRevisionById(int id){
@@ -32,13 +36,29 @@ public class RevisionService {
     public void deleteRevision(int id){
         this.revisionRepository.delete(id);
     }
-    public void updateRevision(Revision plane){
-        this.revisionRepository.update(plane);
+    public void updateRevision(Revision revision){
+        this.revisionRepository.update(revision);
     }
 
-    public void createRevision(Revision plane){
-        this.revisionRepository.save(plane);
+    public int createRevision(Revision revision){
+        return  this.revisionRepository.save(revision);
     }
+
+    // AREVISION _ EMPLOYEE
+
+    public void addEmployeeToRevision(RevisionDetail revisionDetail){
+        this.revisionDetailRepository.save(revisionDetail);
+    }
+
+    public void updateEmployeeToRevision(RevisionDetail revisionDetail){
+        this.revisionDetailRepository.update(revisionDetail);
+    }
+
+    public void deleteEmployeeToRevision(int RevisionId){
+        this.revisionDetailRepository.delete(RevisionId);
+    }
+
+    // ACTUALIZAR EMPLEADO
 
 
     // AVION

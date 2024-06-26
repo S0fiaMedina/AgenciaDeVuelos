@@ -48,6 +48,9 @@ import com.agenciavuelos.modules.revision.adapter.in.RevisionConsoleAdapter;
 import com.agenciavuelos.modules.revision.adapter.out.RevisionMySQLRepository;
 import com.agenciavuelos.modules.revision.application.RevisionService;
 import com.agenciavuelos.modules.revision.infrastructure.RevisionRepository;
+import com.agenciavuelos.modules.revisionDetail.adapter.out.RevisionDetailMySQLRepository;
+import com.agenciavuelos.modules.revisionDetail.domain.RevisionDetail;
+import com.agenciavuelos.modules.revisionDetail.infrastructure.RevisionDetailRepository;
 import com.agenciavuelos.modules.status.adapter.in.StatusConsoleAdapter;
 import com.agenciavuelos.modules.status.adapter.out.StatusMySQLRepository;
 import com.agenciavuelos.modules.status.application.StatusService;
@@ -217,7 +220,8 @@ public class Initializer {
         PlaneRepository planeRepository = new PlaneMySQLRepository(url, user, password);
         EmployeeRepository employeeRepository = new EmployeeMySQLRepository(url, user, password);
         RevisionRepository revisionRepository = new RevisionMySQLRepository(url, user, password);
-        RevisionService revisionService = new RevisionService(revisionRepository, planeRepository, employeeRepository);
+        RevisionDetailRepository revisionDetailRepository = new RevisionDetailMySQLRepository(url, user, password);
+        RevisionService revisionService = new RevisionService(revisionRepository, planeRepository, employeeRepository, revisionDetailRepository);
         return new RevisionConsoleAdapter(revisionService);
     }
 

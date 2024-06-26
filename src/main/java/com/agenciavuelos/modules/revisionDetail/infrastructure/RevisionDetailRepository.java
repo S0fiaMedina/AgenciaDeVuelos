@@ -1,16 +1,11 @@
 package com.agenciavuelos.modules.revisionDetail.infrastructure;
-
-
-import java.util.Optional;
-
-import com.agenciavuelos.modules.revision.domain.Revision;
+import com.agenciavuelos.modules.revisionDetail.domain.RevisionDetail;
 
 public interface RevisionDetailRepository {
-    public Optional<Revision> findById(int id);
 
-    public void save(Revision revision);
+    public void save(RevisionDetail revisionDetail);
 
-    public void update(Revision revision);
+    public void update(RevisionDetail revisionDetail);
 
     public void delete(int id);
 }

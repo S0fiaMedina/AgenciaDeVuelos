@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.agenciavuelos.Console.Util;
-import com.agenciavuelos.modules.manufacturer.domain.Manufacturer;
-import com.agenciavuelos.modules.plane.domain.Plane;
+
 import com.agenciavuelos.modules.revision.application.RevisionService;
 import com.agenciavuelos.modules.revision.domain.Revision;
+import com.agenciavuelos.modules.revisionDetail.domain.RevisionDetail;
 
 public class RevisionConsoleAdapter{
 
@@ -73,7 +73,9 @@ public class RevisionConsoleAdapter{
 
                 Revision newRevision = new Revision(newPlanePlate, newRevisionDate, newDescription);
 
-                this.revisionService.createRevision(newRevision);
+                int newRevisionId = this.revisionService.createRevision(newRevision);
+                this.revisionService.addEmployeeToRevision(new RevisionDetail(newEmployeeId, newRevisionId));
+
                 Util.showSuccess("revision registrada correctamente");
 
                 break;
@@ -99,9 +101,9 @@ public class RevisionConsoleAdapter{
              * Caso de Uso 24: Actualizar Información de Revisión
             */
             case 3:
-                int updatePlane;
-                updatePlane = Util.getIntInput(">> Ingrese el id de la revision ");
-                Optional<Revision>foundRevision = this.revisionService.findRevisionById(updatePlane);
+                int updateRevisionId;
+                updateRevisionId = Util.getIntInput(">> Ingrese el id de la revision ");
+                Optional<Revision>foundRevision = this.revisionService.findRevisionById(updateRevisionId);
 
                 foundRevision.ifPresentOrElse(
 
@@ -134,9 +136,13 @@ public class RevisionConsoleAdapter{
                     // descripcion
                     String updateDescription = Util.getStringInput(">> Agregue detalles de la revisión");
 
-                    Revision updateRevision = new Revision(updateRevisionDate, updateRevisionDate, updateDescription);
+                    spottedRevision.setDescription(updateDescription);
+                    spottedRevision.setPlanePlate(updatePlanePlate);
+                    spottedRevision.setRevisionDate(updateRevisionDate);
 
-                    this.revisionService.createRevision(updateRevision);
+                    this.revisionService.updateRevision(spottedRevision);
+                    this.revisionService.updateEmployeeToRevision(new RevisionDetail(updateEmployeeId, spottedRevision.getId()));
+                    Util.showSuccess("Revision con el id: " + spottedRevision.getId() + " actualizada exitosamente");
 
                     },
                     ()-> {
@@ -155,8 +161,9 @@ public class RevisionConsoleAdapter{
                     
                 deletedRevision.ifPresentOrElse(
                 spottedRevision -> { 
-                    
+                    this.revisionService.deleteEmployeeToRevision(idDelete);
                     this.revisionService.deleteRevision(idDelete);
+                    Util.showSuccess("Revision con el id: " + idDelete + " Eliminada exitosamente");
                 },
                 ()-> {
                     Util.showWarning("Id no encontrado o avion inexistente");
