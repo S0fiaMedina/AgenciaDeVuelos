@@ -14,7 +14,7 @@ public class TestMain {
 
     // inicializados
     
-    initializer.startEmployeeConsoleAdapter().run();
+    initializer.startTripCrewConsoleAdapter().run();
 
     }
     

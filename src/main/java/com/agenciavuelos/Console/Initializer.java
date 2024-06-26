@@ -48,7 +48,9 @@ import com.agenciavuelos.modules.status.adapter.in.StatusConsoleAdapter;
 import com.agenciavuelos.modules.status.adapter.out.StatusMySQLRepository;
 import com.agenciavuelos.modules.status.application.StatusService;
 import com.agenciavuelos.modules.status.infrastructure.StatusRepository;
+import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapter;
 import com.agenciavuelos.modules.trip.adapter.out.TripMySQLRepository;
+import com.agenciavuelos.modules.trip.application.TripService;
 import com.agenciavuelos.modules.trip.infrastructure.TripRepository;
 import com.agenciavuelos.modules.tripCrew.adapter.in.TripCrewConsoleAdapter;
 import com.agenciavuelos.modules.tripCrew.adapter.out.TripCrewMySQLRepository;
@@ -215,13 +217,21 @@ public class Initializer {
 
     }
 
+        // VUELOS
+    public TripConsoleAdapter startTripModule() {
+        AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
+        TripRepository tripRepository = new TripMySQLRepository(url, user, password);
+        TripService tripService = new TripService(tripRepository, airportRepository);
+        return new TripConsoleAdapter(tripService);
+    }
+
 
     // TRIPCREW
     public TripCrewConsoleAdapter startTripCrewConsoleAdapter() {
         TripCrewRepository tripCrewRepository = new TripCrewMySQLRepository(url, user, password);
         TripRepository tripRepository = new TripMySQLRepository(url, user, password);
         EmployeeRepository employeeRepository = new EmployeeMySQLRepository(url, user, password);
-        TripCrewService tripCrewService = new TripCrewService(tripCrewRepository, employeeRepository)
-        return new TripulationRoleConsoleAdapter(tripCrewService);
+        TripCrewService tripCrewService = new TripCrewService(tripCrewRepository, employeeRepository, tripRepository);
+        return new TripCrewConsoleAdapter(tripCrewService);
     }
 }

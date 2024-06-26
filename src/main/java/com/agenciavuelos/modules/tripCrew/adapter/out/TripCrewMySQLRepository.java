@@ -47,7 +47,7 @@ public class TripCrewMySQLRepository implements TripCrewRepository{
          List<TripCrew> tripCrews = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = """
-                SELECT e.id, e.name AS employee_name, tr.name AS role_name
+                SELECT e.id, e.name, t.id,  tr.name
                 FROM employee AS e
                 INNER JOIN tripulation_roles AS tr ON tr.id = e.id_rol
                 INNER JOIN trip_crew AS tc ON tc.id_employees = e.id
@@ -61,7 +61,7 @@ public class TripCrewMySQLRepository implements TripCrewRepository{
                 while (resultSet.next()) {
                     TripCrew tripCrew = new TripCrew(
                         resultSet.getString("e.id"),
-                        resultSet.getInt(idTrip),
+                        resultSet.getInt("t.id"),
                         resultSet.getString("tr.name"),
                         resultSet.getString("e.name")
                     );
