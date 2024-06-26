@@ -34,8 +34,8 @@ public class TripBookingDetailService {
         this.tripBookingDetailRepository.save(tripBooking);
     }
 
-    public void saveDetails(int idTB, int idCustomer, int idFare) {
-        TripBookingDetail tripBookingDetail = new TripBookingDetail(idTB, idCustomer, idFare);
-        createTripBookingDetail(tripBookingDetail);
+    public Optional<TripBookingDetail>  findTripBookingById(int id) {
+        Optional<TripBookingDetail> optionalTripBookingDetail = this.tripBookingDetailRepository.findByTripBookingId(id);
+        return optionalTripBookingDetail;
     }
 }

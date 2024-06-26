@@ -109,13 +109,13 @@ public class AirportConsoleAdapter {
                 break;
             
             case 4: // ELIMINAR
-                String deleteId = Util.getStringInput(">> Introduzca el ID a buscar: ");
+                String deleteId = Util.getStringInput(">> Introduzca el ID a eliminar: ");
                 Optional<Airport> airportToDelete = this.airportService.findAirportById(deleteId);
 
                 // TODO: hacer funcion de validacion de obj nulos
                 airportToDelete.ifPresentOrElse(
                     spottedAirport -> {
-                        this.airportService.deteleAirport(deleteId);
+                        this.airportService.deleteAirport(deleteId);
                     },
                     () -> {
                         Util.showWarning("ID no encontrado o aeropuerto inexistente");

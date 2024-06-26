@@ -5,10 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.tripBooking.domain.TripBooking;
 import com.agenciavuelos.modules.tripBooking.infrastructure.TripBookingRepository;
 
@@ -24,17 +26,24 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
     }
 
     @Override
-    public void save(TripBooking tripBooking) {
+    public int save(TripBooking tripBooking) {
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = "INSERT INTO trip_booking (booking_date, id_trip) VALUES (?,?)";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
+            try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, tripBooking.getBookingDate());
                 statement.setInt(2, tripBooking.getIdTrip());
                 statement.executeUpdate();
+                Util.showSuccess("Se ha registrado correctamente la información");
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int id =  generatedKeys.getInt(1); // Devuelve el ID generado
+                    return id;
+                } 
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+                e.printStackTrace();
         }
+        return 0;
     }
 
     @Override
@@ -46,6 +55,7 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
                 statement.setInt(2, tripBooking.getIdTrip());
                 statement.setInt(3, tripBooking.getId());
                 statement.executeUpdate();
+                Util.showSuccess("Se ha registrado correctamente la información");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,9 +92,10 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, id);
                 statement.executeUpdate();
+                Util.showSuccess("Se ha eliminado el registro");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Util.showWarning("No se puede eliminar un registro que se encuentra relacionado con otra tabla");
         }
     }
 
@@ -109,22 +120,4 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
         }
         return tripBookings;
     }
-
-    @Override
-    public int findId() {
-        int id = -1;
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            String query = "SELECT LAST_INSERT_ID()";
-            try (PreparedStatement statement = connection.prepareStatement(query);
-                    ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    id = resultSet.getInt(1);
-                    System.out.println("ID: " + id);
-                }
-            }
-        } catch (SQLException e) {
-        e.printStackTrace();
-        }
-        return id;
-    } 
 }

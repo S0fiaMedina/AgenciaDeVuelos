@@ -86,10 +86,9 @@ public class TripBookingConsoleAdapter {
                     idF = tripBookingService.getFlightFareId(idFare);
                 } while (idF == -1);
                 TripBooking tripBooking = new TripBooking(currentDate, idF);
-                this.tripBookingService.createTripBooking(tripBooking);
-                int idB = tripBookingService.getId();
-                System.out.println(idB);
-                tripBookingDetailService.saveDetails(idB, idCustomer, idFare);
+                int idTB = this.tripBookingService.createTripBooking(tripBooking);
+                TripBookingDetail tripBookingDetail = new TripBookingDetail(idTB, idCustomer, idFare);
+                this.tripBookingDetailService.createTripBookingDetail(tripBookingDetail);
                 break;
         
             /* case 2: // ACTUALIZAR
@@ -151,14 +150,13 @@ public class TripBookingConsoleAdapter {
                 break;
             
             case 3: // ELIMINAR
+                // TODO: hacer funcion de validacion de obj nulos
                 int deleteId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<TripBooking> tripBookingToDelete = this.tripBookingService.findTripBookingById(deleteId);
-
                 // TODO: hacer funcion de validacion de obj nulos
                 tripBookingToDelete.ifPresentOrElse(
                     spottedTripBooking -> {
                         this.tripBookingService.deleteTripBooking(deleteId);
-                        System.out.println("Reserva eliminada con éxito");
                     },
                     () -> {
                         Util.showWarning("ID no encontrado o reserva inexistente");

@@ -26,7 +26,7 @@ public class AirportService {
         return optionalAirport;
     }
 
-    public void deteleAirport(String id){
+    public void deleteAirport(String id){
         this.airportRepository.delete(id);
     }
 

@@ -43,12 +43,8 @@ public class TripBookingService {
         this.tripBookingRepository.update(tripBooking);
     }
 
-    public void createTripBooking(TripBooking tripBooking){
-        this.tripBookingRepository.save(tripBooking);
-    }
-
-    public int getId() {
-        return this.tripBookingRepository.findId();
+    public int createTripBooking(TripBooking tripBooking){
+        return this.tripBookingRepository.save(tripBooking);
     }
 
     public int getTripId(int id) {
@@ -70,16 +66,6 @@ public class TripBookingService {
         }
         return idF;
     }
-
-    /* public int getCustomerId(int documentNumber) {
-        int idF = -1;
-        Optional<Customer> foundCustomer = customerRepository.findByDocumentNumber(documentNumber);
-        if (foundCustomer.isPresent()) {
-            Customer customer = foundCustomer.get();
-            idF = customer.getDocumentNumber();
-        }
-        return idF;
-    } */
 
     public int getFlightFareId(int id) {
         int idF = -1;

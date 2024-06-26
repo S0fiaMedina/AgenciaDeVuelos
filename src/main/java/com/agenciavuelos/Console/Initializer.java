@@ -50,7 +50,6 @@ import com.agenciavuelos.modules.tripBooking.application.TripBookingService;
 import com.agenciavuelos.modules.tripBooking.infrastructure.TripBookingRepository;
 import com.agenciavuelos.modules.tripBookingDetail.adapter.out.TripBookingDetailMySQLRepository;
 import com.agenciavuelos.modules.tripBookingDetail.application.TripBookingDetailService;
-import com.agenciavuelos.modules.tripBookingDetail.domain.TripBookingDetail;
 import com.agenciavuelos.modules.tripBookingDetail.infrastructure.TripBookingDetailRepository;
 import com.agenciavuelos.modules.tripulationRole.adapter.in.TripulationRoleConsoleAdapter;
 import com.agenciavuelos.modules.tripulationRole.adapter.out.TripulationRoleMySQLRepository;

@@ -79,7 +79,7 @@ public class TripBookingDetailMySQLRepository implements TripBookingDetailReposi
 
     @Override
     public void delete(int id) {
-        /* try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = "DELETE FROM trip_booking WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, id);
@@ -87,7 +87,7 @@ public class TripBookingDetailMySQLRepository implements TripBookingDetailReposi
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } */
+        }
     }
 
     @Override
@@ -111,5 +111,29 @@ public class TripBookingDetailMySQLRepository implements TripBookingDetailReposi
         e.printStackTrace();
         }
         return tripBookingDetails;
+    }
+
+    @Override
+    public Optional<TripBookingDetail> findByTripBookingId(int id) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = "SELECT * FROM trip_booking_details WHERE id_trip_booking = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, id);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        TripBookingDetail tripBookingDetail = new TripBookingDetail(
+                            resultSet.getInt("id"),
+                            resultSet.getInt("id_trip_booking"),
+                            resultSet.getInt("id_customer"),
+                            resultSet.getInt("id_fare")
+                        );
+                        return Optional.of(tripBookingDetail);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
     }
 }
