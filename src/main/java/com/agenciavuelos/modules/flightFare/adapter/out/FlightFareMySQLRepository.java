@@ -91,7 +91,7 @@ public class FlightFareMySQLRepository implements FlightFareRepository {
                 Util.showSuccess("Se ha eliminado el registro");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Util.showWarning("No se puede eliminar un registro que se encuentra relacionado con otra tabla");
         }
     }
 

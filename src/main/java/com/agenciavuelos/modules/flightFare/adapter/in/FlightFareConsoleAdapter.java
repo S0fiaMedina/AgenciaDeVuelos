@@ -10,12 +10,11 @@ import com.agenciavuelos.modules.flightFare.application.FlightFareService;
 public class FlightFareConsoleAdapter {
     private final FlightFareService flightFareService;
 
-    // lista que contiene las opciones del menu
     private final  String[] flightFareOptions = { 
-        "1. Crear tarifa",
-        "2. Actualizar tarifa",
-        "3. Buscar tarifa por ID",
-        "4. Eliminar tarifa",
+        "1. Registrar Tarifa de Vuelo",
+        "2. Actualizar Tarifa de Vuelo",
+        "3. Consultar Tarifa de Vuelo",
+        "4. Eliminar Tarifa de Vuelo",
         "5. Salir"
     };
 
@@ -24,8 +23,6 @@ public class FlightFareConsoleAdapter {
     }
 
     /**
-     * Muestra un menú de opciones de fabricantes y solicita al usuario que elija una opción válida.
-     * 
      * @return El número de opción seleccionado por el usuario, validado dentro del rango de opciones disponibles.
     */
     public int getChoiceFromUser(){
@@ -52,10 +49,8 @@ public class FlightFareConsoleAdapter {
             case 2: // ACTUALIZAR
 
                 List<FlightFare> flightFares = this.flightFareService.findAllFlightFares();
-                // Aqui se podria colocar una funcion para imprimir los manufactureros, pero me da pereza xd, esto es solo para mostrar
-                // esa linea se podria eliminar luego para mejorar rendimeinto
 
-                if (flightFares == null || flightFares.isEmpty()  ) // valida que hayan manufacturadores antes de cualquier cosa
+                if (flightFares == null || flightFares.isEmpty() )
                     Util.showWarning("No hay tarifas registrados");
 
                 else{
@@ -63,12 +58,9 @@ public class FlightFareConsoleAdapter {
                     Optional<FlightFare> optionalFlightFare = this.flightFareService.findFlightFareById(idFlightFare);
 
                 
-                    optionalFlightFare.ifPresentOrElse( // Aqui esta la funcion lambda
-
-                        // ¿Es realmente necesario editar paises?
-                        // XXX: revisar para poder cambiar el codigo del pais
+                    optionalFlightFare.ifPresentOrElse(
                         updatedFlightFare -> {
-                            System.out.println("Esta es la información actual de la tarifa:\n " + updatedFlightFare);
+                            System.out.println("Esta es la información actual de la tarifa:\n " + updatedFlightFare.getId() + " - " + updatedFlightFare.getDescription());
 
                             String newDescription = Util.getStringInput(">> Ingrese la descripción de la tarifa:");
                             String newDetails = Util.getStringInput(">> Ingrese los detalles:");
@@ -91,10 +83,9 @@ public class FlightFareConsoleAdapter {
                 int SearchId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<FlightFare> foundFlightFare = this.flightFareService.findFlightFareById(SearchId);
                 
-                // estoy empezando a creer que esta logica de validacion es mejor colocarla en una funcion aparte -_-
                 foundFlightFare.ifPresentOrElse(
                     spottedFlightFare -> { 
-                        System.out.println("Esta es la información de la tarifa encontrado:\n" + spottedFlightFare);
+                        System.out.println("Esta es la información de la tarifa encontrada:\n" + spottedFlightFare.getId() + " - " + spottedFlightFare.getDescription());
                     },
                     ()-> {
                         Util.showWarning("ID no encontrado o tarifa inexistente");
@@ -103,7 +94,7 @@ public class FlightFareConsoleAdapter {
                 );
                 break;
             
-            case 4: // ELIMINAR (por id, obviamente)
+            case 4: // ELIMINAR
                 int deleteId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<FlightFare> flightFareToDelete = this.flightFareService.findFlightFareById(deleteId);
 
