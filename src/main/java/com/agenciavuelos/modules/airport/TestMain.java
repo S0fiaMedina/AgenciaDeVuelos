@@ -4,18 +4,14 @@ import com.agenciavuelos.Console.Initializer;
 
 public class TestMain {
 
-    public static void main(String[] args) {
-        // No se si sea necesario realizar una clase de menus
+public static void main(String[] args) {
 
     String url = "jdbc:mysql://localhost:3306/AGENCIA_VUELOS";
-    String user = "campus2023";
-    String password = "campus2023";
+    String user = "root";
+    String password = "root";
     Initializer initializer = new Initializer(url, user, password);
 
-    // inicializados
-    
     initializer.startAirportConsoleAdapter().run();
 
     }
-    
 }

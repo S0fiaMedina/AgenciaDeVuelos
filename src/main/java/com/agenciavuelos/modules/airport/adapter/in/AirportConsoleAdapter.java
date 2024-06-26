@@ -13,12 +13,11 @@ public class AirportConsoleAdapter {
     private final AirportService airportService;
     private final CityService cityService;
 
-    // lista que contiene las opciones del menu
     private final  String[] airportOptions = { 
-        "1. Crear aeropuerto",
-        "2. Actualizar aeropuerto",
-        "3. Buscar aeropuerto por ID",
-        "4. Eliminar aeropuerto",
+        "1. Registrar Aeropuerto",
+        "2. Actualizar Aeropuerto",
+        "3. Consultar Aeropuerto",
+        "4. Eliminar Aeropuerto",
         "5. Salir"
     };
 
@@ -28,8 +27,6 @@ public class AirportConsoleAdapter {
     }
 
     /**
-     * Muestra un menú de opciones de fabricantes y solicita al usuario que elija una opción válida.
-     * 
      * @return El número de opción seleccionado por el usuario, validado dentro del rango de opciones disponibles.
     */
     public int getChoiceFromUser(){
@@ -55,7 +52,6 @@ public class AirportConsoleAdapter {
                     idS = airportService.checkId(id);
                 } while (idS != "");
                 String name = Util.getStringInput(">> Ingrese el nombre del aeropuerto:");
-                // System.out.println(cityService.findAllCountries().get(0).getId() + "" + cityService.findAllCountries().get(0).getName());
                 for (int i = 0; i <= cities.size() - 1; i++) {
                     System.out.println(cities.get(i).getId() + " - " + cities.get(i).getName());
                 }
@@ -70,10 +66,8 @@ public class AirportConsoleAdapter {
             case 2: // ACTUALIZAR
 
                 List<Airport> airports = this.airportService.findAllAirports();
-                // Aqui se podria colocar una funcion para imprimir los manufactureros, pero me da pereza xd, esto es solo para mostrar
-                // esa linea se podria eliminar luego para mejorar rendimeinto
 
-                if (airports == null || airports.isEmpty()  ) // valida que hayan manufacturadores antes de cualquier cosa
+                if (airports == null || airports.isEmpty()  )
                     Util.showWarning("No hay aeropuertos registrados");
 
                 else{
@@ -81,12 +75,9 @@ public class AirportConsoleAdapter {
                     Optional<Airport> optionalAirport = this.airportService.findAirportById(idAirport);
 
                 
-                    optionalAirport.ifPresentOrElse( // Aqui esta la funcion lambda
-
-                        // ¿Es realmente necesario editar paises?
-                        // XXX: revisar para poder cambiar el codigo del pais
+                    optionalAirport.ifPresentOrElse(
                         updatedAirport -> {
-                            System.out.println("Esta es la información actual del aeropuerto:\n " + updatedAirport);
+                            System.out.println("Esta es la información actual del aeropuerto:\n " + updatedAirport.getId() + " - " + updatedAirport.getName());
 
                             String newName = Util.getStringInput(">> Ingrese el nuevo nombre del aeropuerto: ");
                             
@@ -106,10 +97,9 @@ public class AirportConsoleAdapter {
                 String SearchId = Util.getStringInput(">> Introduzca el ID a buscar: ");
                 Optional<Airport> foundAirport = this.airportService.findAirportById(SearchId);
                 
-                // estoy empezando a creer que esta logica de validacion es mejor colocarla en una funcion aparte -_-
                 foundAirport.ifPresentOrElse(
                     spottedAirport -> { 
-                    System.out.println("Esta es la información del aeropuerto encontrado:\n" + spottedAirport);
+                    System.out.println("Esta es la información del aeropuerto encontrado:\n" + spottedAirport.getId() + " - " + spottedAirport.getName());
                     },
                     ()-> {
                         Util.showWarning("ID no encontrado o aeropuerto inexistente");
@@ -118,7 +108,7 @@ public class AirportConsoleAdapter {
                 );
                 break;
             
-            case 4: // ELIMINAR (por id, obviamente)
+            case 4: // ELIMINAR
                 String deleteId = Util.getStringInput(">> Introduzca el ID a buscar: ");
                 Optional<Airport> airportToDelete = this.airportService.findAirportById(deleteId);
 
@@ -126,7 +116,6 @@ public class AirportConsoleAdapter {
                 airportToDelete.ifPresentOrElse(
                     spottedAirport -> {
                         this.airportService.deteleAirport(deleteId);
-                        System.out.println("Aeropuerto eliminado con éxito");
                     },
                     () -> {
                         Util.showWarning("ID no encontrado o aeropuerto inexistente");

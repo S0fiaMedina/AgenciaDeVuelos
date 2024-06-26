@@ -7,8 +7,6 @@ import com.agenciavuelos.modules.airport.infrastructure.AirportRepository;
 import com.agenciavuelos.modules.city.domain.City;
 import com.agenciavuelos.modules.city.infrastructure.CityRepository;
 import com.agenciavuelos.modules.airport.domain.Airport;
-// import com.agenciavuelos.modules.country.domain.Country;
-// import com.agenciavuelos.modules.country.infrastructure.CountryRepository;
 
 public class AirportService {
     private final AirportRepository airportRepository;
