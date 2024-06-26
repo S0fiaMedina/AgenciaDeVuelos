@@ -15,4 +15,8 @@ public interface TripBookingRepository {
     public void update(TripBooking tripBooking);
 
     public void delete(int id);
+
+    public List<TripBooking> findByCustomerId(int id);
+
+    public List<TripBooking> findByTripId(int id);
 }

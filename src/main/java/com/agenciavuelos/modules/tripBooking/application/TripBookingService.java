@@ -47,6 +47,14 @@ public class TripBookingService {
         return this.tripBookingRepository.save(tripBooking);
     }
 
+    public List<TripBooking> getTripBookingByCustomer(int id) {
+        return this.tripBookingRepository.findByCustomerId(id);
+    }
+
+    public List<TripBooking> getTripBookingByTrip(int id) {
+        return this.tripBookingRepository.findByTripId(id);
+    }
+
     public int getTripId(int id) {
         int idF = -1;
         Optional<Trip> foundTrip = tripRepository.findById(id);
