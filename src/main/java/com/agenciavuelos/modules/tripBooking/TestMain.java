@@ -1,4 +1,4 @@
-package com.agenciavuelos.modules.trip;
+package com.agenciavuelos.modules.tripBooking;
 
 import com.agenciavuelos.Console.Initializer;
 
@@ -14,8 +14,7 @@ public class TestMain {
 
     // inicializados
     
-    initializer.startTripModule().run();
+    initializer.startTripBookingModule().run();
 
-    }
-    
+    } 
 }

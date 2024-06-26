@@ -44,6 +44,10 @@ import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapter;
 import com.agenciavuelos.modules.trip.adapter.out.TripMySQLRepository;
 import com.agenciavuelos.modules.trip.application.TripService;
 import com.agenciavuelos.modules.trip.infrastructure.TripRepository;
+import com.agenciavuelos.modules.tripBooking.adapter.in.TripBookingConsoleAdapter;
+import com.agenciavuelos.modules.tripBooking.adapter.out.TripBookingMySQLRepository;
+import com.agenciavuelos.modules.tripBooking.application.TripBookingService;
+import com.agenciavuelos.modules.tripBooking.infrastructure.TripBookingRepository;
 import com.agenciavuelos.modules.tripulationRole.adapter.in.TripulationRoleConsoleAdapter;
 import com.agenciavuelos.modules.tripulationRole.adapter.out.TripulationRoleMySQLRepository;
 import com.agenciavuelos.modules.tripulationRole.application.TripulationRoleService;
@@ -178,6 +182,15 @@ public class Initializer {
         TripRepository tripRepository = new TripMySQLRepository(url, user, password);
         TripService tripService = new TripService(tripRepository, airportRepository);
         return new TripConsoleAdapter(tripService);
+    }
+
+    public TripBookingConsoleAdapter startTripBookingModule() {
+        AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
+        TripRepository tripRepository = new TripMySQLRepository(url, user, password);
+        TripService tripService = new TripService(tripRepository, airportRepository);
+        TripBookingRepository tripBookingRepository = new TripBookingMySQLRepository(url, user, password);
+        TripBookingService tripBookingService = new TripBookingService(tripBookingRepository, tripRepository);
+        return new TripBookingConsoleAdapter(tripBookingService, tripService);
     }
 
     // TARIFAS
