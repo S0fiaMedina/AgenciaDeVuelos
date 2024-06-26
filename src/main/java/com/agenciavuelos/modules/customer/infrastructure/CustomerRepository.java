@@ -8,6 +8,8 @@ import com.agenciavuelos.modules.customer.domain.Customer;
 public interface CustomerRepository {
     public Optional<Customer> findById(int id);
 
+    public Optional<Customer> findByDocumentNumber(int documentNumber);
+
     public List<Customer> findAll();
 
     public void save(Customer documentType);

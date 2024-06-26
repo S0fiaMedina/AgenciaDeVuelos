@@ -108,5 +108,23 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
         e.printStackTrace();
         }
         return tripBookings;
-    }    
+    }
+
+    @Override
+    public int findId() {
+        int id = -1;
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = "SELECT LAST_INSERT_ID()";
+            try (PreparedStatement statement = connection.prepareStatement(query);
+                    ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    id = resultSet.getInt(1);
+                    System.out.println("ID: " + id);
+                }
+            }
+        } catch (SQLException e) {
+        e.printStackTrace();
+        }
+        return id;
+    } 
 }

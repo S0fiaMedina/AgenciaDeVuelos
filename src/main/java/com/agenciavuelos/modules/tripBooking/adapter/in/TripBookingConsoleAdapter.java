@@ -1,34 +1,46 @@
 package com.agenciavuelos.modules.tripBooking.adapter.in;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.tripBooking.application.TripBookingService;
 import com.agenciavuelos.modules.tripBooking.domain.TripBooking;
+import com.agenciavuelos.modules.tripBookingDetail.application.TripBookingDetailService;
+import com.agenciavuelos.modules.tripBookingDetail.domain.TripBookingDetail;
+import com.agenciavuelos.modules.customer.application.CustomerService;
+import com.agenciavuelos.modules.customer.domain.Customer;
+import com.agenciavuelos.modules.flightFare.application.FlightFareService;
+import com.agenciavuelos.modules.flightFare.domain.FlightFare;
 import com.agenciavuelos.modules.trip.application.TripService;
 import com.agenciavuelos.modules.trip.domain.Trip;
 
 public class TripBookingConsoleAdapter {
     private final TripBookingService tripBookingService;
+    private final TripBookingDetailService tripBookingDetailService;
     private final TripService tripService;
+    private final CustomerService customerService;
+    private final FlightFareService flightFareService;
 
     // lista que contiene las opciones del menu
     private final  String[] tripBookingOptions = { 
-        "1. Crear reserva",
-        "2. Actualizar reserva",
-        "3. Buscar reserva por ID",
-        "4. Eliminar reserva",
-        "5. Salir"
+        "1. Crear Reserva",
+        "2. Consultar Reserva",
+        "3. Eliminar Reserva",
+        "4. Salir"
     };
 
-    public TripBookingConsoleAdapter(TripBookingService tripBookingService, TripService tripService) {
+    public TripBookingConsoleAdapter(TripBookingService tripBookingService, TripBookingDetailService tripBookingDetailService, TripService tripService, CustomerService customerService, FlightFareService flightFareService) {
         this.tripBookingService = tripBookingService;
+        this.tripBookingDetailService = tripBookingDetailService;
         this.tripService = tripService;
+        this.customerService = customerService;
+        this.flightFareService = flightFareService;
     }
 
     /**
-     * 
      * @return El número de opción seleccionado por el usuario, validado dentro del rango de opciones disponibles.
     */
     public int getChoiceFromUser(){
@@ -40,31 +52,48 @@ public class TripBookingConsoleAdapter {
     }
 
     public void run(){
-        String date;
+        String currentDate;
+        int idCustomer;
+        int idFare;
         int idF;
-        boolean isCorrect = true;
         int optionSelected = getChoiceFromUser();
+        List<Customer> customers = customerService.findAllCustomers();
         List<Trip> trips = tripService.findAllTrips();
+        List<FlightFare> flightFares = flightFareService.findAllFlightFares();
         switch (optionSelected) {
 
             case 1: // CREAR
+                for (int i = 0; i <= customers.size() - 1; i++) {
+                    System.out.println(customers.get(i).getId() + " - " + customers.get(i).getName() + " - " + customers.get(i).getDocumentNumber());
+                }
                 do {
-                    date = Util.getStringInput(">> Ingrese la fecha de la reserva (yyyy-MM-dd):");
-                    isCorrect = Util.checkDateFormat(date, "yyyy-MM-dd");
-                } while (isCorrect == false);
+                    idCustomer = Util.getIntInput(">> Ingrese el ID del cliente:");
+                    idF = tripBookingService.getCustomerId(idCustomer);
+                } while (idF == -1);
                 for (int i = 0; i <= trips.size() - 1; i++) {
-                    System.out.println(trips.get(i).getId() + " - " + trips.get(i).getDate());
+                    System.out.println(trips.get(i).getId() + " - " + trips.get(i).getDate() + " - " + trips.get(i).getIdAirportD() + " - " + trips.get(i).getIdAirportA());
                 }
                 do {
                     int idTrip = Util.getIntInput(">> Ingrese el ID del viaje que desea reservar:");
                     idF = tripBookingService.getTripId(idTrip);
                 } while (idF == -1);
-                TripBooking  tripBooking = new TripBooking(date, idF);
+                currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                for (int i = 0; i <= flightFares.size() - 1; i++) {
+                    System.out.println(flightFares.get(i).getId() + " - " + flightFares.get(i).getDescription() + " - " + flightFares.get(i).getDetails() + " - " + flightFares.get(i).getValue());
+                }
+                do {
+                    idFare = Util.getIntInput(">> Ingrese el ID de la tarifa:");
+                    idF = tripBookingService.getFlightFareId(idFare);
+                } while (idF == -1);
+                TripBooking tripBooking = new TripBooking(currentDate, idF);
                 this.tripBookingService.createTripBooking(tripBooking);
+                int idB = tripBookingService.getId();
+                System.out.println(idB);
+                tripBookingDetailService.saveDetails(idB, idCustomer, idFare);
                 break;
         
-            case 2: // ACTUALIZAR
-
+            /* case 2: // ACTUALIZAR
+                
                 List<TripBooking> tripBookings = this.tripBookingService.findAllTripBookings();
 
                 if (tripBookings == null || tripBookings.isEmpty()  )
@@ -104,9 +133,9 @@ public class TripBookingConsoleAdapter {
                         });
                     }
                 break;
-
-            case 3: // BUSCAR POR ID
-
+                */
+            case 2: // BUSCAR POR ID
+                /*
                 int SearchId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<TripBooking> foundTripBooking = this.tripBookingService.findTripBookingById(SearchId);
                 
@@ -118,10 +147,10 @@ public class TripBookingConsoleAdapter {
                         Util.showWarning("ID no encontrado o reserva inexistente");
                     }
                 
-                );
+                ); */
                 break;
             
-            case 4: // ELIMINAR (por id, obviamente)
+            case 3: // ELIMINAR
                 int deleteId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<TripBooking> tripBookingToDelete = this.tripBookingService.findTripBookingById(deleteId);
 

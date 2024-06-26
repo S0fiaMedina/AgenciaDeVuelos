@@ -141,4 +141,32 @@ public class CustomerMySQLRepository  implements CustomerRepository{
        }
         return numberOfCoincidences;
     }
+
+    @Override
+    public Optional<Customer> findByDocumentNumber(int documentNumber) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                SELECT cu.id, cu.name, cu.age, dt.name, cu.document_number FROM customer  AS cu 
+                INNER JOIN document_type AS dt ON dt.id = cu.id_document_type
+                WHERE cu.document_number = ?
+                    """;
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, documentNumber);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        Customer customer = new Customer();
+                        customer.setId(  resultSet.getInt("id") );
+                        customer.setName( resultSet.getString("name") );
+                        customer.setAge(  resultSet.getInt("age") );  
+                        customer.settypeOfDoc( resultSet.getString("dt.name") );
+                        customer.setDocumentNumber(resultSet.getInt("document_number") );
+                        return Optional.of(customer);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
+        }
+        return Optional.empty();
+    }
 }
