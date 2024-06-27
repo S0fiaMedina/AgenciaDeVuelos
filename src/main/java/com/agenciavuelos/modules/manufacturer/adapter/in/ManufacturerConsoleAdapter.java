@@ -31,7 +31,7 @@ public class ManufacturerConsoleAdapter {
     */
     public int getChoiceFromUser(){
         System.out.println("-------------------------------------");
-        System.out.println("MENU DE FABRICANTE");
+        System.out.println("MODULO DE FABRICANTES DE AVIONES");
         System.out.println("-------------------------------------");
         Util.printOptions(this.manufacturerOptions); 
         return Util.rangeValidator(1, manufacturerOptions.length);
@@ -41,19 +41,18 @@ public class ManufacturerConsoleAdapter {
         int optionSelected = getChoiceFromUser();
         switch (optionSelected) {
 
-            case 1: // CREAR
-                String name = Util.getStringInput(">> Ingrese el nombre del manufacturero:");
+            case 1: 
+                String name = Util.getStringInput(">> Ingrese el nombre del fabricante:");
                 Manufacturer manufacturer = new Manufacturer(name);
                 this.manufacturerService.createManufacturer(manufacturer);
                 break;
         
-            case 2: // ACTUALIZAR
+            case 2: 
 
                 List<Manufacturer> manufacturers = this.manufacturerService.findAllManufacturers();
-                // Aqui se podria colocar una funcion para imprimir los manufactureros, pero me da pereza xd, esto es solo para mostrar
-                // esa linea se podria eliminar luego para mejorar rendimeinto
+                
 
-                if (manufacturers == null || manufacturers.isEmpty()  ) // valida que hayan manufacturadores antes de cualquier cosa
+                if (manufacturers == null || manufacturers.isEmpty()  ) 
                     Util.showWarning("No hay fabricantes registrados");
 
                 else{
@@ -61,33 +60,33 @@ public class ManufacturerConsoleAdapter {
                     Optional<Manufacturer> optionalManufacturer = this.manufacturerService.findManufacturerById(id);
 
                 
-                    optionalManufacturer.ifPresentOrElse( // Aqui esta la funcion lambda
+                    optionalManufacturer.ifPresentOrElse( 
 
-                        // Acción si el fabricante está presente
+                        
                         updatedmManufacturer -> {
                             System.out.println("Esta es la información actual del fabricante:\n " + updatedmManufacturer);
                             String newName = Util.getStringInput(">> Ingrese el nuevo nombre del manufacturero: ");
 
-                            // Cambiar el nombre del fabricante
+                            
                             updatedmManufacturer.setName(newName);
 
-                            // Actualizar el fabricante en la base de datos
+                            
                             this.manufacturerService.updateManufacturer(updatedmManufacturer);
                         },
 
-                        // Acción si el fabricante no está presente (ID no encontrado)
+                        
                         () -> {
                             Util.showWarning("ID no encontrado");
                         });
                     }
                 break;
 
-            case 3: // BUSCAR POR ID
+            case 3: 
 
                 int id = Util.getIntInput(">> Introduzca el id a buscar: ");
                 Optional<Manufacturer> foundManufacturer = this.manufacturerService.findManufacturerById(id);
                 
-                // estoy empezando a creer que esta logica de validacion es mejor colocarla en una funcion aparte -_-
+                
                 foundManufacturer.ifPresentOrElse(
                     spottedManufacturer -> { // Si el fabricante fue encontrado...
                     System.out.println("Esta es la información del fabricante encontrado:\n" + spottedManufacturer);
@@ -99,11 +98,10 @@ public class ManufacturerConsoleAdapter {
                 );
                 break;
             
-            case 4: // ELIMINAR (por id, obviamente)
+            case 4: // ELIMINAR 
                 int deleteId = Util.getIntInput(">> Introduzca el id a buscar: ");
                 Optional<Manufacturer> manufacturerToDelete = this.manufacturerService.findManufacturerById(deleteId);
-                // Utilizar ifPresent para manejar el caso cuando el fabricante está presente
-                // TODO: hacer funcion de validacion de obj nulos
+
                 manufacturerToDelete.ifPresentOrElse(
                     spottedManufacturer -> {
                         this.manufacturerService.deteleManufacturer(deleteId);

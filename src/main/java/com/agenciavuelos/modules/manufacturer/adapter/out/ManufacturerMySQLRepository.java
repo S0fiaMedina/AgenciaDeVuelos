@@ -18,6 +18,8 @@ public class ManufacturerMySQLRepository implements ManufacturerRepository{
     private final String user;
     private final String password;
 
+    
+
     public ManufacturerMySQLRepository(String url, String user, String password) {
         this.url = url;
         this.user = user;

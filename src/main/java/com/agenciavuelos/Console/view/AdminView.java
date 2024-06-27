@@ -10,6 +10,7 @@ import com.agenciavuelos.modules.flightFare.adapter.in.FlightFareConsoleAdapter;
 import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
 import com.agenciavuelos.modules.model.adapter.in.ModelConsoleAdapter;
 import com.agenciavuelos.modules.plane.adapter.in.PlaneConsoleAdapter;
+import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapter;
 
 public class AdminView {
 
@@ -22,6 +23,7 @@ public class AdminView {
     private final PlaneConsoleAdapter planeConsoleAdapter;
     private final FlightFareConsoleAdapter flightFareConsoleAdapter;
     private final DocumentTypeConsoleAdapter documentTypeConsoleAdapter;
+    private final TripConsoleAdapter tripConsoleAdapter;
     
     String[] gestionOptions = {
         "▶ (1) Gestión Fabricantes",
@@ -49,6 +51,13 @@ public class AdminView {
         this.manufacturerConsoleAdapter = initializer.startManufacturerModule();
         this.modelConsoleAdapter = initializer.starModelConsoleAdapter();
         this.airlineConsoleAdapter = initializer.startAirlineConsoleAdapter();
+        this.employeeConsoleAdapter = initializer.startEmployeeConsoleAdapter();
+        this.airportConsoleAdapter = initializer.startAirportConsoleAdapter();
+        this.planeConsoleAdapter = initializer.startPlaneModule();
+        this.flightFareConsoleAdapter = initializer.startFlightFareModule();
+        this.documentTypeConsoleAdapter = initializer.startDocumentTypeModule();
+        this.tripConsoleAdapter = initializer.startTripModule();
+
     }
 
 
@@ -56,6 +65,7 @@ public class AdminView {
         System.out.println(header);
         Util.printOptions(gestionOptions);
         int selectedOption = Util.rangeValidator(1, this.gestionOptions.length);
+
 
         switch (selectedOption) {
             case 1: // fabricantes
@@ -67,7 +77,7 @@ public class AdminView {
                 break;
             
             case 3: // aerolineas
-                this.
+                break;
         }
 
 

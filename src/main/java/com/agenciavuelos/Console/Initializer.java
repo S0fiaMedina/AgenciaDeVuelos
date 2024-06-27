@@ -125,7 +125,7 @@ public class Initializer {
     private final TripBookingDetailRepository tripBookingDetailRepository;
     private final FlightFareRepository flightFareRepository;
     private final TripBookingRepository tripBookingRepository;
-    private final PaymentRepository paymentRepository;
+    //private final PaymentRepository paymentRepository;
     private final PaymentFormRepository paymentFormRepository;
 
     // empleados  
@@ -137,7 +137,10 @@ public class Initializer {
     private final DocumentTypeRepository documentTypeRepository;
     
 
-    private Initializer(){
+    public Initializer(String url, String user, String password){
+        this.user = user;
+        this.password = password;
+        this.url = url;
 
         // location
         this.countryRepository = new CountryMySQLRepository(url, user, password);
@@ -159,7 +162,7 @@ public class Initializer {
         this.tripBookingDetailRepository = new TripBookingDetailMySQLRepository(url, user, password);
         this.flightFareRepository = new FlightFareMySQLRepository(url, user, password);
         this.tripBookingRepository = new TripBookingMySQLRepository(url, user, password);
-        this.paymentRepository = new PaymentMySQLRepository(url, user, password);
+        //this.paymentRepository = new PaymentMySQLRepository(url, user, password);
         this.paymentFormRepository = new PaymentFormMySQLRepository(url, user, password);
         // viajes
         this.tripRepository = new TripMySQLRepository(url, user, password);
@@ -175,12 +178,6 @@ public class Initializer {
         this.customerRepository = new CustomerMySQLRepository(url, user, password);
     }
 
-    public Initializer(String url, String user, String password) {
-        this();
-        this.user = user;
-        this.password = password;
-        this.url = url;
-    }
 
 
 
@@ -336,6 +333,21 @@ public class Initializer {
         TripCrewService tripCrewService = new TripCrewService(tripCrewRepository, employeeRepository, tripRepository);
         return new TripCrewConsoleAdapter(tripCrewService);
     }
+
+    public String getUser() {
+        return user;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+
+    
 
     
 }

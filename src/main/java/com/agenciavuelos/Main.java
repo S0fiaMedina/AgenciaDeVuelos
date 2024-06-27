@@ -10,6 +10,7 @@ public class Main {
         String url = "jdbc:mysql://localhost:3306/AGENCIA_VUELOS";
         String user = "campus2023";
         String password = "campus2023";
+        
         Initializer initializer = new Initializer(url, user, password);
         AdminView adminView = new AdminView(initializer);
 
@@ -53,6 +54,7 @@ public class Main {
 
         System.out.println(header);
         Util.printOptions(mainOptions);
+        System.out.println(">> ¿Quien eres?. Digita la opcion.");
         int selectedOption = Util.rangeValidator(1, mainOptions.length);
 
         
