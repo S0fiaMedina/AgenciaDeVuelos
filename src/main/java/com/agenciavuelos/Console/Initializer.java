@@ -97,12 +97,77 @@ public class Initializer {
     private String url;
 
     
+    // location
+    private final  CountryRepository countryRepository;
+    private final CityRepository cityRepository;
+    private final AirportRepository airportRepository;
+    private final GateRepository gateRepository;
+
+    // aviones 
+    private final ManufacturerRepository manufacturerRepository; 
+    private final StatusRepository statusRepository;
+    private final ModelRepository modelRepository;
+    private final AirlineRepository airlineRepository;
+    private final PlaneRepository planeRepository;
+
+    // viajes 
+   // private final TripRepository tripRepository;
+   // private final FlightConnectionRepository flightConnectionRepository;
+   // private final TripCrewRepository tripCrewRepository;
+
+
+    // empleados  
+    private final TripulationRoleRepository tripulationRoleRepository;
+    private final EmployeeRepository employeeRepository;
+
+    // clientes
+    private final CustomerRepository customerRepository;
+    private final DocumentTypeRepository documentTypeRepository;
+    
+
+    private Initializer(){
+
+        // location
+        this.countryRepository = new CountryMySQLRepository(url, user, password);
+        this.cityRepository = new CityMySQLRepository(url, user, password);
+        this.airportRepository = new AirportMySQLRepository(url, user, password);
+        this.gateRepository = new GateMySQLRepository(url, user, password);
+        
+
+        // avion
+        this.manufacturerRepository  = new ManufacturerMySQLRepository(url, user, password);
+        this.statusRepository = new StatusMySQLRepository(url, user, password);
+        this.modelRepository = new ModelMySQLRepository(url, user, password);
+        this.airlineRepository = new AirlineMySQLRepository(url, user, password);
+        this.planeRepository = new PlaneMySQLRepository(url, user, password);
+
+        // viajes
+        //this.tripRepository = new TripMySQLRepository(url, user, password);
+        //this.flightConnectionRepository = new FlightConnectionMySQLRepository(url, user, password);
+        //this.tripCrewRepository = new TripMySQLRepository(url, user, password);
+
+        // empleados
+        this.tripulationRoleRepository = new TripulationRoleMySQLRepository(url, user, password);
+        this.employeeRepository = new EmployeeMySQLRepository(url, user, password);
+
+        // clientes
+        this.documentTypeRepository = new DocumentTypeMySQLRepository(url, user, password);
+        this.customerRepository = new CustomerMySQLRepository(url, user, password);
+
+
+
+
+
+    }
 
     public Initializer(String url, String user, String password) {
+        this();
         this.user = user;
         this.password = password;
         this.url = url;
     }
+
+
 
 
 
@@ -119,7 +184,6 @@ public class Initializer {
 
     // FABRICANTES - MANUFACTURADORES
     public ManufacturerConsoleAdapter startManufacturerModule(){
-        ManufacturerRepository manufacturerRepository = new ManufacturerMySQLRepository(url, user, password);
         ManufacturerService manufacturerService = new ManufacturerService(manufacturerRepository);
         return new ManufacturerConsoleAdapter(manufacturerService);
     }
@@ -127,32 +191,25 @@ public class Initializer {
 
     // PAISES 
     public CountryConsoleAdapter startCountryConsoleAdapter(){
-        CountryRepository countryRepository = new CountryMySQLRepository(url, user, password);
         CountryService countryService = new CountryService(countryRepository);
         return new CountryConsoleAdapter(countryService);
     }
 
     // CIUDADES
     public CityConsoleAdapter startCityConsoleAdapter(){
-        CountryRepository countryRepository = new CountryMySQLRepository(url, user, password);
         CountryService countryService = new CountryService(countryRepository);
-        CityRepository cityRepository = new CityMySQLRepository(url, user, password);
         CityService cityService = new CityService(cityRepository, countryRepository);
         return new CityConsoleAdapter(cityService, countryService);
     }
 
     // AEROPUERTOS
     public AirportConsoleAdapter startAirportConsoleAdapter() {
-        CountryRepository countryRepository = new CountryMySQLRepository(url, user, password);
-        CityRepository cityRepository = new CityMySQLRepository(url, user, password);
         CityService cityService = new CityService(cityRepository, countryRepository);
-        AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
         AirportService airportService = new AirportService(airportRepository, cityRepository);
         return new AirportConsoleAdapter(airportService, cityService);
     }
 
     // AEROLINEAS
-    // ESTADOS TODO: fusionar con aviones
 
     public StatusConsoleAdapter startStatusConsoleAdapter(){
         StatusRepository statusRepository = new StatusMySQLRepository(url, user, password);
@@ -163,31 +220,25 @@ public class Initializer {
     // modelos
     public ModelConsoleAdapter starModelConsoleAdapter(){
         ManufacturerRepository manufacturerRepository = new ManufacturerMySQLRepository(url, user, password);
-        ModelRepository modelRepository = new ModelMySQLRepository(url, user, password);
         ModelService modelService = new ModelService(modelRepository, manufacturerRepository);
         return new ModelConsoleAdapter(modelService);
     }
 
         // AEROLINEAS
     public AirlineConsoleAdapter startAirlineConsoleAdapter() {
-        AirlineRepository airlineRepository = new AirlineMySQLRepository(url, user, password);
         AirlineService airlineService = new AirlineService(airlineRepository);
         return new AirlineConsoleAdapter(airlineService);
     }
 
     // PUERTAS DE EMBARQUE
     public GateConsoleAdapter startGateConsoleAdapter() {
-        CityRepository cityRepository = new CityMySQLRepository(url, user, password);
-        AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
         AirportService airportService = new AirportService(airportRepository, cityRepository);
-        GateRepository gateRepository = new GateMySQLRepository(url, user, password);
         GateService gateService = new GateService(gateRepository, airportRepository);
         return new GateConsoleAdapter(gateService, airportService);
     }
 
     // ROLES DE TRIPULACION
     public TripulationRoleConsoleAdapter startTripulationRoleConsoleAdapter() {
-        TripulationRoleRepository tripulationRoleRepository = new TripulationRoleMySQLRepository(url, user, password);
         TripulationRoleService tripulationRoleService = new TripulationRoleService(tripulationRoleRepository);
         return new TripulationRoleConsoleAdapter(tripulationRoleService);
     }
@@ -195,13 +246,9 @@ public class Initializer {
     // EMPLEADOS
     public EmployeeConsoleAdapter startEmployeeConsoleAdapter() {
         CityRepository cityRepository = new CityMySQLRepository(url, user, password);
-        AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
         AirportService airportService = new AirportService(airportRepository, cityRepository);
-        AirlineRepository airlineRepository = new AirlineMySQLRepository(url, user, password);
         AirlineService airlineService = new AirlineService(airlineRepository);
-        TripulationRoleRepository tripulationRoleRepository = new TripulationRoleMySQLRepository(url, user, password);
         TripulationRoleService tripulationRoleService = new TripulationRoleService(tripulationRoleRepository);
-        EmployeeRepository employeeRepository = new EmployeeMySQLRepository(url, user, password);
         EmployeeService employeeService = new EmployeeService(employeeRepository, tripulationRoleRepository, airlineRepository, airportRepository);
         return new EmployeeConsoleAdapter(employeeService, tripulationRoleService, airlineService, airportService);
     }
@@ -213,27 +260,18 @@ public class Initializer {
 
     // TIPO DE DOCUMENTO 
     public DocumentTypeConsoleAdapter startDocumentTypeModule(){
-        DocumentTypeRepository documentTypeRepository = new DocumentTypeMySQLRepository(url, user, password);
         DocumentTypeService documentTypeService = new DocumentTypeService(documentTypeRepository);
         return new DocumentTypeConsoleAdapter(documentTypeService);
     }
 
     // CUSTOMER 
     public CustomerConsoleAdapter startCustomerModule(){
-        DocumentTypeRepository documentTypeRepository = new DocumentTypeMySQLRepository(url, user, password); // re instancia repo de tipos de documentos (XXX: revisar en fututo)
-        CustomerRepository customerRepository = new CustomerMySQLRepository(url, user, password);
         CustomerService customerService = new CustomerService(customerRepository, documentTypeRepository);
         return new CustomerConsoleAdapter(customerService);
     }
 
     // AVIONES
     public PlaneConsoleAdapter startPlaneModule(){
-        // incializacion de repositorios
-        StatusRepository statusRepository = new StatusMySQLRepository(url, user, password);
-        ManufacturerRepository manufacturerRepository = new ManufacturerMySQLRepository(url, user, password);
-        ModelRepository modelRepository = new ModelMySQLRepository(url, user, password);
-        AirlineRepository airlineRepository = new AirlineMySQLRepository(url, user, password);
-        PlaneRepository planeRepository = new PlaneMySQLRepository(url, user, password);
 
         PlaneService planeService = new PlaneService(planeRepository, statusRepository, modelRepository, manufacturerRepository, airlineRepository);
 
