@@ -36,7 +36,7 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
                 Util.showSuccess("Se ha registrado correctamente la información");
                 ResultSet generatedKeys = statement.getGeneratedKeys();
                 if (generatedKeys.next()) {
-                    int id =  generatedKeys.getInt(1); // Devuelve el ID generado
+                    int id =  generatedKeys.getInt(1);
                     return id;
                 } 
             }

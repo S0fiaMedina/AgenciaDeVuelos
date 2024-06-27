@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,20 +25,25 @@ public class CustomerMySQLRepository  implements CustomerRepository{
     }
 
     @Override
-    public void save(Customer customer) {
+    public int save(Customer customer) {
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = "INSERT INTO customer (name, age, id_document_type, document_number) VALUES (?, ?, ?,?)";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
+            try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, customer.getName());
                 statement.setInt(2, customer.getAge());
                 statement.setInt(3, customer.getDocumentTypeId());
                 statement.setInt(4, customer.getDocumentNumber());
-
                 statement.executeUpdate();
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int id =  generatedKeys.getInt(1);
+                    return id;
+                }
             }
         } catch (SQLException e) {
             System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
         }
+        return 0;
     }
 
     @Override

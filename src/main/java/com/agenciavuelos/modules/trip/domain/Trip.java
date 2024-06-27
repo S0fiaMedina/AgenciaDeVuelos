@@ -6,6 +6,10 @@ public class Trip {
     private Double price;
     private String idAirportD;
     private String idAirportA;
+    private String nameCityD;
+    private String nameCityA;
+
+    public Trip() {}
 
     public Trip(String date, Double price, String idAirportD, String idAirportA) {
         this.date = date;
@@ -60,6 +64,22 @@ public class Trip {
 
     public void setIdAirportA(String idAirportA) {
         this.idAirportA = idAirportA;
+    }
+
+    public String getNameCityD() {
+        return nameCityD;
+    }
+
+    public void setNameCityD(String nameCityD) {
+        this.nameCityD = nameCityD;
+    }
+
+    public String getNameCityA() {
+        return nameCityA;
+    }
+
+    public void setNameCityA(String nameCityA) {
+        this.nameCityA = nameCityA;
     }
 
 }

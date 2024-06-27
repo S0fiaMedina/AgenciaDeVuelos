@@ -181,10 +181,19 @@ public class Initializer {
 
     // VUELOS
     public TripConsoleAdapter startTripModule() {
+        DocumentTypeRepository documentTypeRepository = new DocumentTypeMySQLRepository(url, user, password);
+        CustomerRepository customerRepository = new CustomerMySQLRepository(url, user, password);
+        CustomerService customerService = new CustomerService(customerRepository, documentTypeRepository);
+        FlightFareRepository flightFareRepository = new FlightFareMySQLRepository(url, user, password);
+        FlightFareService flightFareService = new FlightFareService(flightFareRepository);
         AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
         TripRepository tripRepository = new TripMySQLRepository(url, user, password);
         TripService tripService = new TripService(tripRepository, airportRepository);
-        return new TripConsoleAdapter(tripService);
+        TripBookingDetailRepository tripBookingDetailRepository = new TripBookingDetailMySQLRepository(url, user, password);
+        TripBookingDetailService tripBookingDetailService = new TripBookingDetailService(tripBookingDetailRepository);
+        TripBookingRepository tripBookingRepository = new TripBookingMySQLRepository(url, user, password);
+        TripBookingService tripBookingService = new TripBookingService(tripBookingRepository, tripRepository, customerRepository, flightFareRepository);
+        return new TripConsoleAdapter(tripService, tripBookingService, tripBookingDetailService, customerService, flightFareService);
     }
 
     // RESERVAS

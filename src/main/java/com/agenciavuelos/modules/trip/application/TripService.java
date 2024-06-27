@@ -17,14 +17,17 @@ public class TripService {
         this.airportRepository = airportRepository;
     }
 
+    public List<Trip> searchTrips(String nameCityD, String nameCityA, String departureDate) {
+        return tripRepository.searchTrips(nameCityD, nameCityA, departureDate);
+    }
+
     public List<Trip> findAllTrips(){
         return tripRepository.findAll();
     }
 
-    public Optional<Trip>  findTripById(int id) {
+    public Optional<Trip> findTripById(int id) {
         Optional<Trip> optionalTrip = this.tripRepository.findById(id);
         return optionalTrip;
-
     }
 
     public void deleteTrip(int id){

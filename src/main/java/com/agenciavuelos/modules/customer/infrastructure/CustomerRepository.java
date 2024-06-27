@@ -12,7 +12,7 @@ public interface CustomerRepository {
 
     public List<Customer> findAll();
 
-    public void save(Customer documentType);
+    public int save(Customer documentType);
 
     public void update(Customer documentType);
 

@@ -62,18 +62,31 @@ public class TripMySQLRepository implements TripRepository{
     @Override
     public Optional<Trip> findById(int id) {
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            String query = "SELECT * FROM trip WHERE id = ?";
+            String query = """
+                    SELECT t.id, t.tripe_date, t.price_tripe, t.departure_airport_id, t.arrival_airport_id, c1.name, c2.name
+                    FROM trip t
+                    INNER JOIN airport a1
+                    ON a1.id = t.departure_airport_id
+                    INNER JOIN airport a2
+                    ON a2.id = t.arrival_airport_id
+                    INNER JOIN city c1
+                    ON c1.id = a1.id_city
+                    INNER JOIN city c2
+                    ON c2.id = a2.id_city
+                    WHERE t.id = ?
+                    """;
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, id);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        Trip trip = new Trip(
-                            resultSet.getInt("id"),
-                            resultSet.getString("tripe_date"),
-                            resultSet.getDouble("price_tripe"),
-                            resultSet.getString("departure_airport_id"),
-                            resultSet.getString("arrival_airport_id")
-                        );
+                        Trip trip = new Trip();
+                        trip.setId(resultSet.getInt("t.id"));
+                        trip.setDate(resultSet.getString("t.tripe_date"));
+                        trip.setPrice(resultSet.getDouble("t.price_tripe"));
+                        trip.setIdAirportD(resultSet.getString("t.departure_airport_id"));
+                        trip.setIdAirportA(resultSet.getString("t.arrival_airport_id"));
+                        trip.setNameCityD(resultSet.getString("c1.name"));
+                        trip.setNameCityA(resultSet.getString("c2.name"));
                         return Optional.of(trip);
                     }
                 }
@@ -118,6 +131,47 @@ public class TripMySQLRepository implements TripRepository{
             }
         } catch (SQLException e) {
         e.printStackTrace();
+        }
+        return trips;
+    }
+
+    @Override
+    public List<Trip> searchTrips(String nameCityD, String nameCityA, String departureDate) {
+        List<Trip> trips = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                SELECT t.id, t.tripe_date, t.price_tripe, c1.name, c2.name
+                FROM trip t
+                INNER JOIN airport a1
+                ON a1.id = t.departure_airport_id
+                INNER JOIN airport a2
+                ON a2.id = t.arrival_airport_id
+                INNER JOIN city c1
+                ON c1.id = a1.id_city
+                INNER JOIN city c2
+                ON c2.id = a2.id_city
+                WHERE c1.name = ?
+                AND c2.name = ?
+                AND t.tripe_date = ?;
+            """;
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, nameCityD);
+                statement.setString(2, nameCityA);
+                statement.setString(3, departureDate);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        Trip trip = new Trip();
+                        trip.setId(resultSet.getInt("t.id"));
+                        trip.setDate(resultSet.getString("t.tripe_date"));
+                        trip.setPrice(resultSet.getDouble("t.price_tripe"));
+                        trip.setNameCityD(resultSet.getString("c1.name"));
+                        trip.setNameCityA(resultSet.getString("c2.name"));
+                        trips.add(trip);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return trips;
     }
