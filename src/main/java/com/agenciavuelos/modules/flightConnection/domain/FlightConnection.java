@@ -7,7 +7,7 @@ public class FlightConnection {
     private String idAirport;
     private String planePlates;
 
-    private String airportName;
+   
 
 
     public FlightConnection() {
@@ -79,18 +79,24 @@ public class FlightConnection {
     }
 
 
-    public String getAirportName() {
-        return airportName;
-    }
-
-
-    public void setAirportName(String airportName) {
-        this.airportName = airportName;
-    }
-
     
 
-    
+    @Override
+    public String toString() { // un toString bien bonito :3 para darselo al usuario
+        StringBuilder sb = new StringBuilder();
+        sb.append("Detalles del cliente:");
+        sb.append("\n=================");
+        sb.append("\nID:\t" +  this.id);
+        sb.append("\nNumero de conexión:\t"+ this.connectionNumber);
+        sb.append("\nId del viaje:\t" + this.idTrip);
+        sb.append("\nAeropuerto :\t"+ this.idAirport);
+        sb.append("\nAvion:\t" + this.planePlates);
+        
+
+        sb.append("\n=================");
+        return sb.toString();
+    }
+
     // se pregunta al usuario si desea un vuelo directo o de escalas
     // si es directo... SE HACE SOLO UNA CONEXION 
     // 

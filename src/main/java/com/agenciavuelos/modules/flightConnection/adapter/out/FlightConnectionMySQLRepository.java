@@ -99,9 +99,8 @@ public class FlightConnectionMySQLRepository implements FlightConnectionReposito
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
 
             String query = """
-                    SELECT fc.id, fc.connection_number, fc.plane_plates, fc.id_airport, a.name, fc.id_trip 
+                    SELECT fc.id, fc.connection_number, fc.plane_plates, fc.id_airport,  fc.id_trip 
                     FROM flight_connection AS fc
-                    INNER JOIN airport AS a ON a.id = fc.id_airport 
                     INNER JOIN trip AS t ON t.id = fc.id_trip 
                     WHERE fc.id_trip = ?;
                     """;
@@ -118,7 +117,6 @@ public class FlightConnectionMySQLRepository implements FlightConnectionReposito
                     flightConnection.setConnectionNumber( resultSet.getString("fc.connection_number") );
                     flightConnection.setPlanePlates(  resultSet.getString("fc.plane_plates") );  
                     flightConnection.setIdAirport( resultSet.getString("fc.id_airport") );
-                    flightConnection.setAirportName( resultSet.getString("a.name") );
                     flightConnection.setIdTrip( resultSet.getInt("fc.id_trip") );
 
 
@@ -137,11 +135,10 @@ public class FlightConnectionMySQLRepository implements FlightConnectionReposito
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
 
             String query = """
-                    SELECT fc.id, fc.connection_number, fc.plane_plates, fc.id_airport, a.name, fc.id_trip 
+                    SELECT fc.id, fc.connection_number, fc.plane_plates, fc.id_airport,  fc.id_trip 
                     FROM flight_connection AS fc
-                    INNER JOIN airport AS a ON a.id = fc.id_airport 
                     INNER JOIN trip AS t ON t.id = fc.id_trip 
-                    WHERE fc.id_trip = ?;
+                    WHERE fc.id = ?
                     """;
 
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -156,7 +153,6 @@ public class FlightConnectionMySQLRepository implements FlightConnectionReposito
                     flightConnection.setConnectionNumber( resultSet.getString("fc.connection_number") );
                     flightConnection.setPlanePlates(  resultSet.getString("fc.plane_plates") );  
                     flightConnection.setIdAirport( resultSet.getString("fc.id_airport") );
-                    flightConnection.setAirportName( resultSet.getString("a.name") );
                     flightConnection.setIdTrip( resultSet.getInt("fc.id_trip") );
 
 

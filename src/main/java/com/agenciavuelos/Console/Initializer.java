@@ -20,6 +20,10 @@ import com.agenciavuelos.modules.employee.adapter.in.EmployeeConsoleAdapter;
 import com.agenciavuelos.modules.employee.adapter.out.EmployeeMySQLRepository;
 import com.agenciavuelos.modules.employee.application.EmployeeService;
 import com.agenciavuelos.modules.employee.infrastructure.EmployeeRepository;
+import com.agenciavuelos.modules.flightConnection.adapter.in.FlightConnectionConsoleAdapter;
+import com.agenciavuelos.modules.flightConnection.adapter.out.FlightConnectionMySQLRepository;
+import com.agenciavuelos.modules.flightConnection.application.FlightConnectionService;
+import com.agenciavuelos.modules.flightConnection.infrastructure.FlightConnectionRepository;
 import com.agenciavuelos.modules.flightFare.adapter.in.FlightFareConsoleAdapter;
 import com.agenciavuelos.modules.flightFare.adapter.out.FlightFareMySQLRepository;
 import com.agenciavuelos.modules.flightFare.application.FlightFareService;
@@ -40,6 +44,8 @@ import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdap
 import com.agenciavuelos.modules.manufacturer.adapter.out.ManufacturerMySQLRepository;
 import com.agenciavuelos.modules.manufacturer.application.ManufacturerService;
 import com.agenciavuelos.modules.manufacturer.infrastructure.ManufacturerRepository;
+import com.agenciavuelos.modules.plane.adapter.out.PlaneMySQLRepository;
+import com.agenciavuelos.modules.plane.infrastructure.PlaneRepository;
 import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapter;
 import com.agenciavuelos.modules.trip.adapter.out.TripMySQLRepository;
 import com.agenciavuelos.modules.trip.application.TripService;
@@ -210,5 +216,16 @@ public class Initializer {
         FlightFareRepository flightFareRepository = new FlightFareMySQLRepository(url, user, password);
         FlightFareService flightFareService = new FlightFareService(flightFareRepository);
         return new FlightFareConsoleAdapter(flightFareService);
+    }
+
+    // CONEXIONES
+    public FlightConnectionConsoleAdapter startFlightConnectionModule(){
+        TripRepository tripRepository = new TripMySQLRepository(url, user, password);
+        PlaneRepository planeRepository = new PlaneMySQLRepository(url, user, password);
+        FlightConnectionRepository flightConnectionRepository = new FlightConnectionMySQLRepository(url, user, password);
+        AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
+        FlightConnectionService flightConnectionService = new FlightConnectionService(tripRepository, airportRepository, planeRepository, flightConnectionRepository);
+        return new FlightConnectionConsoleAdapter(flightConnectionService);
+
     }
 }
