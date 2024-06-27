@@ -12,6 +12,9 @@ public class TestMain {
     Initializer initializer = new Initializer(url, user, password);
 
     initializer.startEmployeeConsoleAdapter().run();
+    // inicializados
+    
+    initializer.startTripCrewConsoleAdapter().run();
 
     }
     

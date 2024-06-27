@@ -18,12 +18,15 @@ import com.agenciavuelos.modules.tripBooking.domain.TripBooking;
 import com.agenciavuelos.modules.tripBookingDetail.application.TripBookingDetailService;
 import com.agenciavuelos.modules.tripBookingDetail.domain.TripBookingDetail;
 
+
+
+
 public class TripConsoleAdapter {
-    private final TripService tripService;
     private final TripBookingService tripBookingService;
     private final TripBookingDetailService tripBookingDetailService;
     private final CustomerService customerService;
     private final FlightFareService flightFareService;
+    private final TripService tripService;
 
     private final  String[] tripOptions = { 
         "1. Registrar Vuelo",
@@ -154,6 +157,7 @@ public class TripConsoleAdapter {
                 
                 );
                 break;
+            
             case 4: // ELIMINAR
                 int deleteId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<Trip> tripToDelete = this.tripService.findTripById(deleteId);
