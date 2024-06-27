@@ -1,4 +1,4 @@
-package com.agenciavuelos.views.domain;
+package com.agenciavuelos.Console.view;
 
 public class TechnicianView {
     String[] gestionOptions = {

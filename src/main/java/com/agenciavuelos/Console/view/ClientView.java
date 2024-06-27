@@ -1,4 +1,4 @@
-package com.agenciavuelos.views.domain;
+package com.agenciavuelos.Console.view;
 
 public class ClientView {
     String[] vueloOptions = {
@@ -13,4 +13,6 @@ public class ClientView {
                 BIENVENIDO, CLIENTE
         ##########################################                                                                  
         """;
+    
+    
 }
