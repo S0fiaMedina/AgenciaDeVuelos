@@ -2,12 +2,26 @@ package com.agenciavuelos.Console.view;
 
 import com.agenciavuelos.Console.Initializer;
 import com.agenciavuelos.Console.Util;
+import com.agenciavuelos.modules.airline.adapter.in.AirlineConsoleAdapter;
+import com.agenciavuelos.modules.airport.adapter.in.AirportConsoleAdapter;
+import com.agenciavuelos.modules.documentType.adapter.in.DocumentTypeConsoleAdapter;
+import com.agenciavuelos.modules.employee.adapter.in.EmployeeConsoleAdapter;
+import com.agenciavuelos.modules.flightFare.adapter.in.FlightFareConsoleAdapter;
 import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
+import com.agenciavuelos.modules.model.adapter.in.ModelConsoleAdapter;
+import com.agenciavuelos.modules.plane.adapter.in.PlaneConsoleAdapter;
 
 public class AdminView {
 
     private final Initializer initializer;
     private final ManufacturerConsoleAdapter manufacturerConsoleAdapter;
+    private final ModelConsoleAdapter modelConsoleAdapter;
+    private final AirlineConsoleAdapter airlineConsoleAdapter;
+    private final EmployeeConsoleAdapter employeeConsoleAdapter;
+    private final AirportConsoleAdapter airportConsoleAdapter;
+    private final PlaneConsoleAdapter planeConsoleAdapter;
+    private final FlightFareConsoleAdapter flightFareConsoleAdapter;
+    private final DocumentTypeConsoleAdapter documentTypeConsoleAdapter;
     
     String[] gestionOptions = {
         "▶ (1) Gestión Fabricantes",
@@ -33,6 +47,8 @@ public class AdminView {
     public AdminView(Initializer initializer) {
         this.initializer = initializer;
         this.manufacturerConsoleAdapter = initializer.startManufacturerModule();
+        this.modelConsoleAdapter = initializer.starModelConsoleAdapter();
+        this.airlineConsoleAdapter = initializer.startAirlineConsoleAdapter();
     }
 
 
@@ -42,12 +58,16 @@ public class AdminView {
         int selectedOption = Util.rangeValidator(1, this.gestionOptions.length);
 
         switch (selectedOption) {
-            case 1: // crud manufacturadores
+            case 1: // fabricantes
                 this.manufacturerConsoleAdapter.run();
                 break;
         
-            default:
+            case 2: // modelos
+                this.modelConsoleAdapter.run();
                 break;
+            
+            case 3: // aerolineas
+                this.
         }
 
 
