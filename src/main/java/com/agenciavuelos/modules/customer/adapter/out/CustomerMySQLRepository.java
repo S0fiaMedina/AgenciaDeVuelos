@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,20 +25,25 @@ public class CustomerMySQLRepository  implements CustomerRepository{
     }
 
     @Override
-    public void save(Customer customer) {
+    public int save(Customer customer) {
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = "INSERT INTO customer (name, age, id_document_type, document_number) VALUES (?, ?, ?,?)";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
+            try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, customer.getName());
                 statement.setInt(2, customer.getAge());
                 statement.setInt(3, customer.getDocumentTypeId());
                 statement.setInt(4, customer.getDocumentNumber());
-
                 statement.executeUpdate();
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int id =  generatedKeys.getInt(1);
+                    return id;
+                }
             }
         } catch (SQLException e) {
             System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
         }
+        return 0;
     }
 
     @Override
@@ -140,5 +146,33 @@ public class CustomerMySQLRepository  implements CustomerRepository{
             System.out.println("Se ha producido un error :(, Motivo \n" + e.getMessage() );
        }
         return numberOfCoincidences;
+    }
+
+    @Override
+    public Optional<Customer> findByDocumentNumber(int documentNumber) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                SELECT cu.id, cu.name, cu.age, dt.name, cu.document_number FROM customer  AS cu 
+                INNER JOIN document_type AS dt ON dt.id = cu.id_document_type
+                WHERE cu.document_number = ?
+                    """;
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, documentNumber);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        Customer customer = new Customer();
+                        customer.setId(  resultSet.getInt("id") );
+                        customer.setName( resultSet.getString("name") );
+                        customer.setAge(  resultSet.getInt("age") );  
+                        customer.settypeOfDoc( resultSet.getString("dt.name") );
+                        customer.setDocumentNumber(resultSet.getInt("document_number") );
+                        return Optional.of(customer);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
+        }
+        return Optional.empty();
     }
 }

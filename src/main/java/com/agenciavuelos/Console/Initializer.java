@@ -28,6 +28,10 @@ import com.agenciavuelos.modules.employee.adapter.in.EmployeeConsoleAdapter;
 import com.agenciavuelos.modules.employee.adapter.out.EmployeeMySQLRepository;
 import com.agenciavuelos.modules.employee.application.EmployeeService;
 import com.agenciavuelos.modules.employee.infrastructure.EmployeeRepository;
+import com.agenciavuelos.modules.flightFare.adapter.in.FlightFareConsoleAdapter;
+import com.agenciavuelos.modules.flightFare.adapter.out.FlightFareMySQLRepository;
+import com.agenciavuelos.modules.flightFare.application.FlightFareService;
+import com.agenciavuelos.modules.flightFare.infrastructure.FlightFareRepository;
 import com.agenciavuelos.modules.gate.adapter.in.GateConsoleAdapter;
 import com.agenciavuelos.modules.gate.adapter.out.GateMySQLRepository;
 import com.agenciavuelos.modules.gate.application.GateService;
@@ -48,6 +52,17 @@ import com.agenciavuelos.modules.status.adapter.in.StatusConsoleAdapter;
 import com.agenciavuelos.modules.status.adapter.out.StatusMySQLRepository;
 import com.agenciavuelos.modules.status.application.StatusService;
 import com.agenciavuelos.modules.status.infrastructure.StatusRepository;
+import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapter;
+import com.agenciavuelos.modules.trip.adapter.out.TripMySQLRepository;
+import com.agenciavuelos.modules.trip.application.TripService;
+import com.agenciavuelos.modules.trip.infrastructure.TripRepository;
+import com.agenciavuelos.modules.tripBooking.adapter.in.TripBookingConsoleAdapter;
+import com.agenciavuelos.modules.tripBooking.adapter.out.TripBookingMySQLRepository;
+import com.agenciavuelos.modules.tripBooking.application.TripBookingService;
+import com.agenciavuelos.modules.tripBooking.infrastructure.TripBookingRepository;
+import com.agenciavuelos.modules.tripBookingDetail.adapter.out.TripBookingDetailMySQLRepository;
+import com.agenciavuelos.modules.tripBookingDetail.application.TripBookingDetailService;
+import com.agenciavuelos.modules.tripBookingDetail.infrastructure.TripBookingDetailRepository;
 import com.agenciavuelos.modules.tripulationRole.adapter.in.TripulationRoleConsoleAdapter;
 import com.agenciavuelos.modules.tripulationRole.adapter.out.TripulationRoleMySQLRepository;
 import com.agenciavuelos.modules.tripulationRole.application.TripulationRoleService;
@@ -208,6 +223,46 @@ public class Initializer {
         return new PlaneConsoleAdapter(planeService);
 
 
+    }
+
+    public TripConsoleAdapter startTripModule() {
+        DocumentTypeRepository documentTypeRepository = new DocumentTypeMySQLRepository(url, user, password);
+        CustomerRepository customerRepository = new CustomerMySQLRepository(url, user, password);
+        CustomerService customerService = new CustomerService(customerRepository, documentTypeRepository);
+        FlightFareRepository flightFareRepository = new FlightFareMySQLRepository(url, user, password);
+        FlightFareService flightFareService = new FlightFareService(flightFareRepository);
+        AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
+        TripRepository tripRepository = new TripMySQLRepository(url, user, password);
+        TripService tripService = new TripService(tripRepository, airportRepository);
+        TripBookingDetailRepository tripBookingDetailRepository = new TripBookingDetailMySQLRepository(url, user, password);
+        TripBookingDetailService tripBookingDetailService = new TripBookingDetailService(tripBookingDetailRepository);
+        TripBookingRepository tripBookingRepository = new TripBookingMySQLRepository(url, user, password);
+        TripBookingService tripBookingService = new TripBookingService(tripBookingRepository, tripRepository, customerRepository, flightFareRepository);
+        return new TripConsoleAdapter(tripService, tripBookingService, tripBookingDetailService, customerService, flightFareService);
+    }
+
+    // RESERVAS
+    public TripBookingConsoleAdapter startTripBookingModule() {
+        DocumentTypeRepository documentTypeRepository = new DocumentTypeMySQLRepository(url, user, password);
+        CustomerRepository customerRepository = new CustomerMySQLRepository(url, user, password);
+        CustomerService customerService = new CustomerService(customerRepository, documentTypeRepository);
+        FlightFareRepository flightFareRepository = new FlightFareMySQLRepository(url, user, password);
+        FlightFareService flightFareService = new FlightFareService(flightFareRepository);
+        AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
+        TripRepository tripRepository = new TripMySQLRepository(url, user, password);
+        TripService tripService = new TripService(tripRepository, airportRepository);
+        TripBookingDetailRepository tripBookingDetailRepository = new TripBookingDetailMySQLRepository(url, user, password);
+        TripBookingDetailService tripBookingDetailService = new TripBookingDetailService(tripBookingDetailRepository);
+        TripBookingRepository tripBookingRepository = new TripBookingMySQLRepository(url, user, password);
+        TripBookingService tripBookingService = new TripBookingService(tripBookingRepository, tripRepository, customerRepository, flightFareRepository);
+        return new TripBookingConsoleAdapter(tripBookingService, tripBookingDetailService, tripService, customerService, flightFareService);
+    }
+
+    // TARIFAS
+    public FlightFareConsoleAdapter startFlightFareModule() {
+        FlightFareRepository flightFareRepository = new FlightFareMySQLRepository(url, user, password);
+        FlightFareService flightFareService = new FlightFareService(flightFareRepository);
+        return new FlightFareConsoleAdapter(flightFareService);
     }
 
 }

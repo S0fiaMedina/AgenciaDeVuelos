@@ -38,8 +38,8 @@ public class CustomerService {
         this.customerRepository.update(documentType);
     }
 
-    public void createCustomer(Customer documentType){
-        this.customerRepository.save(documentType);
+    public int createCustomer(Customer documentType){
+        return this.customerRepository.save(documentType);
     }
 
     // verificar ids

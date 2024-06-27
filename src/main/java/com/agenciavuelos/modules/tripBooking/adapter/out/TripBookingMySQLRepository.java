@@ -1,5 +1,197 @@
 package com.agenciavuelos.modules.tripBooking.adapter.out;
 
-public class TripBookingMySQLRepository {
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
+import com.agenciavuelos.Console.Util;
+import com.agenciavuelos.modules.tripBooking.domain.TripBooking;
+import com.agenciavuelos.modules.tripBooking.infrastructure.TripBookingRepository;
+
+public class TripBookingMySQLRepository implements TripBookingRepository{
+    private final String url;
+    private final String user;
+    private final String password;
+
+    public TripBookingMySQLRepository(String url, String user, String password) {
+        this.url = url;
+        this.user = user;
+        this.password = password;
+    }
+
+    @Override
+    public int save(TripBooking tripBooking) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = "INSERT INTO trip_booking (booking_date, id_trip) VALUES (?,?)";
+            try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                statement.setString(1, tripBooking.getBookingDate());
+                statement.setInt(2, tripBooking.getIdTrip());
+                statement.executeUpdate();
+                Util.showSuccess("Se ha registrado correctamente la información");
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int id =  generatedKeys.getInt(1);
+                    return id;
+                } 
+            }
+        } catch (SQLException e) {
+                e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public void update(TripBooking tripBooking) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = "UPDATE trip_booking SET booking_date = ?, id_trip = ? WHERE id = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, tripBooking.getBookingDate());
+                statement.setInt(2, tripBooking.getIdTrip());
+                statement.setInt(3, tripBooking.getId());
+                statement.executeUpdate();
+                Util.showSuccess("Se ha registrado correctamente la información");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Optional<TripBooking> findById(int id) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = "SELECT * FROM trip_booking WHERE id = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, id);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        TripBooking tripBooking = new TripBooking(
+                            resultSet.getInt("id"),
+                            resultSet.getString("booking_date"),
+                            resultSet.getInt("id_trip")
+                        );
+                        return Optional.of(tripBooking);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public void delete(int id) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = "DELETE FROM trip_booking WHERE id = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, id);
+                statement.executeUpdate();
+                Util.showSuccess("Se ha eliminado el registro");
+            }
+        } catch (SQLException e) {
+            Util.showWarning("No se puede eliminar un registro que se encuentra relacionado con otra tabla");
+        }
+    }
+
+    @Override
+    public List<TripBooking> findAll() {
+        List<TripBooking> tripBookings = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = "SELECT * FROM trip_booking";
+            try (PreparedStatement statement = connection.prepareStatement(query);
+                    ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    TripBooking tripBooking = new TripBooking(
+                        resultSet.getInt("id"),
+                        resultSet.getString("booking_date"),
+                        resultSet.getInt("id_trip")
+                    );
+                    tripBookings.add(tripBooking);
+                }
+            }
+        } catch (SQLException e) {
+        e.printStackTrace();
+        }
+        return tripBookings;
+    }
+
+    @Override
+    public List<TripBooking> findByCustomerId(int id) {
+        List<TripBooking> tripBookings = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                SELECT t.id, c.id, c.name, tp.booking_date, ff.value
+                FROM trip t
+                INNER JOIN trip_booking tp
+                ON tp.id_trip = t.id
+                INNER JOIN trip_booking_details tbd
+                ON tp.id_trip = tbd.id_trip_booking
+                INNER JOIN customer c
+                ON c.id = tbd.id_customer
+                INNER JOIN flight_fare ff
+                ON ff.id = tbd.id_fare
+                WHERE c.id = ?;
+            """;
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, id);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        TripBooking tripBooking = new TripBooking();
+                        tripBooking.setIdTrip(resultSet.getInt("t.id"));
+                        tripBooking.setIdCustomer(resultSet.getInt("c.id"));
+                        tripBooking.setNameCustomer(resultSet.getString("c.name"));
+                        tripBooking.setBookingDate(resultSet.getString("tp.booking_date"));
+                        tripBooking.setValueFare(resultSet.getInt("ff.value"));
+                        tripBookings.add(tripBooking);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tripBookings;
+    }
+
+    @Override
+    public List<TripBooking> findByTripId(int id) {
+        List<TripBooking> tripBookings = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                SELECT t.id, c.id, c.name, tp.booking_date, ff.value
+                FROM trip t
+                INNER JOIN trip_booking tp
+                ON tp.id_trip = t.id
+                INNER JOIN trip_booking_details tbd
+                ON tp.id_trip = tbd.id_trip_booking
+                INNER JOIN customer c
+                ON c.id = tbd.id_customer
+                INNER JOIN flight_fare ff
+                ON ff.id = tbd.id_fare
+                WHERE t.id = ?;
+            """;
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, id);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        TripBooking tripBooking = new TripBooking();
+                        tripBooking.setIdTrip(resultSet.getInt("t.id"));
+                        tripBooking.setIdCustomer(resultSet.getInt("c.id"));
+                        tripBooking.setNameCustomer(resultSet.getString("c.name"));
+                        tripBooking.setBookingDate(resultSet.getString("tp.booking_date"));
+                        tripBooking.setValueFare(resultSet.getInt("ff.value"));
+                        tripBookings.add(tripBooking);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tripBookings;
+    }
 }

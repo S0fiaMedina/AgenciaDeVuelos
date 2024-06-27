@@ -1,7 +1,7 @@
 package com.agenciavuelos.modules.employee.adapter.in;
 
 import java.util.List;
-import java.util.Optional;
+// import java.util.Optional;
 
 import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.airline.application.AirlineService;
@@ -19,9 +19,8 @@ public class EmployeeConsoleAdapter {
     private final AirlineService airlineService;
     private final AirportService airportService;
 
-    // lista que contiene las opciones del menu
     private final  String[] employeeOptions = { 
-        "1. Crear empleado",
+        "1. Registrar Empleado",
         "2. Salir"
     };
 
@@ -33,8 +32,6 @@ public class EmployeeConsoleAdapter {
     }
 
     /**
-     * Muestra un menú de opciones de fabricantes y solicita al usuario que elija una opción válida.
-     * 
      * @return El número de opción seleccionado por el usuario, validado dentro del rango de opciones disponibles.
     */
     public int getChoiceFromUser(){
