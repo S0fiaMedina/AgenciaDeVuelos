@@ -183,4 +183,35 @@ public class PlaneMySQLRepository implements PlaneRepository{
         return numberOfCoincidences;
     }
 
+
+    @Override
+    public Optional<Plane> findByTrip(int idTrip) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                SELECT p.plates, p.capacity
+                FROM plane p
+                INNER JOIN flight_connection fc
+                ON fc.plane_plates = p.plates
+                INNER JOIN trip t
+                ON t.id = fc.id_trip
+                WHERE t.departure_airport_id = fc.id_airport
+                AND t.id = ?;
+                """;
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, idTrip);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        Plane plane = new Plane();
+                        plane.setPlates( resultSet.getString("p.plates") );
+                        plane.setCapacity(  resultSet.getInt("p.capacity") );  
+                        return Optional.of(plane);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
+        }
+        return Optional.empty();
+    }
+
 }

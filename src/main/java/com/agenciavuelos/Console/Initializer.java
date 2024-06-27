@@ -221,11 +221,15 @@ public class Initializer {
         PlaneService planeService = new PlaneService(planeRepository, statusRepository, modelRepository, manufacturerRepository, airlineRepository);
 
         return new PlaneConsoleAdapter(planeService);
-
-
     }
 
     public TripConsoleAdapter startTripModule() {
+        StatusRepository statusRepository = new StatusMySQLRepository(url, user, password);
+        ManufacturerRepository manufacturerRepository = new ManufacturerMySQLRepository(url, user, password);
+        ModelRepository modelRepository = new ModelMySQLRepository(url, user, password);
+        AirlineRepository airlineRepository = new AirlineMySQLRepository(url, user, password);
+        PlaneRepository planeRepository = new PlaneMySQLRepository(url, user, password);
+        PlaneService planeService = new PlaneService(planeRepository, statusRepository, modelRepository, manufacturerRepository, airlineRepository);
         DocumentTypeRepository documentTypeRepository = new DocumentTypeMySQLRepository(url, user, password);
         CustomerRepository customerRepository = new CustomerMySQLRepository(url, user, password);
         CustomerService customerService = new CustomerService(customerRepository, documentTypeRepository);
@@ -238,7 +242,7 @@ public class Initializer {
         TripBookingDetailService tripBookingDetailService = new TripBookingDetailService(tripBookingDetailRepository);
         TripBookingRepository tripBookingRepository = new TripBookingMySQLRepository(url, user, password);
         TripBookingService tripBookingService = new TripBookingService(tripBookingRepository, tripRepository, customerRepository, flightFareRepository);
-        return new TripConsoleAdapter(tripService, tripBookingService, tripBookingDetailService, customerService, flightFareService);
+        return new TripConsoleAdapter(tripService, null, tripBookingService, tripBookingDetailService, customerService, planeService, flightFareService);
     }
 
     // RESERVAS

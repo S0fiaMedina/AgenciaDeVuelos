@@ -6,6 +6,8 @@ import java.util.Optional;
 import com.agenciavuelos.modules.tripBookingDetail.domain.TripBookingDetail;
 
 public interface TripBookingDetailRepository {
+    public List<Integer> findSeatNumbers(int idTrip);
+
     public Optional<TripBookingDetail> findByTripBookingId(int id);
 
     public Optional<TripBookingDetail> findById(int id);

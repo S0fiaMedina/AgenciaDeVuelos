@@ -5,15 +5,16 @@ public class TripBookingDetail {
     private int idTripBooking;
     private int idCustomer;
     private int idFare;
+    private int seatNumber;
 
-    public TripBookingDetail(int idTripBooking, int idCustomer, int idFare) {
+    public TripBookingDetail(int idTripBooking, int idCustomer, int idFare, int seatNumber) {
         this.idTripBooking = idTripBooking;
         this.idCustomer = idCustomer;
         this.idFare = idFare;
+        this.seatNumber = seatNumber;
     }
 
-    public TripBookingDetail(int id, int idTripBooking, int idCustomer, int idFare) {
-        this.id = id;
+    public TripBookingDetail(int idTripBooking, int idCustomer, int idFare) {
         this.idTripBooking = idTripBooking;
         this.idCustomer = idCustomer;
         this.idFare = idFare;
@@ -49,5 +50,13 @@ public class TripBookingDetail {
 
     public void setIdFare(int idFare) {
         this.idFare = idFare;
+    }
+
+    public int getSeatNumber() {
+        return seatNumber;
+    }
+
+    public void setSeatNumber(int seatNumber) {
+        this.seatNumber = seatNumber;
     }
 }

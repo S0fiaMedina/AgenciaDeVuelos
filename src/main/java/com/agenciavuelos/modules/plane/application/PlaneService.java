@@ -64,6 +64,10 @@ public class PlaneService {
         return this.planeRepository.verifyPlate(number);
     }
 
+    public Optional<Plane> findByTrip(int idTrip) {
+        return this.planeRepository.findByTrip(idTrip);
+    }
+
     // FABRICANTE
 
     public List<Manufacturer> findAllManufacturers(){

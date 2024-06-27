@@ -18,4 +18,6 @@ public interface PlaneRepository {
     public int verifyPlate(String plate);
 
     public void delete(String plate);
+
+    public Optional<Plane> findByTrip(int idTrip);
 }
