@@ -143,7 +143,7 @@ public class PlaneConsoleAdapter {
         Plane newPlane = new Plane(newPlates, newCapacity, newFabricationDate, newModelId, newStatusId, newAirlineId);
 
         this.planeService.createPlane(newPlane);
-        Util.showWarning("Avion registrado con exito.");
+        
     }
 
     /**
@@ -249,7 +249,7 @@ public class PlaneConsoleAdapter {
                 System.out.println(spottedPlane);
 
                 this.planeService.updatePlane(spottedPlane);
-                Util.showWarning("Avion actualizado exitosamente");
+                
             },
             ()-> {
                 Util.showWarning("Id no encontrado o avion inexistente");
@@ -269,7 +269,6 @@ public class PlaneConsoleAdapter {
         deletePlane.ifPresentOrElse(
         spottedPlane -> { 
             this.planeService.deletePlane(deletePlate);
-            Util.showSuccess("Avion eliminado con exito");
         },
         ()-> {
             Util.showWarning("Id no encontrado o avion inexistente");
