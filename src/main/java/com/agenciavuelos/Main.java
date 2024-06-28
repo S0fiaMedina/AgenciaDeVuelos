@@ -3,6 +3,7 @@ package com.agenciavuelos;
 import com.agenciavuelos.Console.Initializer;
 import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.Console.view.adapter.in.AdminConsoleAdapter;
+import com.agenciavuelos.Console.view.adapter.in.ClientConsoleAdapter;
 import com.agenciavuelos.Console.view.adapter.in.SalesAgentConsoleAdapter;
 import com.agenciavuelos.Console.view.adapter.in.TechnicianConsoleAdapter;
 
@@ -17,6 +18,7 @@ public class Main {
         AdminConsoleAdapter adminConsoleAdapter = new AdminConsoleAdapter(initializer);
         TechnicianConsoleAdapter technicianConsoleAdapter = new TechnicianConsoleAdapter(initializer);
         SalesAgentConsoleAdapter salesAgentConsoleAdapter = new SalesAgentConsoleAdapter(initializer);
+        ClientConsoleAdapter clientConsoleAdapter = new ClientConsoleAdapter(initializer);
 
 
         String header = """
@@ -76,6 +78,7 @@ public class Main {
                 break;
             
             case 4: // cliente
+                clientConsoleAdapter.run();
                 break;
             
             default: // salir
