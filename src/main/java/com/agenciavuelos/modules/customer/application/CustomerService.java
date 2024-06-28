@@ -33,6 +33,9 @@ public class CustomerService {
 
     }
 
+    public Optional<Customer> findByDocumentNumber(int docNumber) {
+        return this.customerRepository.findByDocumentNumber(docNumber);
+    }
 
     public void updateCustomer(Customer documentType){
         this.customerRepository.update(documentType);

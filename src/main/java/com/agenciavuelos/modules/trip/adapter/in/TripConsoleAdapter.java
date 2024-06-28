@@ -18,6 +18,10 @@ import com.agenciavuelos.modules.flightConnection.application.FlightConnectionSe
 import com.agenciavuelos.modules.flightConnection.domain.FlightConnection;
 import com.agenciavuelos.modules.flightFare.application.FlightFareService;
 import com.agenciavuelos.modules.flightFare.domain.FlightFare;
+import com.agenciavuelos.modules.payment.application.PaymentService;
+import com.agenciavuelos.modules.payment.domain.Payment;
+import com.agenciavuelos.modules.paymentForm.application.PaymentFormService;
+import com.agenciavuelos.modules.paymentForm.domain.PaymentForm;
 import com.agenciavuelos.modules.plane.application.PlaneService;
 import com.agenciavuelos.modules.plane.domain.Plane;
 import com.agenciavuelos.modules.trip.application.TripService;
@@ -35,6 +39,8 @@ public class TripConsoleAdapter {
     private final CustomerService customerService;
     private final PlaneService planeService;
     private final FlightFareService flightFareService;
+    private final PaymentService paymentService;
+    private final PaymentFormService paymentFormService;
 
     private final  String[] tripOptions = { 
         "1. Registrar Vuelo",
@@ -45,7 +51,7 @@ public class TripConsoleAdapter {
         "6. Salir"
     };
 
-    public TripConsoleAdapter(TripService tripService, FlightConnectionService flightConnectionService, TripBookingService tripBookingService, TripBookingDetailService tripBookingDetailService, CustomerService customerService, PlaneService planeService, FlightFareService flightFareService) {
+    public TripConsoleAdapter(TripService tripService, FlightConnectionService flightConnectionService, TripBookingService tripBookingService, TripBookingDetailService tripBookingDetailService, CustomerService customerService, PlaneService planeService, FlightFareService flightFareService, PaymentService paymentService, PaymentFormService paymentFormService) {
         this.tripService = tripService;
         this.flightConnectionService = flightConnectionService;
         this.tripBookingService = tripBookingService;
@@ -53,6 +59,8 @@ public class TripConsoleAdapter {
         this.customerService = customerService;
         this.planeService = planeService;
         this.flightFareService = flightFareService;
+        this.paymentService = paymentService;
+        this.paymentFormService = paymentFormService;
     }
 
     /**
@@ -177,119 +185,163 @@ public class TripConsoleAdapter {
                     });
                     break;
             case 5:
-                Boolean iCorrect = true;
-                String dateD;
-                String nameCityD = Util.getStringInput(">> Ingrese la ciudad de origen: ");
-                String nameCityA = Util.getStringInput(">> Ingrese la ciudad de destino: ");
-                do {
-                    dateD = Util.getStringInput(">> Ingrese la fecha del vuelo (yyyy-MM-dd):");
-                    iCorrect = Util.checkDateFormat(dateD, "yyyy-MM-dd");
-                } while (iCorrect == false);
 
-                List<Trip> foundTripsList = this.tripService.searchTrips(nameCityD, nameCityA, dateD);
-                if (foundTripsList == null || foundTripsList.isEmpty()) {
-                    Util.showWarning("No se encontraron vuelos");
-                } else {
-                    System.out.println("VUELOS ENCONTRADOS");
-                    for (int i = 0; i <= foundTripsList.size() - 1; i++) {
-                        System.out.println(foundTripsList.get(i).getId() + " - " + foundTripsList.get(i).getDate() + " - " + foundTripsList.get(i).getNameCityD() + " - " + foundTripsList.get(i).getNameCityA());
-                    }
-                    int optionOne = Util.getIntInput("""
+                int documentNumber = Util.getIntInput(">> Ingrese su número de documento:");
+                Optional<Customer> foundC = this.customerService.findByDocumentNumber(documentNumber);
+                
+                foundC.ifPresentOrElse(
+                    spottedCustomer -> {
+                        Boolean iCorrect = true;
+                        String dateD;
+                        int idSpottedCustomer = spottedCustomer.getId();
+                        String nameCityD = Util.getStringInput(">> Ingrese la ciudad de origen: ");
+                        String nameCityA = Util.getStringInput(">> Ingrese la ciudad de destino: ");
+                        do {
+                            dateD = Util.getStringInput(">> Ingrese la fecha del vuelo (yyyy-MM-dd):");
+                            iCorrect = Util.checkDateFormat(dateD, "yyyy-MM-dd");
+                        } while (iCorrect == false);
 
-                    1. Seleccionar Vuelo
-                    2. Salir
-                    """);
-                    switch (optionOne) {
-                        case 1:
-                            int choice = Util.getIntInput(">> Ingrese el código del vuelo que desea seleccionar: ");
-                            Optional<Trip> foundT = this.tripService.findTripById(choice);
-                            
-                            foundT.ifPresentOrElse(
-                                spottedTrip -> {
-                                    // SE DEBE MOSTRAR LOS DATOS DE ESCALAS
-                                    System.out.println("Esta es la información del vuelo seleccionado:\n" + spottedTrip.getDate() + " - " + spottedTrip.getNameCityD() + " - " + spottedTrip.getNameCityA() + " - " + spottedTrip.getPrice());
-                                    String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                                    TripBooking tripBooking = new TripBooking(currentDate, foundT.get().getId());
-                                    int idTB = this.tripBookingService.createTripBooking(tripBooking);
+                        List<Trip> foundTripsList = this.tripService.searchTrips(nameCityD, nameCityA, dateD);
+                        if (foundTripsList == null || foundTripsList.isEmpty()) {
+                            Util.showWarning("No se encontraron vuelos");
+                        } else {
+                            System.out.println("VUELOS ENCONTRADOS");
+                            for (int i = 0; i <= foundTripsList.size() - 1; i++) {
+                                System.out.println(foundTripsList.get(i).getId() + " - " + foundTripsList.get(i).getDate() + " - " + foundTripsList.get(i).getNameCityD() + " - " + foundTripsList.get(i).getNameCityA());
+                            }
+                            int optionOne = Util.getIntInput("""
 
-                                    Optional<Plane> tripPlane = this.planeService.findByTrip(foundT.get().getId());
-                                    tripPlane.ifPresentOrElse(
-                                        spottedPlane -> {
-                                            int idF;
-                                            int idFare;
-                                            int idFound;
-                                            int capacityPlane = spottedPlane.getCapacity();
-                                            List<Integer> seats = Util.createSeats(1, capacityPlane);
-                                            // System.out.println(seats);
-                                            List<FlightFare> flightFares = flightFareService.findAllFlightFares();
-                                            int optionTwo = Util.getIntInput("""
+                            1. Seleccionar Vuelo
+                            2. Salir
+                            """);
+                            switch (optionOne) {
+                                case 1:
+                                    int choice = Util.getIntInput(">> Ingrese el código del vuelo que desea seleccionar: ");
+                                    Optional<Trip> foundT = this.tripService.findTripById(choice);
+                                    
+                                    foundT.ifPresentOrElse(
+                                        spottedTrip -> {
+                                            // SE DEBE MOSTRAR LOS DATOS DE ESCALAS
+                                            System.out.println("Esta es la información del vuelo seleccionado:\n" + spottedTrip.getDate() + " - " + spottedTrip.getNameCityD() + " - " + spottedTrip.getNameCityA() + " - " + spottedTrip.getPrice());
+                                            String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                                            TripBooking tripBooking = new TripBooking(currentDate, foundT.get().getId());
+                                            int idTB = this.tripBookingService.createTripBooking(tripBooking);
 
-                                            1. Añadir Pasajeros
-                                            2. Salir
-                                            """);
-                                            switch (optionTwo) {
-                                                case 1:
-                                                    int numPassengers = Util.getIntInput(">> Ingrese el número de pasajeros que va a registrar: ");
-                                                    for (int i = 1; i <= numPassengers; i++) {
-                                                        Boolean isFound = true;
-                                                        List<Integer> seatsOcuppied = tripBookingDetailService.findSeatNumbers(spottedTrip.getId());
-                                                        System.out.println(seatsOcuppied);
-                                                        String name = Util.getStringInput(">> Ingrese el nombre del pasajero: ");
-                                                        int age = Util.getIntInput(">> Ingrese la edad del pasajero: ");
+                                            Optional<Plane> tripPlane = this.planeService.findByTrip(foundT.get().getId());
+                                            tripPlane.ifPresentOrElse(
+                                                spottedPlane -> {
+                                                    int idF;
+                                                    int idFare;
+                                                    int idFound;
+                                                    int capacityPlane = spottedPlane.getCapacity();
+                                                    List<Integer> seats = Util.createSeats(1, capacityPlane);
+                                                    // System.out.println(seats);
+                                                    List<FlightFare> flightFares = flightFareService.findAllFlightFares();
+                                                    int optionTwo = Util.getIntInput("""
 
-                                                        List<DocumentType> documentTypes = this.customerService.findAllDocumentTypes();
-                                                        documentTypes.forEach(document -> { System.out.println(document); }); 
+                                                    1. Añadir Pasajeros
+                                                    2. Salir
+                                                    """);
+                                                    switch (optionTwo) {
+                                                        case 1:
+                                                            int numPassengers = Util.getIntInput(">> Ingrese el número de pasajeros que va a registrar: ");
+                                                            for (int i = 1; i <= numPassengers; i++) {
+                                                                Boolean isFound = true;
+                                                                List<Integer> seatsOcuppied = tripBookingDetailService.findSeatNumbers(spottedTrip.getId());
+                                                                // System.out.println(seatsOcuppied);
+                                                                String name = Util.getStringInput(">> Ingrese el nombre del pasajero: ");
+                                                                int age = Util.getIntInput(">> Ingrese la edad del pasajero: ");
 
-                                                        int newDocumentTypeId;
-                                                        do{
-                                                            newDocumentTypeId = Util.getIntInput(">> Ingrese el ID que corresponda al tipo de documento: ");
-                                                            idFound = this.customerService.getDocumentTypeId(newDocumentTypeId);
-                                                        } while (idFound == -1);
-                                                        
-                                                        int docNumber = 0;
-                                                        do {
-                                                            docNumber = Util.getIntInput(">> Introduzca el número de identificación del pasajero\n NOTA: debe ser un numero único"); 
-                                                        }while (this.customerService.verifyDocumentNumber(docNumber) != 0);
+                                                                List<DocumentType> documentTypes = this.customerService.findAllDocumentTypes();
+                                                                documentTypes.forEach(document -> { System.out.println(document); }); 
 
-                                                        for (int j = 0; j <= flightFares.size() - 1; j++) {
-                                                            System.out.println(flightFares.get(j).getId() + " - " + flightFares.get(j).getDescription() + " - " + flightFares.get(j).getDetails() + " - " + flightFares.get(j).getValue());
-                                                        }
-                                                        do {
-                                                            idFare = Util.getIntInput(">> Ingrese el ID de la tarifa:");
-                                                            idF = tripBookingService.getFlightFareId(idFare);
-                                                        } while (idF == -1);
-                                                        Customer  customer = new Customer(name, age, newDocumentTypeId, docNumber);
-                                                        int idC = customerService.createCustomer(customer);
-                                                        System.out.println(seats);
-                                                        do {
-                                                            int seatNumber = Util.getIntInput(">> Ingrese el asiento: ");
-                                                            if (seatsOcuppied.contains(seatNumber)) {
-                                                                Util.showWarning("El asiento se encuentra ocupado");
-                                                            } else {
-                                                                TripBookingDetail tripBookingDetail = new TripBookingDetail(idTB, idC, idFare, seatNumber);
-                                                                this.tripBookingDetailService.createTripBookingDetail(tripBookingDetail);
-                                                                isFound = false;
+                                                                int newDocumentTypeId;
+                                                                do{
+                                                                    newDocumentTypeId = Util.getIntInput(">> Ingrese el ID que corresponda al tipo de documento: ");
+                                                                    idFound = this.customerService.getDocumentTypeId(newDocumentTypeId);
+                                                                } while (idFound == -1);
+                                                                
+                                                                int docNumber = 0;
+                                                                do {
+                                                                    docNumber = Util.getIntInput(">> Introduzca el número de identificación del pasajero\n NOTA: debe ser un numero único"); 
+                                                                }while (this.customerService.verifyDocumentNumber(docNumber) != 0);
+
+                                                                for (int j = 0; j <= flightFares.size() - 1; j++) {
+                                                                    System.out.println(flightFares.get(j).getId() + " - " + flightFares.get(j).getDescription() + " - " + flightFares.get(j).getDetails() + " - " + flightFares.get(j).getValue());
+                                                                }
+                                                                do {
+                                                                    idFare = Util.getIntInput(">> Ingrese el ID de la tarifa:");
+                                                                    idF = tripBookingService.getFlightFareId(idFare);
+                                                                } while (idF == -1);
+                                                                Customer  customer = new Customer(name, age, newDocumentTypeId, docNumber);
+                                                                int idC = customerService.createCustomer(customer);
+                                                                System.out.println(seats);
+                                                                do {
+                                                                    int seatNumber = Util.getIntInput(">> Ingrese el asiento: ");
+                                                                    if (seatsOcuppied.contains(seatNumber)) {
+                                                                        Util.showWarning("El asiento se encuentra ocupado");
+                                                                    } else {
+                                                                        TripBookingDetail tripBookingDetail = new TripBookingDetail(idTB, idC, idFare, seatNumber);
+                                                                        this.tripBookingDetailService.createTripBookingDetail(tripBookingDetail);
+                                                                        isFound = false;
+                                                                    }
+                                                                } while (isFound == true);
                                                             }
-                                                        } while (isFound == true);
+                                                            
+                                                            int optionThree = Util.getIntInput("""
+                                                            1. Realizar Pago
+                                                            2. Salir
+                                                            """);
+                                                            switch (optionThree) {
+                                                                case 1:
+                                                                    List<PaymentForm> paymentForms = this.paymentFormService.findAllPaymentForms();
+                                                                    for (PaymentForm paymentForm : paymentForms) {
+                                                                        System.out.println(paymentForm.getId() + " - " + paymentForm.getDescription());
+                                                                    }
+                                                                    Optional<PaymentForm> foundP;
+                                                                    do {
+                                                                        int idPaymentForm = Util.getIntInput(">> Seleccione el ID de la forma de pago:");
+                                                                        foundP = this.paymentFormService.findPaymentFormById(idPaymentForm);
+                                                                        foundP.ifPresentOrElse(
+                                                                            spottedPaymentForm -> {
+                                                                                Payment payment = new Payment(documentNumber, spottedPaymentForm.getId(), idTB);
+                                                                                this.paymentService.createPayment(payment);
+                                                                                Util.showSuccess("Pago exitoso");
+                                                                            },
+                                                                            () -> {
+                                                                                Util.showWarning("No se encontró la forma del pago");
+                                                                            }
+                                                                        );
+                                                                    } while (foundP.isEmpty());
+                                                                    
+                                                                    break;
+                                                                case 2:
+                                                                    this.tripBookingService.deleteTripBooking(idTB);
+                                                                    break;
+                                                            }
+                                                            break;
+                                                        case 2:
+                                                            this.tripBookingService.deleteTripBooking(idTB);
+                                                            break;
                                                     }
-                                                    break;
-                                                case 2:
-                                                    this.tripBookingService.deleteTripBooking(idTB);
-                                                    break;
-                                            }
-                                        }, 
-                                        () -> {
-                                            Util.showSuccess("No existe avión asociado a este vuelo");
-                                        });
-                                },
-                                ()-> {
-                                    Util.showWarning("ID no encontrado o vuelo inexistente");
-                                }
-                            );
-                            
-                            break;
+                                                }, 
+                                                () -> {
+                                                    Util.showSuccess("No existe avión asociado a este vuelo");
+                                                }
+                                            );
+                                        },
+                                        ()-> {
+                                            Util.showWarning("ID no encontrado o vuelo inexistente");
+                                        }
+                                    );
+                                    break;
+                            }
+                        }
+                    },
+                    () -> {
+                        Util.showWarning("No se encontró el cliente");
                     }
-                }
+                );
                 break;
         } 
     }

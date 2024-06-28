@@ -28,6 +28,9 @@ import com.agenciavuelos.modules.employee.adapter.in.EmployeeConsoleAdapter;
 import com.agenciavuelos.modules.employee.adapter.out.EmployeeMySQLRepository;
 import com.agenciavuelos.modules.employee.application.EmployeeService;
 import com.agenciavuelos.modules.employee.infrastructure.EmployeeRepository;
+import com.agenciavuelos.modules.flightConnection.adapter.out.FlightConnectionMySQLRepository;
+import com.agenciavuelos.modules.flightConnection.application.FlightConnectionService;
+import com.agenciavuelos.modules.flightConnection.infrastructure.FlightConnectionRepository;
 import com.agenciavuelos.modules.flightFare.adapter.in.FlightFareConsoleAdapter;
 import com.agenciavuelos.modules.flightFare.adapter.out.FlightFareMySQLRepository;
 import com.agenciavuelos.modules.flightFare.application.FlightFareService;
@@ -44,6 +47,12 @@ import com.agenciavuelos.modules.model.adapter.in.ModelConsoleAdapter;
 import com.agenciavuelos.modules.model.adapter.out.ModelMySQLRepository;
 import com.agenciavuelos.modules.model.application.ModelService;
 import com.agenciavuelos.modules.model.infrastructure.ModelRepository;
+import com.agenciavuelos.modules.payment.adapter.out.PaymentMySQLRepository;
+import com.agenciavuelos.modules.payment.application.PaymentService;
+import com.agenciavuelos.modules.payment.infrastructure.PaymentRepository;
+import com.agenciavuelos.modules.paymentForm.adapter.out.PaymentFormMySQLRepository;
+import com.agenciavuelos.modules.paymentForm.application.PaymentFormService;
+import com.agenciavuelos.modules.paymentForm.infrastructure.PaymentFormRepository;
 import com.agenciavuelos.modules.plane.adapter.in.PlaneConsoleAdapter;
 import com.agenciavuelos.modules.plane.adapter.out.PlaneMySQLRepository;
 import com.agenciavuelos.modules.plane.application.PlaneService;
@@ -238,11 +247,17 @@ public class Initializer {
         AirportRepository airportRepository = new AirportMySQLRepository(url, user, password);
         TripRepository tripRepository = new TripMySQLRepository(url, user, password);
         TripService tripService = new TripService(tripRepository, airportRepository);
+        FlightConnectionRepository flightConnectionRepository = new FlightConnectionMySQLRepository(url, user, password);
+        FlightConnectionService flightConnectionService = new FlightConnectionService(tripRepository, airportRepository, planeRepository, flightConnectionRepository);
+        PaymentRepository paymentRepository = new PaymentMySQLRepository(url, user, password);
+        PaymentService paymentService = new PaymentService(paymentRepository);
+        PaymentFormRepository paymentFormRepository = new PaymentFormMySQLRepository(url, user, password);
+        PaymentFormService paymentFormService = new PaymentFormService(paymentFormRepository);
         TripBookingDetailRepository tripBookingDetailRepository = new TripBookingDetailMySQLRepository(url, user, password);
         TripBookingDetailService tripBookingDetailService = new TripBookingDetailService(tripBookingDetailRepository);
         TripBookingRepository tripBookingRepository = new TripBookingMySQLRepository(url, user, password);
         TripBookingService tripBookingService = new TripBookingService(tripBookingRepository, tripRepository, customerRepository, flightFareRepository);
-        return new TripConsoleAdapter(tripService, null, tripBookingService, tripBookingDetailService, customerService, planeService, flightFareService);
+        return new TripConsoleAdapter(tripService, flightConnectionService, tripBookingService, tripBookingDetailService, customerService, planeService, flightFareService, paymentService, paymentFormService);
     }
 
     // RESERVAS
