@@ -29,7 +29,10 @@ public class TripBookingConsoleAdapter {
         "1. Crear Reserva",
         "2. Consultar Reserva",
         "3. Eliminar Reserva",
-        "4. Salir"
+        "4. Consultar Reserva de Vuelo", // CU43
+        "5. Modificar Reserva de Vuelo", // CU45
+        "6. Cancelar Reserva de Vuelo", // CU44
+        "7. Salir"  
     };
 
     public TripBookingConsoleAdapter(TripBookingService tripBookingService, TripBookingDetailService tripBookingDetailService, TripService tripService, CustomerService customerService, FlightFareService flightFareService) {
@@ -56,6 +59,7 @@ public class TripBookingConsoleAdapter {
         int idCustomer;
         int idFare;
         int idF;
+        int idTrip;
         int optionSelected = getChoiceFromUser();
         List<Customer> customers = customerService.findAllCustomers();
         List<Trip> trips = tripService.findAllTrips();
@@ -74,7 +78,7 @@ public class TripBookingConsoleAdapter {
                     System.out.println(trips.get(i).getId() + " - " + trips.get(i).getDate() + " - " + trips.get(i).getIdAirportD() + " - " + trips.get(i).getIdAirportA());
                 }
                 do {
-                    int idTrip = Util.getIntInput(">> Ingrese el ID del viaje que desea reservar:");
+                    idTrip = Util.getIntInput(">> Ingrese el ID del viaje que desea reservar:");
                     idF = tripBookingService.getTripId(idTrip);
                 } while (idF == -1);
                 currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -85,7 +89,7 @@ public class TripBookingConsoleAdapter {
                     idFare = Util.getIntInput(">> Ingrese el ID de la tarifa:");
                     idF = tripBookingService.getFlightFareId(idFare);
                 } while (idF == -1);
-                TripBooking tripBooking = new TripBooking(currentDate, idF);
+                TripBooking tripBooking = new TripBooking(currentDate, idTrip);
                 int idTB = this.tripBookingService.createTripBooking(tripBooking);
                 TripBookingDetail tripBookingDetail = new TripBookingDetail(idTB, idCustomer, idFare);
                 this.tripBookingDetailService.createTripBookingDetail(tripBookingDetail);
@@ -134,15 +138,15 @@ public class TripBookingConsoleAdapter {
                 break;
                 */
             case 2: // BUSCAR POR ID
-                int SearchId;
+                int searchId;
                 int option = Util.getIntInput("""
                     1. Buscar por ID del cliente
                     2. Buscar por ID del vuelo
                     """);
                 switch (option) {
                     case 1:
-                        SearchId = Util.getIntInput(">> Introduzca el ID del cliente: ");
-                        List<TripBooking> foundTripBookingByCustomerList = this.tripBookingService.getTripBookingByCustomer(SearchId);
+                        searchId = Util.getIntInput(">> Introduzca el ID del cliente: ");
+                        List<TripBooking> foundTripBookingByCustomerList = this.tripBookingService.getTripBookingByCustomer(searchId);
                         if (foundTripBookingByCustomerList == null || foundTripBookingByCustomerList.isEmpty()) {
                             Util.showWarning("No se encontraron reservas");
                         } else {
@@ -153,8 +157,8 @@ public class TripBookingConsoleAdapter {
                         }
                         break;
                     case 2:
-                        SearchId = Util.getIntInput(">> Introduzca el ID del trayecto: ");
-                        List<TripBooking> foundTripBookingByTripList = this.tripBookingService.getTripBookingByTrip(SearchId);
+                        searchId = Util.getIntInput(">> Introduzca el ID del trayecto: ");
+                        List<TripBooking> foundTripBookingByTripList = this.tripBookingService.getTripBookingByTrip(searchId);
                         if (foundTripBookingByTripList == null || foundTripBookingByTripList.isEmpty()) {
                             Util.showWarning("No se encontraron reservas");
                         } else {
@@ -168,7 +172,7 @@ public class TripBookingConsoleAdapter {
                 break;
             case 3: // ELIMINAR
                 // TODO: hacer funcion de validacion de obj nulos
-                int deleteId = Util.getIntInput(">> Introduzca el ID a buscar: ");
+                int deleteId = Util.getIntInput(">> Introduzca el ID a eliminar: ");
                 Optional<TripBooking> tripBookingToDelete = this.tripBookingService.findTripBookingById(deleteId);
                 // TODO: hacer funcion de validacion de obj nulos
                 tripBookingToDelete.ifPresentOrElse(
@@ -178,6 +182,58 @@ public class TripBookingConsoleAdapter {
                     () -> {
                         Util.showWarning("ID no encontrado o reserva inexistente");
                     });
+            case 4:
+                int documentNumber = Util.getIntInput(">> Ingrese su número de documento:");
+                Optional<Customer> foundC = this.customerService.findByDocumentNumber(documentNumber);
+                foundC.ifPresentOrElse(
+                    spottedCustomer -> {
+                        List<Integer> bookingsList = this.tripBookingService.findBookingsByCustomerId(spottedCustomer.getId());
+                        int searchID = Util.getIntInput(">> Introduzca el ID de la reserva: ");
+                        if (bookingsList.contains(searchID)) {
+                            List<TripBooking> tripBookingList = this.tripBookingService.findBookingById(searchID);
+                            if (tripBookingList == null || tripBookingList.isEmpty()) {
+                                Util.showWarning("No se encontraron reservas");
+                            } else {
+                                System.out.println("RESERVA ENCONTRADA");
+                                tripBookingList.forEach(booking -> {System.out.println(booking);});
+                            }
+                        } else {
+                            Util.showWarning("La reserva solicitada no pertenece al cliente");
+                        }
+                    },
+                    () -> {
+                        Util.showWarning("No se encontró al cliente");
+                    }
+                );
+                break;
+            case 5:
+                break;
+            case 6:
+                int docNumber = Util.getIntInput(">> Ingrese su número de documento:");
+                    Optional<Customer> foundCustomer = this.customerService.findByDocumentNumber(docNumber);
+                    foundCustomer.ifPresentOrElse(
+                        spottedCustomer -> {
+                            List<Integer> bookingsList = this.tripBookingService.findBookingsByCustomerId(spottedCustomer.getId());
+                            int searchID = Util.getIntInput(">> Introduzca el ID de la reserva: ");
+                            if (bookingsList.contains(searchID)) {
+                                List<TripBooking> tripBookingList = this.tripBookingService.findBookingById(searchID);
+                                if (tripBookingList == null || tripBookingList.isEmpty()) {
+                                    Util.showWarning("No se encontraron reservas");
+                                } else {
+                                    String conf = Util.getStringInput("Confirme la cancelación con 'S', presione cualquier otra letra para salir");
+                                    if (conf.equals("S")) {
+                                        this.tripBookingService.deleteTripBooking(searchID);
+                                    }
+                                }
+                            } else {
+                                Util.showWarning("La reserva solicitada no pertenece al cliente");
+                            }
+                        },
+                        () -> {
+                            Util.showWarning("No se encontró al cliente");
+                        }
+                    );
+                break;
         }
     }
 }

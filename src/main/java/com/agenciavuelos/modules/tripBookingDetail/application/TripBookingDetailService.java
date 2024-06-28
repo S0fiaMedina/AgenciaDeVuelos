@@ -22,6 +22,10 @@ public class TripBookingDetailService {
         return optionalTripBookingDetail;
     }
 
+    public List<Integer> findSeatNumbers(int idTrip) {
+        return this.tripBookingDetailRepository.findSeatNumbers(idTrip);
+    }
+
     public void deleteTripBookingDetail(int id){
         this.tripBookingDetailRepository.delete(id);
     }

@@ -4,7 +4,10 @@ package com.agenciavuelos.Console;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * NOTA PARA LA SUSTENTACIÓN: 
@@ -173,4 +176,8 @@ public class Util {
         System.out.println("*************************************\nPresiona Enter para continuar...");
         scanner.nextLine();
     }
+
+    public static List<Integer> createSeats(int start, int end) {
+        return IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());
+    };
 }
