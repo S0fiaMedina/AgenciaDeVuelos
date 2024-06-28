@@ -65,6 +65,9 @@ public class AdminConsoleAdapter {
             case 6: // aviones
                 this.admin.getPlaneConsoleAdapter().run();
                 break;
+            case 7: // tarifas de vuelo
+                this.admin.getFlightFareConsoleAdapter().run();
+                break;
         }
 
     }

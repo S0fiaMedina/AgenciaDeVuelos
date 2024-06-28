@@ -30,6 +30,7 @@ public class FlightFareConsoleAdapter {
         System.out.println("MENU DE TARIFAS");
         System.out.println("-------------------------------------");
         Util.printOptions(this.flightFareOptions); 
+        System.out.println(">> Seleccione la opcion de su preferencia: ");
         return Util.rangeValidator(1, flightFareOptions.length);
     }
 
@@ -38,67 +39,83 @@ public class FlightFareConsoleAdapter {
         switch (optionSelected) {
 
             case 1: // CREAR
-                // TODO: validacion de no repeticion de codigo de pais
-                String description = Util.getStringInput(">> Ingrese la descripción de la tarifa:");
-                String details = Util.getStringInput(">> Ingrese los detalles:");
-                Double value = Util.getDoubleInput(">> Ingrese el valor de la tarifa:");
-                FlightFare flightFare = new FlightFare(description, details, value);
-                this.flightFareService.createFlightFare(flightFare);
+                this.newFlightFare();
                 break;
+
         
             case 2: // ACTUALIZAR
 
-                List<FlightFare> flightFares = this.flightFareService.findAllFlightFares();
-
-                if (flightFares == null || flightFares.isEmpty() )
-                    Util.showWarning("No hay tarifas registrados");
-
-                else{
-                    int idFlightFare = Util.getIntInput(">> Introduzca el código a buscar: ");
-                    Optional<FlightFare> optionalFlightFare = this.flightFareService.findFlightFareById(idFlightFare);
-
-                
-                    optionalFlightFare.ifPresentOrElse(
-                        updatedFlightFare -> {
-                            System.out.println("Esta es la información de la tarifa encontrada:\n" + updatedFlightFare.getDescription() + " - " + updatedFlightFare.getDetails() + " - " + updatedFlightFare.getValue());
-
-                            String newDescription = Util.getStringInput(">> Ingrese la descripción de la tarifa:");
-                            String newDetails = Util.getStringInput(">> Ingrese los detalles:");
-                            Double newValue = Util.getDoubleInput(">> Ingrese el valor de la tarifa:");
-                            
-                            updatedFlightFare.setDescription(newDescription);
-                            updatedFlightFare.setDetails(newDetails);
-                            updatedFlightFare.setValue(newValue);
-                            this.flightFareService.updateFlightFare(updatedFlightFare);
-                        },
-                        
-                        () -> {
-                            Util.showWarning("ID no encontrado");
-                        });
-                    }
+               this.updateFlightFare();
                 break;
 
             case 3: // BUSCAR POR ID
 
-                int SearchId = Util.getIntInput(">> Introduzca el ID a buscar: ");
-                Optional<FlightFare> foundFlightFare = this.flightFareService.findFlightFareById(SearchId);
-                
-                foundFlightFare.ifPresentOrElse(
-                    spottedFlightFare -> { 
-                        System.out.println("Esta es la información de la tarifa encontrada:\n" + spottedFlightFare.getDescription() + " - " + spottedFlightFare.getDetails() + " - " + spottedFlightFare.getValue());
-                    },
-                    ()-> {
-                        Util.showWarning("ID no encontrado o tarifa inexistente");
-                    }
-                
-                );
+                this.searchFlightFare();
                 break;
             
             case 4: // ELIMINAR
-                int deleteId = Util.getIntInput(">> Introduzca el ID a buscar: ");
+                this.deleteFlightFare();
+        }
+    }
+
+    public void newFlightFare(){
+        String description = Util.getStringInput(">> Ingrese la descripción de la tarifa:");
+        String details = Util.getStringInput(">> Ingrese los detalles:");
+        Double value = Util.getDoubleInput(">> Ingrese el valor de la tarifa:");
+        FlightFare flightFare = new FlightFare(description, details, value);
+        this.flightFareService.createFlightFare(flightFare);
+    }
+
+    public void updateFlightFare(){
+        List<FlightFare> flightFares = this.flightFareService.findAllFlightFares();
+
+        if (flightFares == null || flightFares.isEmpty() )
+            Util.showWarning("No hay tarifas registrados");
+
+        else{
+            int idFlightFare = Util.getIntInput(">> Introduzca el código a buscar: ");
+            Optional<FlightFare> optionalFlightFare = this.flightFareService.findFlightFareById(idFlightFare);
+
+        
+            optionalFlightFare.ifPresentOrElse(
+                updatedFlightFare -> {
+                    System.out.println("Esta es la información de la tarifa encontrada:\n" + updatedFlightFare.getDescription() + " - " + updatedFlightFare.getDetails() + " - " + updatedFlightFare.getValue());
+
+                    String newDescription = Util.getStringInput(">> Ingrese la descripción de la tarifa:");
+                    String newDetails = Util.getStringInput(">> Ingrese los detalles:");
+                    Double newValue = Util.getDoubleInput(">> Ingrese el valor de la tarifa:");
+                    
+                    updatedFlightFare.setDescription(newDescription);
+                    updatedFlightFare.setDetails(newDetails);
+                    updatedFlightFare.setValue(newValue);
+                    this.flightFareService.updateFlightFare(updatedFlightFare);
+                },
+                
+                () -> {
+                    Util.showWarning("ID no encontrado");
+                });
+            }
+        }
+    
+    public void searchFlightFare(){
+        int SearchId = Util.getIntInput(">> Introduzca el ID a buscar: ");
+        Optional<FlightFare> foundFlightFare = this.flightFareService.findFlightFareById(SearchId);
+        
+        foundFlightFare.ifPresentOrElse(
+            spottedFlightFare -> { 
+                System.out.println("Esta es la información de la tarifa encontrada:\n" + spottedFlightFare.getDescription() + " - " + spottedFlightFare.getDetails() + " - " + spottedFlightFare.getValue());
+            },
+            ()-> {
+                Util.showWarning("ID no encontrado o tarifa inexistente");
+            }
+        
+        );
+    }
+
+    public void deleteFlightFare(){
+        int deleteId = Util.getIntInput(">> Introduzca el ID a buscar: ");
                 Optional<FlightFare> flightFareToDelete = this.flightFareService.findFlightFareById(deleteId);
 
-                // TODO: hacer funcion de validacion de obj nulos
                 flightFareToDelete.ifPresentOrElse(
                     spottedFlightFare -> {
                         this.flightFareService.deleteFlightFare(deleteId);
@@ -106,6 +123,5 @@ public class FlightFareConsoleAdapter {
                     () -> {
                         Util.showWarning("ID no encontrado o tarifa inexistente");
                     });
-        }
     }
 }
