@@ -43,84 +43,99 @@ public class DocumentTypeConsoleAdapter {
         switch (optionSelected) {
 
             case 1: // CREAR
-
-                // solicita los datos
-                String name = Util.getStringInput(">> Ingrese el nombre del tipo de documento:");
-                DocumentType  manufacturer = new DocumentType(0,name); 
-
-                //guarda
-                this.documentTypeService.createDocumentType(manufacturer);
-
+                this.newDocumentType();
                 break;
 
             case 2: // ACTUALIZAR
-
-                // solicita los datos
-                List<DocumentType> documentTypes = this.documentTypeService.findAllDocumentTypes();
-               
-
-                if (documentTypes == null || documentTypes.isEmpty()  ) // valida que hayan manufacturadores antes de cualquier cosa
-                    Util.showWarning("No hay tipos de documentos registrados");
-
-                else{
-                    int id = Util.getIntInput(">> Introduzca el id a buscar: ");
-                    Optional<DocumentType> optionalDocumentType = this.documentTypeService.findDocumentTypeById(id);
-
-                
-                    optionalDocumentType.ifPresentOrElse( // Aqui esta la funcion lambda
-
-                        // Acción si el tipo de documento está presente
-                        updatedDocumentType -> {
-                            System.out.println("Esta es la información actual del tipo de documento:\n " + updatedDocumentType);
-                            String newName = Util.getStringInput(">> Ingrese el nuevo nombre del tipo de documento: ");
-
-                            // Cambiar el nombre del tipo de documento
-                            updatedDocumentType.setName(newName);
-
-                            // Actualizar el tipo de documento en la base de datos
-                            this.documentTypeService.updateDocumentType(updatedDocumentType);
-                        },
-
-                        // Acción si el tipo de documento no está presente (ID no encontrado)
-                        () -> {
-                            Util.showWarning("Tipo de documento inexistente o no encontrado. ");
-                        });
-                    }
+                this.updateDocumentType();
                 break;
 
             case 3: // BUSCAR
-                int id = Util.getIntInput(">> Introduzca el id a buscar: ");
-                Optional<DocumentType> foundDocumentType = this.documentTypeService.findDocumentTypeById(id);
-                
-                // estoy empezando a creer que esta logica de validacion es mejor colocarla en una funcion aparte -_-
-                foundDocumentType.ifPresentOrElse(
-                    spottedDocumentType -> { // Si el tipo de documento fue encontrado...
-                    System.out.println("Esta es la información del tipo de documento encontrado:\n" + spottedDocumentType);
-                    },
-                    ()-> {
-                        Util.showWarning("Id no encontrado o tipo de documento inexistente");
-                    }
-                
-                );
+                this.searchDocumentDocumentType();
                 break;
             
             case 4: // ELIMINAR
-            int deleteId = Util.getIntInput(">> Introduzca el id a buscar: ");
-
-            Optional<DocumentType> manufacturerToDelete = this.documentTypeService.findDocumentTypeById(deleteId);
-
-            // Utilizar ifPresent para manejar el caso cuando el tipo de documento está presente
-            
-            manufacturerToDelete.ifPresentOrElse(spottedDocumentType -> {
-                this.documentTypeService.deteleDocumentType(deleteId);
-            },
-            () -> {
-                Util.showWarning("Tipo de documento no encontrado");
-            }
-            );
+                this.deleteDocumentType();
                 break;
         }
     }
+
+    public void newDocumentType(){
+        // solicita los datos
+        String name = Util.getStringInput(">> Ingrese el nombre del tipo de documento:");
+        DocumentType  manufacturer = new DocumentType(0,name); 
+
+        //guarda
+        this.documentTypeService.createDocumentType(manufacturer);
+    }
+
+    public void updateDocumentType(){
+        // solicita los datos
+        List<DocumentType> documentTypes = this.documentTypeService.findAllDocumentTypes();
+               
+
+        if (documentTypes == null || documentTypes.isEmpty()  ) // valida que hayan manufacturadores antes de cualquier cosa
+            Util.showWarning("No hay tipos de documentos registrados");
+
+        else{
+            int id = Util.getIntInput(">> Introduzca el id a buscar: ");
+            Optional<DocumentType> optionalDocumentType = this.documentTypeService.findDocumentTypeById(id);
+
+        
+            optionalDocumentType.ifPresentOrElse( // Aqui esta la funcion lambda
+
+                // Acción si el tipo de documento está presente
+                updatedDocumentType -> {
+                    System.out.println("Esta es la información actual del tipo de documento:\n " + updatedDocumentType);
+                    String newName = Util.getStringInput(">> Ingrese el nuevo nombre del tipo de documento: ");
+
+                    // Cambiar el nombre del tipo de documento
+                    updatedDocumentType.setName(newName);
+
+                    // Actualizar el tipo de documento en la base de datos
+                    this.documentTypeService.updateDocumentType(updatedDocumentType);
+                },
+
+                // Acción si el tipo de documento no está presente (ID no encontrado)
+                () -> {
+                    Util.showWarning("Tipo de documento inexistente o no encontrado. ");
+                }
+            );
+        }
+    }
+
+    public void searchDocumentDocumentType(){
+        int id = Util.getIntInput(">> Introduzca el id a buscar: ");
+        Optional<DocumentType> foundDocumentType = this.documentTypeService.findDocumentTypeById(id);
+        
+        // estoy empezando a creer que esta logica de validacion es mejor colocarla en una funcion aparte -_-
+        foundDocumentType.ifPresentOrElse(
+            spottedDocumentType -> { // Si el tipo de documento fue encontrado...
+            System.out.println("Esta es la información del tipo de documento encontrado:\n" + spottedDocumentType);
+            },
+            ()-> {
+                Util.showWarning("Id no encontrado o tipo de documento inexistente");
+            }
+        
+        );
+    }
+
+    public void deleteDocumentType(){
+        int deleteId = Util.getIntInput(">> Introduzca el id a buscar: ");
+
+        Optional<DocumentType> manufacturerToDelete = this.documentTypeService.findDocumentTypeById(deleteId);
+
+        // Utilizar ifPresent para manejar el caso cuando el tipo de documento está presente
+        
+        manufacturerToDelete.ifPresentOrElse(spottedDocumentType -> {
+            this.documentTypeService.deteleDocumentType(deleteId);
+        },
+            () -> {
+                Util.showWarning("Tipo de documento no encontrado");
+            }
+        );
+    }
+
 
 
 }

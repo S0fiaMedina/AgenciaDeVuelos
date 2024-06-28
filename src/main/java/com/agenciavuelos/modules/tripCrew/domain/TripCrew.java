@@ -46,7 +46,7 @@ public class TripCrew {
         StringBuilder sb = new StringBuilder();
         sb.append("id del empleado : ").append(this.idEmployee);
         sb.append(", nombre del empleado: ").append(this.nameEmployee);
-        sb.append("\nrol del empleado: ").append(this.rolEmployee);
+        sb.append(", rol del empleado: ").append(this.rolEmployee);
         return sb.toString();
     }
     

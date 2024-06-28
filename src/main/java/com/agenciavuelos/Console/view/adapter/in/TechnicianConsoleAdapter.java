@@ -13,9 +13,8 @@ public class TechnicianConsoleAdapter {
     };
 
     String header = """
-    ##########################################
-            BIENVENIDO, TECNICO
-    ##########################################                                                                  
+    ▀█▀ █▀▀ █▀▀ █▄░█ █ █▀▀ █▀█
+    ░█░ ██▄ █▄▄ █░▀█ █ █▄▄ █▄█                                                                
     """;
 
     public TechnicianConsoleAdapter(Initializer initializer){

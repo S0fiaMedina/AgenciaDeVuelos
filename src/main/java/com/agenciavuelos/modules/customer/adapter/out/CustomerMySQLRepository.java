@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.customer.domain.Customer;
 import com.agenciavuelos.modules.customer.infrastructure.CustomerRepository;
 
@@ -35,6 +36,8 @@ public class CustomerMySQLRepository  implements CustomerRepository{
                 statement.setInt(4, customer.getDocumentNumber());
                 statement.executeUpdate();
                 ResultSet generatedKeys = statement.getGeneratedKeys();
+                Util.showSuccess("Cliente registrado");
+
                 if (generatedKeys.next()) {
                     int id =  generatedKeys.getInt(1);
                     return id;
@@ -60,6 +63,7 @@ public class CustomerMySQLRepository  implements CustomerRepository{
                 statement.setInt(4, customer.getDocumentNumber());
                 statement.setInt(5, customer.getId());
                 statement.executeUpdate();
+                Util.showSuccess("Cliente actualizado");
             }
         } catch (SQLException e) {
             System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());

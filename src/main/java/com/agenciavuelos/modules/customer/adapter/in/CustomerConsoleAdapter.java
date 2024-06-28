@@ -30,6 +30,7 @@ public class CustomerConsoleAdapter {
         System.out.println("MENU DE CLIENTES");
         System.out.println("-------------------------------------");
         Util.printOptions(this.customerOptions); 
+        System.out.println(">> Escoja la opcion de su preferencia: ");
         return Util.rangeValidator(1, customerOptions.length);
     }
 
@@ -51,6 +52,7 @@ public class CustomerConsoleAdapter {
                 int age = Util.getIntInput(">> Ingrese la edad del cliente: ");
 
                 // solicitando datos de tipo de documento
+                System.out.println("------------> TIPOS DE DOCUMENTO DISPONIBLES <-------------");
                 List<DocumentType>  documentTypes = this.customerService.findAllDocumentTypes();
                 documentTypes.forEach(document -> { System.out.println(document); }); 
 
@@ -68,7 +70,6 @@ public class CustomerConsoleAdapter {
                 }while (this.customerService.verifyDocumentNumber(docNumber) != 0);
 
                 // validacion de que el numero de dodumento sea unico
-
                 Customer  customer = new Customer(name, age, newDocumentTypeId, docNumber); 
 
                 //guarda
@@ -106,15 +107,18 @@ public class CustomerConsoleAdapter {
                     int id = Util.getIntInput(">> Introduzca el id a buscar: ");
                     Optional<Customer> optionalCustomer = this.customerService.findCustomerById(id);
 
-                    // mostrar informacion actual
-                    System.out.println(">> Cliente encontrado. esta es su información actual");
-                    System.out.println(optionalCustomer);
+                   
 
                     // validacion id
                     optionalCustomer.ifPresentOrElse(
-
+                         
                         updatedCustomer -> {
+                            // mostrar informacion actual
+                            System.out.println(">> Cliente encontrado. esta es su información actual");
+                            System.out.println(updatedCustomer);
+
                             int idFound2; // pongo esto porque a java no le gusta usar variables del exterior en lambdas
+
 
                              // solicita al agente ingresar los detalles del cliente:
                             String updateName = Util.getStringInput(">> Ingrese el nuevo nombre del cliente: ");
@@ -122,6 +126,7 @@ public class CustomerConsoleAdapter {
 
                             // solicitando datos de tipo de documento
                             List<DocumentType>  updateDocumentTypes = this.customerService.findAllDocumentTypes();
+                            System.out.println("------------> TIPOS DE DOCUMENTO DISPONIBLES <-------------");
                             updateDocumentTypes.forEach(document -> { System.out.println(document); }); 
 
                             int updateDocumentId;
