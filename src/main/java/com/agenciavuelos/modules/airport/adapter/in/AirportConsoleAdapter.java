@@ -34,6 +34,7 @@ public class AirportConsoleAdapter {
         System.out.println("MENU DE AEROPUERTOS");
         System.out.println("-------------------------------------");
         Util.printOptions(this.airportOptions); 
+        System.out.println(">> Escoja la opcion de su preferencia");
         return Util.rangeValidator(1, airportOptions.length);
     }
 
@@ -46,11 +47,12 @@ public class AirportConsoleAdapter {
         switch (optionSelected) {
 
             case 1: // CREAR
-                // TODO: validacion de no repeticion de codigo de pais
                 do {
                     id = Util.getStringInput(">> Ingrese el ID del aeropuerto: ");
                     idS = airportService.checkId(id);
                 } while (idS != "");
+
+                System.out.println("------------> CIUDADES DISPONIBLES <-------------");
                 String name = Util.getStringInput(">> Ingrese el nombre del aeropuerto:");
                 for (int i = 0; i <= cities.size() - 1; i++) {
                     System.out.println(cities.get(i).getId() + " - " + cities.get(i).getName());

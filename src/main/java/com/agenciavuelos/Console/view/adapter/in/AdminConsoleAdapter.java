@@ -55,8 +55,11 @@ public class AdminConsoleAdapter {
                 this.admin.getAirlineConsoleAdapter().run();
                 break;
             case 4:
-
                 this.employeeHandler();
+                break;
+                
+            case 5:
+                this.admin.getAirportConsoleAdapter().run();
                 break;
 
             case 6: // aviones
