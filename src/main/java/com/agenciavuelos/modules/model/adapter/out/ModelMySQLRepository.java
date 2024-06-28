@@ -5,11 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
+import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.model.domain.Model;
 import com.agenciavuelos.modules.model.infrastructure.ModelRepository;
 
@@ -118,7 +119,12 @@ public class ModelMySQLRepository implements ModelRepository{
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, id);
                 statement.executeUpdate();
+                Util.showSuccess("Modelo eliminado con exito.");
             }
+            
+        } catch ( SQLIntegrityConstraintViolationException e){
+            Util.showWarning("No se pueden borrar modelos que tengan aviones asociados");
+
         } catch (SQLException e) {
             System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
         }

@@ -2,28 +2,12 @@ package com.agenciavuelos.Console.view;
 
 import com.agenciavuelos.Console.Initializer;
 import com.agenciavuelos.Console.Util;
-import com.agenciavuelos.modules.airline.adapter.in.AirlineConsoleAdapter;
-import com.agenciavuelos.modules.airport.adapter.in.AirportConsoleAdapter;
-import com.agenciavuelos.modules.documentType.adapter.in.DocumentTypeConsoleAdapter;
-import com.agenciavuelos.modules.employee.adapter.in.EmployeeConsoleAdapter;
-import com.agenciavuelos.modules.flightFare.adapter.in.FlightFareConsoleAdapter;
-import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
-import com.agenciavuelos.modules.model.adapter.in.ModelConsoleAdapter;
-import com.agenciavuelos.modules.plane.adapter.in.PlaneConsoleAdapter;
-import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapter;
+import com.agenciavuelos.Console.view.domain.Admin;
+
 
 public class AdminView {
+    private final Admin admin;
 
-    private final Initializer initializer;
-    private final ManufacturerConsoleAdapter manufacturerConsoleAdapter;
-    private final ModelConsoleAdapter modelConsoleAdapter;
-    private final AirlineConsoleAdapter airlineConsoleAdapter;
-    private final EmployeeConsoleAdapter employeeConsoleAdapter;
-    private final AirportConsoleAdapter airportConsoleAdapter;
-    private final PlaneConsoleAdapter planeConsoleAdapter;
-    private final FlightFareConsoleAdapter flightFareConsoleAdapter;
-    private final DocumentTypeConsoleAdapter documentTypeConsoleAdapter;
-    private final TripConsoleAdapter tripConsoleAdapter;
     
     String[] gestionOptions = {
         "▶ (1) Gestión Fabricantes",
@@ -47,17 +31,7 @@ public class AdminView {
     
 
     public AdminView(Initializer initializer) {
-        this.initializer = initializer;
-        this.manufacturerConsoleAdapter = initializer.startManufacturerModule();
-        this.modelConsoleAdapter = initializer.starModelConsoleAdapter();
-        this.airlineConsoleAdapter = initializer.startAirlineConsoleAdapter();
-        this.employeeConsoleAdapter = initializer.startEmployeeConsoleAdapter();
-        this.airportConsoleAdapter = initializer.startAirportConsoleAdapter();
-        this.planeConsoleAdapter = initializer.startPlaneModule();
-        this.flightFareConsoleAdapter = initializer.startFlightFareModule();
-        this.documentTypeConsoleAdapter = initializer.startDocumentTypeModule();
-        this.tripConsoleAdapter = initializer.startTripModule();
-
+        this.admin = new Admin(initializer);
     }
 
 
@@ -70,18 +44,17 @@ public class AdminView {
 
         switch (selectedOption) {
             case 1: // fabricantes
-                this.manufacturerConsoleAdapter.run();
+                this.admin.getManufacturerConsoleAdapter().run();
                 break;
         
             case 2: // modelos
-                this.modelConsoleAdapter.run();
+                this.admin.getModelConsoleAdapter().run();
                 break;
             
             case 6: // aviones
-                this.planeConsoleAdapter.run();
+                this.admin.getPlaneConsoleAdapter().run();
                 break;
         }
-
 
     }
 

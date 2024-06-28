@@ -27,7 +27,7 @@ public class AirlineConsoleAdapter {
     */
     public int getChoiceFromUser(){
         System.out.println("-------------------------------------");
-        System.out.println("MENU DE AEROLINEAS");
+        System.out.println("GESTOR DE AEROLINEAS");
         System.out.println("-------------------------------------");
         Util.printOptions(this.airlineOptions); 
         return Util.rangeValidator(1, airlineOptions.length);
@@ -38,7 +38,7 @@ public class AirlineConsoleAdapter {
         switch (optionSelected) {
 
             case 1: // CREAR
-                // TODO: validacion de no repeticion de codigo de pais
+                
                 String name = Util.getStringInput(">> Ingrese el nombre de la aerolinea:");
                 Airline  airline = new Airline(name);
                 this.airlineService.createAirline(airline);

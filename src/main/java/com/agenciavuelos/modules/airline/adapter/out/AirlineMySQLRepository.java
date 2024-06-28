@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -82,10 +83,14 @@ public class AirlineMySQLRepository implements AirlineRepository {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, id);
                 statement.executeUpdate();
-                Util.showSuccess("Se ha eliminado el registro");
+                Util.showSuccess("Se ha eliminado la aerolinea");
             }
+
+        } catch (SQLIntegrityConstraintViolationException e) {
+            Util.showWarning("No se pueden eliminar aerolineas que tengan datos relacionados");
+        
         } catch (SQLException e) {
-            Util.showWarning("No se puede eliminar un registro que se encuentra relacionado con otra tabla");
+            System.out.println("Ocurrió un error ;(. Motivo: " + e.getMessage());
         }
     }
 

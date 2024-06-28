@@ -41,6 +41,7 @@ public class ModelConsoleAdapter {
                 
 
                 // solicitando datos de fabricante
+                System.out.println(" ------------> FABRICANTES DISPONIBLES <-------------");
                 List<Manufacturer>  manufacturers = this.modelService.findAllManufacturers();
                 manufacturers.forEach(document -> { System.out.println(document); }); 
 
@@ -54,6 +55,7 @@ public class ModelConsoleAdapter {
 
                 //guarda
                 this.modelService.createModel(model);
+                Util.showSuccess("Modelo registrado con exito");
 
                 break;
             
@@ -98,7 +100,7 @@ public class ModelConsoleAdapter {
                         int updateManufacturerId;
                         
                         do{ // validacion id de tipo de documento
-                            updateManufacturerId = Util.getIntInput(">> Ingrese el nuevo id que corresponda al tipo de documento: ");
+                            updateManufacturerId = Util.getIntInput(">> Ingrese el nuevo id que corresponda al fabricante: ");
                             idFound2 = this.modelService.getIdManufacturerId(updateManufacturerId);
                         } while (idFound2 == -1);
                         
@@ -126,7 +128,7 @@ public class ModelConsoleAdapter {
                 
                 manufacturerToDelete.ifPresentOrElse(spottedModel -> {
                     this.modelService.deleteModel(deleteId);
-                    Util.showWarning("modelo eliminado con exito");
+        
                 },
                 () -> {
                     Util.showWarning("modelo no encontrado");
