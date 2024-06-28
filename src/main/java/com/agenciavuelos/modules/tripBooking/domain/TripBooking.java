@@ -95,4 +95,16 @@ public class TripBooking {
     public void setValueFare(int valueFare) {
         this.valueFare = valueFare;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Fecha Reserva: ").append(this.bookingDate);
+        sb.append("\nNombre Cliente: ").append(this.nameCustomer);
+        sb.append("\nNro Identificacion: ").append(this.documentCustomer);
+        sb.append("\nFecha de Vuelo: ").append(this.tripDate);
+        sb.append("\nNro Asiento: ").append(this.seatNumber);
+        sb.append("\n---------------------------------");
+        return sb.toString();
+    }
 }
