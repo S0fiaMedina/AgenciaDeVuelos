@@ -126,7 +126,7 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
         List<TripBooking> tripBookings = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = """
-                SELECT t.id, c.id, c.name, tp.booking_date, ff.value
+                SELECT tp.id, t.id, c.id, c.name, tp.booking_date, ff.value
                 FROM trip t
                 INNER JOIN trip_booking tp
                 ON tp.id_trip = t.id
@@ -143,6 +143,7 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         TripBooking tripBooking = new TripBooking();
+                        tripBooking.setId( resultSet.getInt("tp.id"));
                         tripBooking.setIdTrip(resultSet.getInt("t.id"));
                         tripBooking.setIdCustomer(resultSet.getInt("c.id"));
                         tripBooking.setNameCustomer(resultSet.getString("c.name"));
