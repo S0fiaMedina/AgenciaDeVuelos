@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.revision.domain.Revision;
 import com.agenciavuelos.modules.revision.infrastructure.RevisionRepository;
 
@@ -35,12 +36,14 @@ public class RevisionMySQLRepository implements RevisionRepository{
                 statement.setString(2, revision.getPlanePlate());
                 statement.setString(3, revision.getDescription());
                 statement.executeUpdate();
+                Util.showSuccess("Revision registrada");
 
                 ResultSet generatedKeys = statement.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     int id =  generatedKeys.getInt(1); // Devuelve el ID generado
                     return id;
                 }
+                
             }
 
         } catch (SQLException e) {
@@ -61,6 +64,7 @@ public class RevisionMySQLRepository implements RevisionRepository{
                 statement.setInt(4, revision.getId());
                 
                 statement.executeUpdate();
+                Util.showSuccess("Revision actualizada.");
                 
             }
         } catch (SQLException e) {
@@ -76,6 +80,7 @@ public class RevisionMySQLRepository implements RevisionRepository{
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, id);
                 statement.executeUpdate();
+                Util.showSuccess("Revision eliminada");
             }
         } catch (SQLException e) {
             System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());

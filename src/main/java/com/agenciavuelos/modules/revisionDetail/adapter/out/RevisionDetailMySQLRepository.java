@@ -3,11 +3,7 @@ package com.agenciavuelos.modules.revisionDetail.adapter.out;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-
-import com.agenciavuelos.modules.country.domain.Country;
 import com.agenciavuelos.modules.revisionDetail.domain.RevisionDetail;
 import com.agenciavuelos.modules.revisionDetail.infrastructure.RevisionDetailRepository;
 

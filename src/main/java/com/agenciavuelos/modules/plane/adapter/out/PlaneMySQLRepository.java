@@ -67,7 +67,7 @@ public class PlaneMySQLRepository implements PlaneRepository{
                 statement.setInt(6, plane.getIdAirline());
                 statement.setInt(7, plane.getId());
 
-                int rowsUpdated = statement.executeUpdate();
+                statement.executeUpdate();
                 Util.showSuccess("Avion actualizado. ");
                 
             }

@@ -66,6 +66,9 @@ public class RevisionConsoleAdapter{
                 do {
                     newPlanePlate = Util.getStringInput(">> Ingrese la matricula del avion al que se la hecho mantenimiento ");
                     newIdFound = this.revisionService.getPlatePlane(newPlanePlate);
+                    if (newIdFound == ""){
+                        System.out.println(">> Matricula no encontrada. Intente de nuevo: ");
+                    }
                 } while (newIdFound == "");
 
                 // descripcion
@@ -76,7 +79,7 @@ public class RevisionConsoleAdapter{
                 int newRevisionId = this.revisionService.createRevision(newRevision);
                 this.revisionService.addEmployeeToRevision(new RevisionDetail(newEmployeeId, newRevisionId));
 
-                Util.showSuccess("revision registrada correctamente");
+               
 
                 break;
         
@@ -90,8 +93,9 @@ public class RevisionConsoleAdapter{
                 List<Revision> foundRevisions = this.revisionService.findAllevisionsByPlane(searchPlanePlate);
 
                 if ( foundRevisions.isEmpty() ){
-                    Util.showWarning("El avion no ha pasado por revisiones");
+                    Util.showWarning("El avion no ha pasado por revisiones o no fue ecncontrado");
                 } else {
+                    System.out.println("------------> REVISIONES REGISTRADAS <-------------");
                     foundRevisions.forEach( revision -> {System.out.println(revision);});
                 }
             
@@ -131,6 +135,9 @@ public class RevisionConsoleAdapter{
                     do {
                         updatePlanePlate = Util.getStringInput(">> Ingrese la matricula del avion al que se la hecho mantenimiento ");
                         updateIdFound = this.revisionService.getPlatePlane(updatePlanePlate);
+                        if (updateIdFound == ""){
+                            System.out.println(">> Matricula no encontrada. Intente de nuevo: ");
+                        }
                     } while (updateIdFound == "");
 
                     // descripcion
@@ -142,7 +149,7 @@ public class RevisionConsoleAdapter{
 
                     this.revisionService.updateRevision(spottedRevision);
                     this.revisionService.updateEmployeeToRevision(new RevisionDetail(updateEmployeeId, spottedRevision.getId()));
-                    Util.showSuccess("Revision con el id: " + spottedRevision.getId() + " actualizada exitosamente");
+                    
 
                     },
                     ()-> {
@@ -163,7 +170,7 @@ public class RevisionConsoleAdapter{
                 spottedRevision -> { 
                     this.revisionService.deleteEmployeeToRevision(idDelete);
                     this.revisionService.deleteRevision(idDelete);
-                    Util.showSuccess("Revision con el id: " + idDelete + " Eliminada exitosamente");
+                    
                 },
                 ()-> {
                     Util.showWarning("Id no encontrado o avion inexistente");
