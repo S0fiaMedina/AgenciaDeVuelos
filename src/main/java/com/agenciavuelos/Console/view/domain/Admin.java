@@ -10,6 +10,7 @@ import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdap
 import com.agenciavuelos.modules.model.adapter.in.ModelConsoleAdapter;
 import com.agenciavuelos.modules.plane.adapter.in.PlaneConsoleAdapter;
 import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapter;
+import com.agenciavuelos.modules.tripCrew.adapter.in.TripCrewConsoleAdapter;
 
 public class Admin {
 
@@ -23,6 +24,7 @@ public class Admin {
     private final FlightFareConsoleAdapter flightFareConsoleAdapter;
     private final DocumentTypeConsoleAdapter documentTypeConsoleAdapter;
     private final TripConsoleAdapter tripConsoleAdapter;
+    private final TripCrewConsoleAdapter tripCrewConsoleAdapter;
 
     public Admin(Initializer initializer){
         this.initializer = initializer;
@@ -35,6 +37,7 @@ public class Admin {
         this.flightFareConsoleAdapter = initializer.startFlightFareModule();
         this.documentTypeConsoleAdapter = initializer.startDocumentTypeModule();
         this.tripConsoleAdapter = initializer.startTripModule();
+        this.tripCrewConsoleAdapter = initializer.startTripCrewConsoleAdapter();
 
     }
 
@@ -76,6 +79,10 @@ public class Admin {
 
     public TripConsoleAdapter getTripConsoleAdapter() {
         return tripConsoleAdapter;
+    }
+
+    public TripCrewConsoleAdapter getTripCrewConsoleAdapter() {
+        return tripCrewConsoleAdapter;
     }
 
     

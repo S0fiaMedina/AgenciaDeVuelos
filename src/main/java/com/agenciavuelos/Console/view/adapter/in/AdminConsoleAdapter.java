@@ -1,11 +1,11 @@
-package com.agenciavuelos.Console.view;
+package com.agenciavuelos.Console.view.adapter.in;
 
 import com.agenciavuelos.Console.Initializer;
 import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.Console.view.domain.Admin;
 
 
-public class AdminView {
+public class AdminConsoleAdapter {
     private final Admin admin;
 
     
@@ -30,7 +30,7 @@ public class AdminView {
 
     
 
-    public AdminView(Initializer initializer) {
+    public AdminConsoleAdapter(Initializer initializer) {
         this.admin = new Admin(initializer);
     }
 
@@ -50,12 +50,45 @@ public class AdminView {
             case 2: // modelos
                 this.admin.getModelConsoleAdapter().run();
                 break;
-            
+
+            case 3: // empleados
+                this.admin.getAirlineConsoleAdapter().run();
+                break;
+            case 4:
+
+                this.employeeHandler();
+                break;
+
             case 6: // aviones
                 this.admin.getPlaneConsoleAdapter().run();
                 break;
         }
 
+    }
+
+    public void employeeHandler(){
+        String[] employeeOptions = {
+            "1 -> Registrar empleado. ",
+            "2.-> Gestionar tripulaciones de vuelo. ",
+            "3 -> Salir."
+        };
+        
+        Util.printOptions(employeeOptions);
+        System.out.println(">> Escoge la opcion de tu preferencia.");
+        int optionSelected = Util.rangeValidator(1, employeeOptions.length);
+
+        switch (optionSelected) {
+            case 1:
+                this.admin.getEmployeeConsoleAdapter().run();
+                break;
+        
+            case 2:
+                this.admin.getTripCrewConsoleAdapter().run();
+                break;
+
+            default :
+                break;
+        }
     }
 
 }

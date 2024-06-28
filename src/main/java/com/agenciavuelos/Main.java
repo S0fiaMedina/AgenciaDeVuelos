@@ -2,7 +2,7 @@ package com.agenciavuelos;
 
 import com.agenciavuelos.Console.Initializer;
 import com.agenciavuelos.Console.Util;
-import com.agenciavuelos.Console.view.AdminView;
+import com.agenciavuelos.Console.view.adapter.in.AdminConsoleAdapter;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,7 +12,7 @@ public class Main {
         String password = "R00T_12345";
         
         Initializer initializer = new Initializer(url, user, password);
-        AdminView adminView = new AdminView(initializer);
+        AdminConsoleAdapter adminView = new AdminConsoleAdapter(initializer);
 
 
         String header = """

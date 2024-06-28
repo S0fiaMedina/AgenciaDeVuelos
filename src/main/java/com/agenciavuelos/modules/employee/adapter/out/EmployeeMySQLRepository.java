@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.employee.domain.Employee;
 import com.agenciavuelos.modules.employee.infrastructure.EmployeeRepository;
 
@@ -35,6 +36,7 @@ public class EmployeeMySQLRepository implements EmployeeRepository {
                 statement.setInt(5, employee.getIdAirline());
                 statement.setString(6, employee.getIdAirport());
                 statement.executeUpdate();
+                Util.showSuccess("Empleado registrado con exito. ");
             }
         } catch (SQLException e) {
             e.printStackTrace();

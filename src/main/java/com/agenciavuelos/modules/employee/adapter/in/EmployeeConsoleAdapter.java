@@ -57,13 +57,15 @@ public class EmployeeConsoleAdapter {
         List<Airport> airports = airportService.findAllAirports();
         switch (optionSelected) {
 
-            case 1: // CREAR
-                // TODO: validacion de no repeticion de codigo de pais
+            case 1: 
+
                 do {
                     id = Util.getStringInput(">> Ingrese el ID del empleado: ");
                     idS = employeeService.checkId(id);
                 } while (idS != "");
                 String name = Util.getStringInput(">> Ingrese el nombre del empleado:");
+
+                System.out.println("------------> ROLES DISPONIBLES <-------------");
                 for (int i = 0; i <= roles.size() - 1; i++) {
                     System.out.println(roles.get(i).getId() + " - " + roles.get(i).getName());
                 }
@@ -75,6 +77,8 @@ public class EmployeeConsoleAdapter {
                     date = Util.getStringInput(">> Ingrese la fecha de ingreso del empleado (yyyy-MM-dd):");
                     isCorrect = Util.checkDateFormat(date, "yyyy-MM-dd");
                 } while (isCorrect == false);
+
+                System.out.println("------------> AEROLINEAS DISPONIBLES <-------------");
                 for (int i = 0; i <= airlines.size() - 1; i++) {
                     System.out.println(airlines.get(i).getId() + " - " + airlines.get(i).getName());
                 }
@@ -82,6 +86,9 @@ public class EmployeeConsoleAdapter {
                     idAirline = Util.getIntInput(">> Ingrese el ID de la aerolinea del empleado:");
                     idF = employeeService.getAirlineId(idAirline);
                 } while (idF == -1);
+
+                // si hay muchos aeropuertos disponibles, esto explota xd
+                System.out.println("------------> AEROPUERTOS DISPONIBLES <-------------");
                 for (int i = 0; i <= airports.size() - 1; i++) {
                     System.out.println(airports.get(i).getId() + " - " + airports.get(i).getName());
                 }

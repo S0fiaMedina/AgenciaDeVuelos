@@ -82,4 +82,14 @@ public class Trip {
         this.nameCityA = nameCityA;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: " +  this.id);
+        sb.append(", fecha: ").append(this.date);
+        sb.append("\nAeropuerto origen: ").append(this.idAirportD);
+        sb.append(", Aeropuerto destino: ").append(this.idAirportD);
+        return sb.toString();
+    }
+
 }

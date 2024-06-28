@@ -55,4 +55,14 @@ public class TripCrewService {
         return foundId;
     }
 
+    // trae todos los empleados 
+    public List<Employee> getAllEmployees(){
+        return employeeRepository.findAll();
+    }
+
+    // trae todos los trayectos
+    public List<Trip> getAllTrips(){
+        return this.tripRepository.findAll();
+    }
+
 }
