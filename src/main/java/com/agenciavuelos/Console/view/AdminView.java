@@ -64,6 +64,7 @@ public class AdminView {
     public void run(){
         System.out.println(header);
         Util.printOptions(gestionOptions);
+        System.out.println(">> Seleccione la opcion de su preferencia");
         int selectedOption = Util.rangeValidator(1, this.gestionOptions.length);
 
 
@@ -76,7 +77,8 @@ public class AdminView {
                 this.modelConsoleAdapter.run();
                 break;
             
-            case 3: // aerolineas
+            case 6: // aviones
+                this.planeConsoleAdapter.run();
                 break;
         }
 

@@ -118,7 +118,6 @@ public class Plane {
     @Override
     public String toString() { // un toString bien bonito :3 para darselo al usuario
         StringBuilder sb = new StringBuilder();
-        sb.append("Detalles del cliente:");
         sb.append("\n=================");
         sb.append("\nID:\t" +  this.id);
         sb.append("\nMatricula:\t"+ this.plates);

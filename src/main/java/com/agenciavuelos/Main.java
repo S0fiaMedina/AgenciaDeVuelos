@@ -8,8 +8,8 @@ public class Main {
     public static void main(String[] args) {
 
         String url = "jdbc:mysql://localhost:3306/AGENCIA_VUELOS";
-        String user = "campus2023";
-        String password = "campus2023";
+        String user = "root";
+        String password = "R00T_12345";
         
         Initializer initializer = new Initializer(url, user, password);
         AdminView adminView = new AdminView(initializer);

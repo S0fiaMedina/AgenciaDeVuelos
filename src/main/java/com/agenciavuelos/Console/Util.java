@@ -86,7 +86,7 @@ public class Util {
             if (!value.equals("")) {
                 return value;
             }
-            System.out.println("!\tERROR: No es posible registrar un texto vacio");
+            System.out.println("!\tERROR: No es posible registrar un texto vacio. Intente de nuevo: ");
         }
     }
 

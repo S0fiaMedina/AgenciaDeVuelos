@@ -29,4 +29,12 @@ public class Airline {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: " +  this.id);
+        sb.append(", nombre: ").append(this.name);
+        return sb.toString();
+    }
+
 }
