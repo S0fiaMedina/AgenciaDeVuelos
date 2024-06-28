@@ -83,7 +83,7 @@ public class DocumentTypeConsoleAdapter {
 
                         // Acción si el tipo de documento no está presente (ID no encontrado)
                         () -> {
-                            System.out.println("ID no encontrado");
+                            Util.showWarning("Tipo de documento inexistente o no encontrado. ");
                         });
                     }
                 break;
@@ -113,7 +113,6 @@ public class DocumentTypeConsoleAdapter {
             
             manufacturerToDelete.ifPresentOrElse(spottedDocumentType -> {
                 this.documentTypeService.deteleDocumentType(deleteId);
-                Util.showWarning("Tipo de documento eliminado con exito");
             },
             () -> {
                 Util.showWarning("Tipo de documento no encontrado");

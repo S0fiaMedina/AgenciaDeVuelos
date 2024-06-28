@@ -5,10 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.documentType.domain.DocumentType;
 import com.agenciavuelos.modules.documentType.infrastructure.DocumentTypeRepository;
 
@@ -32,6 +34,7 @@ public class DocumentTypeMySQLRepository implements DocumentTypeRepository{
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, documentType.getName());
                 statement.executeUpdate();
+                Util.showSuccess("Tipo de ocumento registrado");
             }
         } catch (SQLException e) {
             System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
@@ -46,6 +49,7 @@ public class DocumentTypeMySQLRepository implements DocumentTypeRepository{
                 statement.setString(1, documentType.getName());
                 statement.setInt(2, documentType.getId());
                 statement.executeUpdate();
+                Util.showSuccess("Tipo de documento actualizado");
             }
         } catch (SQLException e) {
             System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
@@ -81,7 +85,11 @@ public class DocumentTypeMySQLRepository implements DocumentTypeRepository{
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, id);
                 statement.executeUpdate();
+                Util.showSuccess("Tipo de documento eliminado.");
             }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            Util.showWarning("No se puede eiliminar ya que tiene clientes asociados");
+
         } catch (SQLException e) {
             System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
         }
