@@ -16,7 +16,11 @@ public interface TripBookingRepository {
 
     public void delete(int id);
 
+    public List<Integer> findBookingsByCustomerId(int id);
+
     public List<TripBooking> findByCustomerId(int id);
 
     public List<TripBooking> findByTripId(int id);
+
+    public List<TripBooking> findBookingById(int id);
 }

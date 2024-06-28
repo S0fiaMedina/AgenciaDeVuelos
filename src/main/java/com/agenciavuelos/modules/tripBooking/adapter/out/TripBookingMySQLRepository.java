@@ -126,14 +126,16 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
         List<TripBooking> tripBookings = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = """
-                SELECT t.id, c.id, c.name, tp.booking_date, ff.value
+                SELECT t.id, c.id, c.name, tb.booking_date, ff.value
                 FROM trip t
-                INNER JOIN trip_booking tp
-                ON tp.id_trip = t.id
+                INNER JOIN trip_booking tb
+                ON tb.id_trip = t.id
                 INNER JOIN trip_booking_details tbd
-                ON tp.id_trip = tbd.id_trip_booking
+                ON tbd.id_trip_booking = tb.id
+                INNER JOIN payment p
+                ON p.id_trip_booking = tb.id
                 INNER JOIN customer c
-                ON c.id = tbd.id_customer
+                ON c.id = p.id_customer
                 INNER JOIN flight_fare ff
                 ON ff.id = tbd.id_fare
                 WHERE c.id = ?;
@@ -146,7 +148,7 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
                         tripBooking.setIdTrip(resultSet.getInt("t.id"));
                         tripBooking.setIdCustomer(resultSet.getInt("c.id"));
                         tripBooking.setNameCustomer(resultSet.getString("c.name"));
-                        tripBooking.setBookingDate(resultSet.getString("tp.booking_date"));
+                        tripBooking.setBookingDate(resultSet.getString("tb.booking_date"));
                         tripBooking.setValueFare(resultSet.getInt("ff.value"));
                         tripBookings.add(tripBooking);
                     }
@@ -185,6 +187,70 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
                         tripBooking.setNameCustomer(resultSet.getString("c.name"));
                         tripBooking.setBookingDate(resultSet.getString("tp.booking_date"));
                         tripBooking.setValueFare(resultSet.getInt("ff.value"));
+                        tripBookings.add(tripBooking);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tripBookings;
+    }
+
+    @Override
+    public List<TripBooking> findBookingById(int id) {
+        List<TripBooking> tripBookings = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                SELECT tb.id, tb.booking_date, t.tripe_date, c.name, c.document_number, tbd.seat_number
+                FROM trip t
+                INNER JOIN trip_booking tb
+                ON tb.id_trip = t.id
+                INNER JOIN trip_booking_details tbd
+                ON tbd.id_trip_booking = tb.id
+                INNER JOIN customer c
+                ON c.id = tbd.id_customer
+                WHERE tb.id = ?;
+            """;
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, id);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        TripBooking tripBooking = new TripBooking();
+                        tripBooking.setIdTrip(resultSet.getInt("tb.id"));
+                        tripBooking.setBookingDate(resultSet.getString("tb.booking_date"));
+                        tripBooking.setTripDate(resultSet.getString("t.tripe_date"));
+                        tripBooking.setNameCustomer(resultSet.getString("c.name"));
+                        tripBooking.setDocumentCustomer(resultSet.getString("c.document_number"));
+                        tripBooking.setSeatNumber(resultSet.getInt("tbd.seat_number"));
+                        tripBookings.add(tripBooking);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tripBookings;
+    }
+
+    @Override
+    public List<Integer> findBookingsByCustomerId(int id) {
+        List<Integer> tripBookings = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                SELECT DISTINCT(tb.id)
+                FROM trip_booking tb
+                INNER JOIN trip_booking_details tbd
+                ON tbd.id_trip_booking = tb.id
+                INNER JOIN payment p
+                ON p.id_trip_booking = tb.id
+                WHERE p.id_customer = ?;
+            """;
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, id);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        int tripBooking = resultSet.getInt("tb.id");
                         tripBookings.add(tripBooking);
                     }
                 }
