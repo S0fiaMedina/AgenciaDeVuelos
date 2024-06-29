@@ -36,6 +36,7 @@ public class ClientConsoleAdapter {
         switch (optionSelected) {
             case 1:
                 // logica de buscar vuelos
+                // seria algo como this.client.get<Adaptador que necesites>.run() o una funcion en especifico si es compartido por otro rol
                 break;
         
             case 2:
