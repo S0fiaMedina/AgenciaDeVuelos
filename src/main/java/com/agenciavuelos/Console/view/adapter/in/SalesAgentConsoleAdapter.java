@@ -47,7 +47,7 @@ public class SalesAgentConsoleAdapter {
                 break;
             
             case 3:
-                // logica de gestion de reservas
+                this.salesAgent.getTripBookingConsoleAdapter().run();
                 break;
 
             case 4:
@@ -76,7 +76,8 @@ public class SalesAgentConsoleAdapter {
     public void flightHandler(){
         String[] options = {
             "1. Consultar vuelo.",
-            "2. Consultar escalas de un trayecto."
+            "2. Consultar escalas de un trayecto.",
+            "3. Salir"
         };
 
         System.out.println("********* GESTION DE VUELOS **********");
@@ -90,6 +91,8 @@ public class SalesAgentConsoleAdapter {
         
             case 2:
                 this.salesAgent.getFlightConnectionConsoleAdapter().searchFlightsByTrip();
+                break;
+            default:
                 break;
         }
 

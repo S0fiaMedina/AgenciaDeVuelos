@@ -124,7 +124,8 @@ public class AdminConsoleAdapter {
         String[] options = {
             "1. Crear trayecto y escalas. ",
             "2. Gestionar trayectos. ",
-            "3. Gestionar escalas / vuelos. "
+            "3. Gestionar escalas / vuelos. ",
+            "4. Salir"
         };
         Util.printOptions(options);
         System.out.println(">> Introduzca la opcion de su preferencia: ");
@@ -148,6 +149,8 @@ public class AdminConsoleAdapter {
             
             case 3:
                 this.admin.getFlightConnectionConsoleAdapter().run();
+                break;
+            default:
                 break;
         }
         

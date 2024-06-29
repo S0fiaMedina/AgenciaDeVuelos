@@ -33,7 +33,7 @@ public class Airline {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("ID: " +  this.id);
-        sb.append(", nombre: ").append(this.name);
+        sb.append("\nNombre: ").append(this.name);
         return sb.toString();
     }
 

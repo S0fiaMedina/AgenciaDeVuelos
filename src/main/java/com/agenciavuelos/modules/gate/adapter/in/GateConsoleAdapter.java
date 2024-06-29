@@ -46,9 +46,7 @@ public class GateConsoleAdapter {
             case 1: // CREAR
                 // TODO: validacion de no repeticion de codigo de pais
                 String number = Util.getStringInput(">> Ingrese el número de la puerta de embarque:");
-                for (int i = 0; i <= airports.size() - 1; i++) {
-                    System.out.println(airports.get(i).getId() + " - " + airports.get(i).getName());
-                }
+                airports.forEach(airport -> {System.out.println(airports.toString());});
                 do {
                     String idAirport = Util.getStringInput(">> Ingrese el ID del aeropuerto al que pertenece la puerta de embarque:");
                     idF = gateService.getAirportId(idAirport);
@@ -76,7 +74,8 @@ public class GateConsoleAdapter {
                         // ¿Es realmente necesario editar paises?
                         // XXX: revisar para poder cambiar el codigo del pais
                         updatedGate -> {
-                            System.out.println("Esta es la información actual de la puerta de embarque:\n " + updatedGate);
+                            System.out.println("Esta es la información actual de la puerta de embarque:");
+                            System.out.println(updatedGate.toString());
 
                             String newGate = Util.getStringInput(">> Ingrese el nuevo número de la puerta de embarque: ");
                             
@@ -99,7 +98,8 @@ public class GateConsoleAdapter {
                 // estoy empezando a creer que esta logica de validacion es mejor colocarla en una funcion aparte -_-
                 foundGate.ifPresentOrElse(
                     spottedGate -> { 
-                    System.out.println("Esta es la información de la puerta de embarque encontrada:\n" + spottedGate);
+                        System.out.println("Esta es la información de la puerta de embarque encontrada:");
+                        System.out.println(spottedGate.toString());
                     },
                     ()-> {
                         Util.showWarning("ID no encontrado o puerta de embarque inexistente");

@@ -13,7 +13,8 @@ public class ClientConsoleAdapter {
         "▶ (1) Buscar Vuelos",
         "▶ (2) Consultar Reserva de Vuelo",
         "▶ (3) Modificar Reserva de Vuelo",
-        "▶ (4) Cancelar Reserva de Vuelo"
+        "▶ (4) Cancelar Reserva de Vuelo",
+        "▶ (5) Salir",
     };
 
     String header = """
@@ -29,35 +30,31 @@ public class ClientConsoleAdapter {
 
     public void run(){
         boolean breaker = true;
-        while (true){
+        while (breaker){
             System.out.println(header);
-        Util.printOptions(clientOptions);
-        System.out.println(">> Digite la opcion de su preferencia: ");
-        int optionSelected = Util.rangeValidator(1, clientOptions.length);
+            Util.printOptions(clientOptions);
+            System.out.println(">> Digite la opcion de su preferencia: ");
+            int optionSelected = Util.rangeValidator(1, clientOptions.length);
 
-        switch (optionSelected) {
-            case 1:
-                // logica de buscar vuelos
-                // seria algo como this.client.get<Adaptador que necesites>.run() o una funcion en especifico si es compartido por otro rol
-                break;
-        
-            case 2:
-                //consultar reserva
-                break;
-            case 3:
-                // modificar reserva
-                break;
-            case 4:
-                // cancelar reserva
-                break;
+            switch (optionSelected) {
+                case 1:
+                    this.client.getTripBookingConsoleAdapterClient().searchTrip();
+                    break;
+                case 2:
+                    this.client.getTripBookingConsoleAdapterClient().searchTripBooking();
+                    break;
+                case 3:
+                    this.client.getTripBookingConsoleAdapterClient().updateTripBooking();
+                    break;
+                case 4:
+                    this.client.getTripBookingConsoleAdapterClient().cancelTripBooking();
+                    break;
                 
-            default: 
-            System.out.println("Adios. cliente :D");
-                break;
-
-        }
-        
-
+                default: 
+                    System.out.println("Adios. cliente :D");
+                    breaker = false;
+                    break;
+            }
         }
     }
 }

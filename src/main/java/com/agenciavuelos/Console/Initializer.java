@@ -49,10 +49,8 @@ import com.agenciavuelos.modules.model.adapter.out.ModelMySQLRepository;
 import com.agenciavuelos.modules.model.application.ModelService;
 import com.agenciavuelos.modules.model.infrastructure.ModelRepository;
 import com.agenciavuelos.modules.payment.adapter.out.PaymentMySQLRepository;
-import com.agenciavuelos.modules.payment.application.PaymentService;
 import com.agenciavuelos.modules.payment.infrastructure.PaymentRepository;
 import com.agenciavuelos.modules.paymentForm.adapter.out.PaymentFormMySQLRepository;
-import com.agenciavuelos.modules.paymentForm.application.PaymentFormService;
 import com.agenciavuelos.modules.paymentForm.infrastructure.PaymentFormRepository;
 import com.agenciavuelos.modules.plane.adapter.in.PlaneConsoleAdapter;
 import com.agenciavuelos.modules.plane.adapter.out.PlaneMySQLRepository;
@@ -63,23 +61,21 @@ import com.agenciavuelos.modules.revision.adapter.out.RevisionMySQLRepository;
 import com.agenciavuelos.modules.revision.application.RevisionService;
 import com.agenciavuelos.modules.revision.infrastructure.RevisionRepository;
 import com.agenciavuelos.modules.revisionDetail.adapter.out.RevisionDetailMySQLRepository;
-import com.agenciavuelos.modules.revisionDetail.domain.RevisionDetail;
 import com.agenciavuelos.modules.revisionDetail.infrastructure.RevisionDetailRepository;
 import com.agenciavuelos.modules.status.adapter.in.StatusConsoleAdapter;
 import com.agenciavuelos.modules.status.adapter.out.StatusMySQLRepository;
 import com.agenciavuelos.modules.status.application.StatusService;
 import com.agenciavuelos.modules.status.infrastructure.StatusRepository;
-import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapter;
 import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapterAdmin;
 import com.agenciavuelos.modules.trip.adapter.out.TripMySQLRepository;
 import com.agenciavuelos.modules.trip.application.TripService;
 import com.agenciavuelos.modules.trip.infrastructure.TripRepository;
 import com.agenciavuelos.modules.tripBooking.adapter.in.TripBookingConsoleAdapter;
+import com.agenciavuelos.modules.tripBooking.adapter.in.TripBookingConsoleAdapterClient;
 import com.agenciavuelos.modules.tripBooking.adapter.out.TripBookingMySQLRepository;
 import com.agenciavuelos.modules.tripBooking.application.TripBookingService;
 import com.agenciavuelos.modules.tripBooking.infrastructure.TripBookingRepository;
 import com.agenciavuelos.modules.tripBookingDetail.adapter.out.TripBookingDetailMySQLRepository;
-import com.agenciavuelos.modules.tripBookingDetail.application.TripBookingDetailService;
 import com.agenciavuelos.modules.tripBookingDetail.infrastructure.TripBookingDetailRepository;
 import com.agenciavuelos.modules.tripCrew.adapter.in.TripCrewConsoleAdapter;
 import com.agenciavuelos.modules.tripCrew.adapter.out.TripCrewMySQLRepository;
@@ -117,8 +113,7 @@ public class Initializer {
     private final AirlineRepository airlineRepository;
     private final PlaneRepository planeRepository;
     private final RevisionRepository revisionRepository;
-    private final RevisionDetailRepository revisionDetailRepository;
-
+    
     // viajes 
     private final TripRepository tripRepository;
     private final FlightConnectionRepository flightConnectionRepository;
@@ -159,7 +154,7 @@ public class Initializer {
         this.airlineRepository = new AirlineMySQLRepository(url, user, password);
         this.planeRepository = new PlaneMySQLRepository(url, user, password);
         this.revisionRepository = new RevisionMySQLRepository(url, user, password);
-        this.revisionDetailRepository = new RevisionDetailMySQLRepository(url, user, password);
+        new RevisionDetailMySQLRepository(url, user, password);
 
         // reservas
         this.tripBookingDetailRepository = new TripBookingDetailMySQLRepository(url, user, password);
@@ -291,18 +286,6 @@ public class Initializer {
         return new RevisionConsoleAdapter(revisionService);
     }
 
-    public TripConsoleAdapter startTripModule() {
-        FlightConnectionService flightConnectionService = new FlightConnectionService(tripRepository, airportRepository, planeRepository, flightConnectionRepository);
-        PlaneService planeService = new PlaneService(planeRepository, statusRepository, modelRepository, manufacturerRepository, airlineRepository);
-        PaymentService paymentService = new PaymentService(paymentRepository);
-        PaymentFormService paymentFormService = new PaymentFormService(paymentFormRepository);
-        CustomerService customerService = new CustomerService(customerRepository, documentTypeRepository);
-        FlightFareService flightFareService = new FlightFareService(flightFareRepository);
-        TripService tripService = new TripService(tripRepository, airportRepository, flightConnectionRepository);
-        TripBookingDetailService tripBookingDetailService = new TripBookingDetailService(tripBookingDetailRepository);
-        TripBookingService tripBookingService = new TripBookingService(tripRepository, tripBookingDetailRepository, tripBookingRepository, customerRepository, flightFareRepository);
-        return new TripConsoleAdapter(tripService, flightConnectionService, tripBookingService, tripBookingDetailService, customerService, planeService, flightFareService, paymentService, paymentFormService);
-    }
     // VIAJES (ADMIN)
     public TripConsoleAdapterAdmin startTripAdminModule(){
         TripService tripService = new TripService(tripRepository, airportRepository, flightConnectionRepository);
@@ -311,8 +294,13 @@ public class Initializer {
 
     // RESERVAS
     public TripBookingConsoleAdapter startTripBookingModule() {
-        TripBookingService tripBookingService = new TripBookingService(tripRepository, tripBookingDetailRepository, tripBookingRepository, customerRepository, flightFareRepository);
+        TripBookingService tripBookingService = new TripBookingService(tripRepository, planeRepository, tripBookingDetailRepository, tripBookingRepository, customerRepository, documentTypeRepository, flightFareRepository, paymentRepository, paymentFormRepository);
         return new TripBookingConsoleAdapter(tripBookingService);
+    }
+
+    public TripBookingConsoleAdapterClient startTripBookingClientModule() {
+        TripBookingService tripBookingService = new TripBookingService(tripRepository, planeRepository, tripBookingDetailRepository, tripBookingRepository, customerRepository, documentTypeRepository, flightFareRepository, paymentRepository, paymentFormRepository);
+        return new TripBookingConsoleAdapterClient(tripBookingService);
     }
 
     // TARIFAS

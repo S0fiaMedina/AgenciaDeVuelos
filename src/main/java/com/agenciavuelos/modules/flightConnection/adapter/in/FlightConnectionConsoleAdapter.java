@@ -38,9 +38,6 @@ public class FlightConnectionConsoleAdapter {
 
     public void run(){
         int selectedOption = this.getChoiceFromUser();
-
-        int foundId;
-        String foundIdString;
     
         switch (selectedOption) {
             

@@ -12,7 +12,7 @@ public class Main {
 
         String url = "jdbc:mysql://localhost:3306/AGENCIA_VUELOS";
         String user = "root";
-        String password = "R00T_12345";
+        String password = "root";
         
         Initializer initializer = new Initializer(url, user, password);
         AdminConsoleAdapter adminConsoleAdapter = new AdminConsoleAdapter(initializer);
@@ -52,7 +52,7 @@ public class Main {
         String[] mainOptions ={
             "▶ ( 1 ) Administrador",
             "▶ ( 2 ) Agente de ventas",
-            "▶ ( 3 ) Tecnico en mantimiento",
+            "▶ ( 3 ) Tecnico en mantenimiento",
             "▶ ( 4 ) Cliente",
             "▶ ( 5 ) Salir"
 
@@ -85,14 +85,5 @@ public class Main {
                 Util.showWarning("Gracias por preferirnos. Adios :)");
                 break;
         }
-        
-
-
     }
-
-    
-
-    
-    
-    
 }

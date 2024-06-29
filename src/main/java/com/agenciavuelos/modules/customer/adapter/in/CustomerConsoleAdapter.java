@@ -86,7 +86,8 @@ public class CustomerConsoleAdapter {
                     
                 foundCustomer.ifPresentOrElse(
                     spottedCustomer -> { // Si el tipo de documento fue encontrado...
-                    System.out.println("Esta es la información del cliente encontrado:\n" + spottedCustomer);
+                        System.out.println("Esta es la información del cliente encontrado:");
+                        System.out.println(spottedCustomer.toString());
                     },
                     ()-> {
                         Util.showWarning("Id no encontrado o cliente inexistente");
@@ -115,7 +116,7 @@ public class CustomerConsoleAdapter {
                         updatedCustomer -> {
                             // mostrar informacion actual
                             System.out.println(">> Cliente encontrado. esta es su información actual");
-                            System.out.println(updatedCustomer);
+                            System.out.println(updatedCustomer.toString());
 
                             int idFound2; // pongo esto porque a java no le gusta usar variables del exterior en lambdas
 

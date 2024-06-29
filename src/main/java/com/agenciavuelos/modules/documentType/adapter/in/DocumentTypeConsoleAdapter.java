@@ -86,7 +86,8 @@ public class DocumentTypeConsoleAdapter {
 
                 // Acción si el tipo de documento está presente
                 updatedDocumentType -> {
-                    System.out.println("Esta es la información actual del tipo de documento:\n " + updatedDocumentType);
+                    System.out.println("Esta es la información actual del tipo de documento:");
+                    System.out.println(updatedDocumentType.toString());
                     String newName = Util.getStringInput(">> Ingrese el nuevo nombre del tipo de documento: ");
 
                     // Cambiar el nombre del tipo de documento
@@ -111,7 +112,8 @@ public class DocumentTypeConsoleAdapter {
         // estoy empezando a creer que esta logica de validacion es mejor colocarla en una funcion aparte -_-
         foundDocumentType.ifPresentOrElse(
             spottedDocumentType -> { // Si el tipo de documento fue encontrado...
-            System.out.println("Esta es la información del tipo de documento encontrado:\n" + spottedDocumentType);
+                System.out.println("Esta es la información del tipo de documento encontrado:");
+                System.out.println(spottedDocumentType.toString());
             },
             ()-> {
                 Util.showWarning("Id no encontrado o tipo de documento inexistente");

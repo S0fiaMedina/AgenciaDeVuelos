@@ -41,9 +41,9 @@ public class Revision {
     @Override
     public String toString() { // un toString bien bonito :3 para darselo al usuario
         StringBuilder sb = new StringBuilder();
-        sb.append("id: " + this.id );
-        sb.append("- placa del avion: " + this.planePlate);
-        sb.append("- fecha de revision: " + this.revisionDate);
+        sb.append("ID: " + this.id );
+        sb.append("\npPlaca del avion: " + this.planePlate);
+        sb.append("\nFecha de revision: " + this.revisionDate);
         return sb.toString();
     }
 

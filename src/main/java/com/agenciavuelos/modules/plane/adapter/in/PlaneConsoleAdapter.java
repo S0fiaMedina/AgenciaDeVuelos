@@ -41,7 +41,11 @@ public class PlaneConsoleAdapter {
         switch (optionSelected) {
 
             case 1:
-                this.registerPlane();
+                if (planeService.getAllAirlines().size() == 0 || planeService.getAllStatuses().size() == 0) {
+                    Util.showWarning("Por favor, registre aerolineas y estados");
+                } else {
+                    this.registerPlane();
+                }
                 break;
 
             case 2:
@@ -158,7 +162,8 @@ public class PlaneConsoleAdapter {
         foundPlane.ifPresentOrElse(
 
             spottedPlane -> { 
-            System.out.println("Esta es la información del avion encontrado:\n" + spottedPlane);
+                System.out.println("Esta es la información del avion encontrado:");
+                System.out.println(spottedPlane.toString());
             },
             ()-> {
                 Util.showWarning("Id no encontrado o avion inexistente");
@@ -186,7 +191,8 @@ public class PlaneConsoleAdapter {
                 int updateAirlineId;
                 int updateStatusId;
 
-                System.out.println("Esta es la información del avion encontrado:\n" + spottedPlane);
+                System.out.println("Esta es la información del avion encontrado:");
+                System.out.println(spottedPlane.toString());
 
 
                 // capacidad del avion

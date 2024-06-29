@@ -76,7 +76,8 @@ public class AirportConsoleAdapter {
                 
                     optionalAirport.ifPresentOrElse(
                         updatedAirport -> {
-                            System.out.println("Esta es la información actual del aeropuerto:\n " + updatedAirport.getId() + " - " + updatedAirport.getName());
+                            System.out.println("Esta es la información actual del aeropuerto:");
+                            System.out.println(updatedAirport.toString());
 
                             String newName = Util.getStringInput(">> Ingrese el nuevo nombre del aeropuerto: ");
                             
@@ -98,7 +99,8 @@ public class AirportConsoleAdapter {
                 
                 foundAirport.ifPresentOrElse(
                     spottedAirport -> { 
-                    System.out.println("Esta es la información del aeropuerto encontrado:\n" + spottedAirport.getId() + " - " + spottedAirport.getName());
+                        System.out.println("Esta es la información del aeropuerto encontrado:");
+                        System.out.println(spottedAirport.toString());
                     },
                     ()-> {
                         Util.showWarning("ID no encontrado o aeropuerto inexistente");

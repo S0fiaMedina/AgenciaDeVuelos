@@ -64,15 +64,16 @@ public class ManufacturerConsoleAdapter {
                         optionalManufacturer.ifPresentOrElse( 
 
                             
-                            updatedmManufacturer -> {
-                                System.out.println("Esta es la información actual del fabricante:\n " + updatedmManufacturer);
+                            updatedManufacturer -> {
+                                System.out.println("Esta es la información actual del fabricante:");
+                                System.out.println(updatedManufacturer.toString());
                                 String newName = Util.getStringInput(">> Ingrese el nuevo nombre del manufacturero: ");
 
                                 
-                                updatedmManufacturer.setName(newName);
+                                updatedManufacturer.setName(newName);
 
                                 
-                                this.manufacturerService.updateManufacturer(updatedmManufacturer);
+                                this.manufacturerService.updateManufacturer(updatedManufacturer);
                             },
 
                             
@@ -89,7 +90,8 @@ public class ManufacturerConsoleAdapter {
                     
                     foundManufacturer.ifPresentOrElse(
                         spottedManufacturer -> { // Si el fabricante fue encontrado...
-                        System.out.println("Esta es la información del fabricante encontrado:\n" + spottedManufacturer);
+                            System.out.println("Esta es la información del fabricante encontrado:");
+                            System.out.println(spottedManufacturer.toString());
                         },
                         ()-> {
                             Util.showWarning("Id no encontrado o fabricante inexistente");

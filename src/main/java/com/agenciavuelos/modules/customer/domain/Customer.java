@@ -80,7 +80,7 @@ public class Customer {
     }
 
     @Override
-    public String toString() { // un toString bien bonito :3 para darselo al usuario
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Detalles del cliente:");
         sb.append("\n=================");

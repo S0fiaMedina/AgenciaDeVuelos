@@ -21,10 +21,7 @@ public class TripBookingConsoleAdapter {
         "1. Crear Reserva",
         "2. Consultar Reserva",
         "3. Eliminar Reserva",
-        "4. Consultar Reserva de Vuelo", // CU43
-        "5. Modificar Reserva de Vuelo", // CU45
-        "6. Cancelar Reserva de Vuelo", // CU44
-        "7. Salir"  
+        "4. Salir"  
     };
 
     public TripBookingConsoleAdapter(TripBookingService tripBookingService) {
@@ -55,78 +52,38 @@ public class TripBookingConsoleAdapter {
         switch (optionSelected) {
 
             case 1: // CREAR
-                for (int i = 0; i <= customers.size() - 1; i++) {
-                    System.out.println(customers.get(i).getId() + " - " + customers.get(i).getName() + " - " + customers.get(i).getDocumentNumber());
-                }
-                do {
-                    idCustomer = Util.getIntInput(">> Ingrese el ID del cliente:");
-                    idF = tripBookingService.getCustomerId(idCustomer);
-                } while (idF == -1);
-                for (int i = 0; i <= trips.size() - 1; i++) {
-                    System.out.println(trips.get(i).getId() + " - " + trips.get(i).getDate() + " - " + trips.get(i).getIdAirportD() + " - " + trips.get(i).getIdAirportA());
-                }
-                do {
-                    idTrip = Util.getIntInput(">> Ingrese el ID del viaje que desea reservar:");
-                    idF = tripBookingService.getTripId(idTrip);
-                } while (idF == -1);
-                currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                for (int i = 0; i <= flightFares.size() - 1; i++) {
-                    System.out.println(flightFares.get(i).getId() + " - " + flightFares.get(i).getDescription() + " - " + flightFares.get(i).getDetails() + " - " + flightFares.get(i).getValue());
-                }
-                do {
-                    idFare = Util.getIntInput(">> Ingrese el ID de la tarifa:");
-                    idF = tripBookingService.getFlightFareId(idFare);
-                } while (idF == -1);
-                TripBooking tripBooking = new TripBooking(currentDate, idTrip);
-                int idTB = this.tripBookingService.createTripBooking(tripBooking);
-                TripBookingDetail tripBookingDetail = new TripBookingDetail(idTB, idCustomer, idFare);
-                this.tripBookingService.createTripBookingDetail(tripBookingDetail);
-                break;
-
-            
-        
-            /* case 2: // ACTUALIZAR
-                
-                List<TripBooking> tripBookings = this.tripBookingService.findAllTripBookings();
-
-                if (tripBookings == null || tripBookings.isEmpty()  )
-                    Util.showWarning("No hay reservas registradas");
-
-                else{
-                    int idTripBooking = Util.getIntInput(">> Introduzca el código a buscar: ");
-                    Optional<TripBooking> optionalTripBooking = this.tripBookingService.findTripBookingById(idTripBooking);
-
-                
-                    optionalTripBooking.ifPresentOrElse( 
-                        updatedTripBooking -> {
-                            String dateA;
-                            int idFA;
-                            boolean iCorrect = true;
-                            System.out.println("Esta es la información actual de la reserva:\n " + updatedTripBooking);
-                            do {
-                                dateA = Util.getStringInput(">> Ingrese la fecha de la reserva (yyyy-MM-dd):");
-                                iCorrect = Util.checkDateFormat(dateA, "yyyy-MM-dd");
-                            } while (iCorrect == false);
-                            for (int i = 0; i <= trips.size() - 1; i++) {
-                                System.out.println(trips.get(i).getId() + " - " + trips.get(i).getDate());
-                            }
-                            do {
-                                int idTrip = Util.getIntInput(">> Ingrese el ID del viaje que desea reservar:");
-                                idFA = tripBookingService.getTripId(idTrip);
-                            } while (idFA == -1);
-                            
-                            updatedTripBooking.setBookingDate(dateA);
-                            updatedTripBooking.setIdTrip(idFA);
-
-                            this.tripBookingService.updateTripBooking(updatedTripBooking);
-                        },
-                        
-                        () -> {
-                            System.out.println("ID no encontrado");
-                        });
+                if (tripBookingService.findAllCustomers().size() == 0 || tripBookingService.findAllTrips().size() == 0) {
+                    Util.showWarning("Por favor, registre empleados y vuelos");
+                } else {
+                    for (int i = 0; i <= customers.size() - 1; i++) {
+                        System.out.println(customers.get(i).getId() + " - " + customers.get(i).getName() + " - " + customers.get(i).getDocumentNumber());
                     }
+                    do {
+                        idCustomer = Util.getIntInput(">> Ingrese el ID del cliente:");
+                        idF = tripBookingService.getCustomerId(idCustomer);
+                    } while (idF == -1);
+                    for (int i = 0; i <= trips.size() - 1; i++) {
+                        System.out.println(trips.get(i).getId() + " - " + trips.get(i).getDate() + " - " + trips.get(i).getIdAirportD() + " - " + trips.get(i).getIdAirportA());
+                    }
+                    do {
+                        idTrip = Util.getIntInput(">> Ingrese el ID del viaje que desea reservar:");
+                        idF = tripBookingService.getTripId(idTrip);
+                    } while (idF == -1);
+                    currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                    for (int i = 0; i <= flightFares.size() - 1; i++) {
+                        System.out.println(flightFares.get(i).getId() + " - " + flightFares.get(i).getDescription() + " - " + flightFares.get(i).getDetails() + " - " + flightFares.get(i).getValue());
+                    }
+                    do {
+                        idFare = Util.getIntInput(">> Ingrese el ID de la tarifa:");
+                        idF = tripBookingService.getFlightFareId(idFare);
+                    } while (idF == -1);
+                    TripBooking tripBooking = new TripBooking(currentDate, idTrip);
+                    int idTB = this.tripBookingService.createTripBooking(tripBooking);
+                    TripBookingDetail tripBookingDetail = new TripBookingDetail(idTB, idCustomer, idFare);
+                    this.tripBookingService.createTripBookingDetail(tripBookingDetail);
+                }
                 break;
-                */
+                
             case 2: // BUSCAR POR ID
                 int searchId;
                 int option = Util.getIntInput("""
@@ -172,81 +129,7 @@ public class TripBookingConsoleAdapter {
                     () -> {
                         Util.showWarning("ID no encontrado o reserva inexistente");
                     });
-            case 4:
-                int documentNumber = Util.getIntInput(">> Ingrese su número de documento:");
-                Optional<Customer> foundC = this.tripBookingService.findByDocumentNumber(documentNumber);
-                foundC.ifPresentOrElse(
-                    spottedCustomer -> {
-                        List<Integer> bookingsList = this.tripBookingService.findBookingsByCustomerId(spottedCustomer.getId());
-                        int searchID = Util.getIntInput(">> Introduzca el ID de la reserva: ");
-                        if (bookingsList.contains(searchID)) {
-                            List<TripBooking> tripBookingList = this.tripBookingService.findBookingById(searchID);
-                            if (tripBookingList == null || tripBookingList.isEmpty()) {
-                                Util.showWarning("No se encontraron reservas");
-                            } else {
-                                System.out.println("RESERVA ENCONTRADA");
-                                tripBookingList.forEach(booking -> {System.out.println(booking);});
-                            }
-                        } else {
-                            Util.showWarning("La reserva solicitada no pertenece al cliente");
-                        }
-                    },
-                    () -> {
-                        Util.showWarning("No se encontró al cliente");
-                    }
-                );
-                break;
-            case 5:
-                this.updateTripBooking();
-                break;
-            case 6:
-                int docNumber = Util.getIntInput(">> Ingrese su número de documento:");
-                    Optional<Customer> foundCustomer = this.tripBookingService.findByDocumentNumber(docNumber);
-                    foundCustomer.ifPresentOrElse(
-                        spottedCustomer -> {
-                            List<Integer> bookingsList = this.tripBookingService.findBookingsByCustomerId(spottedCustomer.getId());
-                            int searchID = Util.getIntInput(">> Introduzca el ID de la reserva: ");
-                            if (bookingsList.contains(searchID)) {
-                                List<TripBooking> tripBookingList = this.tripBookingService.findBookingById(searchID);
-                                if (tripBookingList == null || tripBookingList.isEmpty()) {
-                                    Util.showWarning("No se encontraron reservas");
-                                } else {
-                                    String conf = Util.getStringInput("Confirme la cancelación con 'S', presione cualquier otra letra para salir");
-                                    if (conf.equals("S")) {
-                                        this.tripBookingService.deleteTripBooking(searchID);
-                                    }
-                                }
-                            } else {
-                                Util.showWarning("La reserva solicitada no pertenece al cliente");
-                            }
-                        },
-                        () -> {
-                            Util.showWarning("No se encontró al cliente");
-                        }
-                    );
-                break;
+                    break;
         }
-    }
-
-
-    public void updateTripBooking(){
-        String[] updateOptions = {
-            "1. Editar fecha."
-        };
-
-        // se obtiene id del cliente 
-        int updateCustomerId = Util.getIntInput(">> Ingrese el id del cliente: ");
-        int updateBookingId  = Util.getIntInput(">> Ingrese el id de la reserva: ");
-
-        Optional<TripBooking> foundBooking = this.tripBookingService.findTripBookingOfCustomer(updateCustomerId, updateBookingId);
-        foundBooking.ifPresentOrElse(
-            spottedBooking -> {
-
-            }
-            , 
-            () -> {
-                Util.showWarning("Reserva no encontrada o inexistente");
-            });
-
     }
 }

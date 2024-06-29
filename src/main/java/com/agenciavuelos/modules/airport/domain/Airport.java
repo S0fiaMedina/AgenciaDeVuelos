@@ -34,4 +34,12 @@ public class Airport {
     public void setIdCity(int idCity) {
         this.idCity = idCity;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: " +  this.id);
+        sb.append("\nNombre: ").append(this.name);
+        return sb.toString();
+    }
 }

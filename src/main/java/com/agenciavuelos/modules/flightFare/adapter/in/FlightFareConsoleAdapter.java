@@ -79,7 +79,8 @@ public class FlightFareConsoleAdapter {
         
             optionalFlightFare.ifPresentOrElse(
                 updatedFlightFare -> {
-                    System.out.println("Esta es la información de la tarifa encontrada:\n" + updatedFlightFare.getDescription() + " - " + updatedFlightFare.getDetails() + " - " + updatedFlightFare.getValue());
+                    System.out.println("Esta es la información de la tarifa encontrada:");
+                    System.out.println(updatedFlightFare.toString());
 
                     String newDescription = Util.getStringInput(">> Ingrese la descripción de la tarifa:");
                     String newDetails = Util.getStringInput(">> Ingrese los detalles:");
@@ -103,7 +104,8 @@ public class FlightFareConsoleAdapter {
         
         foundFlightFare.ifPresentOrElse(
             spottedFlightFare -> { 
-                System.out.println("Esta es la información de la tarifa encontrada:\n" + spottedFlightFare.getDescription() + " - " + spottedFlightFare.getDetails() + " - " + spottedFlightFare.getValue());
+                System.out.println("Esta es la información de la tarifa encontrada:");
+                System.out.println(spottedFlightFare.toString());
             },
             ()-> {
                 Util.showWarning("ID no encontrado o tarifa inexistente");

@@ -41,36 +41,7 @@ public class PaymentFormConsoleAdapter {
                 PaymentForm  paymentForm = new PaymentForm(description);
                 this.paymentFormService.createPaymentForm(paymentForm);
                 break;
-            /*
-            case 2: // ACTUALIZAR
 
-                List<PaymentForm> paymentForms = this.paymentFormService.findAllPaymentForms();
-
-                if (paymentForms == null || paymentForms.isEmpty())
-                    Util.showWarning("No hay países registrados");
-
-                else{
-                    int idPaymentForm = Util.getIntInput(">> Introduzca el código a buscar: ");
-                    Optional<PaymentForm> optionalPaymentForm = this.paymentFormService.findPaymentFormById(idPaymentForm);
-
-                
-                    optionalPaymentForm.ifPresentOrElse(
-                        updatedPaymentForm -> {
-                            System.out.println("Esta es la información actual del pais:\n " + updatedPaymentForm);
-
-                            String newDescription = Util.getStringInput(">> Ingrese el nuevo nombre del pais: ");
-                            
-                            updatedPaymentForm.setDescription(newDescription);
-
-                            this.paymentFormService.updatePaymentForm(updatedPaymentForm);
-                        },
-                        
-                        () -> {
-                            System.out.println("ID no encontrado");
-                        });
-                    }
-                break;
-            */
             case 2: // BUSCAR POR ID
 
                 int SearchId = Util.getIntInput(">> Introduzca el ID a buscar: ");
@@ -78,7 +49,8 @@ public class PaymentFormConsoleAdapter {
                 
                 foundPaymentForm.ifPresentOrElse(
                     spottedPaymentForm -> { 
-                    System.out.println("Esta es la información del país encontrado:\n" + spottedPaymentForm);
+                        System.out.println("Esta es la información del país encontrado:");
+                        System.out.println(spottedPaymentForm.toString());
                     },
                     ()-> {
                         Util.showWarning("ID no encontrado o país inexistente");
@@ -86,20 +58,6 @@ public class PaymentFormConsoleAdapter {
                 
                 );
                 break;
-            /*
-            case 3: // ELIMINAR
-                int deleteId = Util.getIntInput(">> Introduzca el ID a buscar: ");
-                Optional<PaymentForm> paymentFormToDelete = this.paymentFormService.findPaymentFormById(deleteId);
-
-                // TODO: hacer funcion de validacion de obj nulos
-                paymentFormToDelete.ifPresentOrElse(
-                    spottedPaymentForm -> {
-                        this.paymentFormService.deletePaymentForm(deleteId);
-                        System.out.println("País eliminado con éxito");
-                    },
-                    () -> {
-                        Util.showWarning("ID no encontrado o país inexistente");
-                    }); */
         }
     }
 }

@@ -28,4 +28,12 @@ public class PaymentForm {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: " +  this.id);
+        sb.append("\nDescripción: ").append(this.description);
+        return sb.toString();
+    }
 }

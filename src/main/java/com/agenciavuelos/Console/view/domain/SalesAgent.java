@@ -64,6 +64,4 @@ public class SalesAgent {
         return documentTypeConsoleAdapter;
     }
 
-    
-
 }

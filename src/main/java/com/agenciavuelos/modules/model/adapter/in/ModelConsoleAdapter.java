@@ -39,7 +39,7 @@ public class ModelConsoleAdapter {
                 case 1: // CREAR
 
                     // solicita al agente ingresar los detalles del mdoelo:
-                    String newName = Util.getStringInput(">> Ingrese el nombre del mdoelo: ");
+                    String newName = Util.getStringInput(">> Ingrese el nombre del modelo: ");
                     
 
                     // solicitando datos de fabricante
@@ -68,7 +68,8 @@ public class ModelConsoleAdapter {
                         
                     foundModel.ifPresentOrElse(
                         spottedModel -> { // Si el tipo de documento fue encontrado...
-                        System.out.println("Esta es la información del modelo encontrado:\n" + spottedModel);
+                            System.out.println("Esta es la información del modelo encontrado:");
+                            System.out.println(spottedModel.toString());
                         },
                         ()-> {
                             Util.showWarning("Id no encontrado o modelo inexistente");
@@ -81,18 +82,17 @@ public class ModelConsoleAdapter {
                     // busca id
                     int id = Util.getIntInput(">> Introduzca el id a buscar: ");
                     Optional<Model> optionalModel = this.modelService.findModelById(id);
-
-                    // mostrar informacion actual
-                    System.out.println(">> Modelo encontrado. esta es su información actual");
-                    System.out.println(optionalModel);
-
+                    
                     // validacion id
                     optionalModel.ifPresentOrElse(
 
                         updatedModel -> {
                             int idFound2; // pongo esto porque a java no le gusta usar variables del exterior en lambdas
 
-                                // singreso de datos
+                            System.out.println(">> Modelo encontrado. esta es su información actual");
+                            System.out.println(updatedModel.toString());
+
+                            // ingreso de datos
                             String updateName = Util.getStringInput(">> Ingrese el nuevo nombre del modelo: ");
 
                             // solicitando datos de tipo de documento

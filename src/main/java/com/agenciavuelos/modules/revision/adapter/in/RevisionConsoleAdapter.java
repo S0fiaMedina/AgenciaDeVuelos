@@ -43,7 +43,6 @@ public class RevisionConsoleAdapter{
              * Caso de Uso 4: Registrar Revisión de Mantenimiento
             */
             case 1:
-
                 // FECHA DE FABRICACIÓN
                 String newRevisionDate;
                 boolean isCorrect;
@@ -93,7 +92,7 @@ public class RevisionConsoleAdapter{
                 List<Revision> foundRevisions = this.revisionService.findAllevisionsByPlane(searchPlanePlate);
 
                 if ( foundRevisions.isEmpty() ){
-                    Util.showWarning("El avion no ha pasado por revisiones o no fue ecncontrado");
+                    Util.showWarning("El avion no ha pasado por revisiones o no fue encontrado");
                 } else {
                     System.out.println("------------> REVISIONES REGISTRADAS <-------------");
                     foundRevisions.forEach( revision -> {System.out.println(revision);});

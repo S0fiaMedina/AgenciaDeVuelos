@@ -34,12 +34,11 @@ public class DocumentType {
         this.name = name;
     }
 
-
-
     @Override
-    public String toString() { // un toString bien bonito :3 para darselo al usuario
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("id: " + this.id ).append(", nombre: " + this.name);
+        sb.append("ID: " +  this.id);
+        sb.append("\nNombre: ").append(this.name);
         return sb.toString();
     }
 }

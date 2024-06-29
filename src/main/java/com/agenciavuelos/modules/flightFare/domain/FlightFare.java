@@ -51,4 +51,14 @@ public class FlightFare {
     public void setValue(Double value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: " +  this.id);
+        sb.append("\nDescripción: ").append(this.description);
+        sb.append("\nDetalles: ").append(this.details);
+        sb.append("\nValor: ").append(this.value);
+        return sb.toString();
+    }
 }

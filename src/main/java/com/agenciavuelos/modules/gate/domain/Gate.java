@@ -39,4 +39,12 @@ public class Gate {
     public void setIdAirport(String idAirport) {
         this.idAirport = idAirport;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: " +  this.id);
+        sb.append("\nNúmero: ").append(this.gateNumber);
+        return sb.toString();
+    }
 }

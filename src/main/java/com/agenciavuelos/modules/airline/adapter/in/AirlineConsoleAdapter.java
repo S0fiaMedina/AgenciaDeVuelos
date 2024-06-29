@@ -57,7 +57,8 @@ public class AirlineConsoleAdapter {
 
                     optionalAirline.ifPresentOrElse(
                         updatedAirline -> {
-                            System.out.println("Esta es la información actual de la aerolinea:\n " + updatedAirline.getId() + " - " + updatedAirline.getName());
+                            System.out.println("Esta es la información de la aerolinea encontrada:");
+                            System.out.println(updatedAirline.toString());
 
                             String newName = Util.getStringInput(">> Ingrese el nuevo nombre de la aerolinea: ");
                             
@@ -79,7 +80,8 @@ public class AirlineConsoleAdapter {
                 
                 foundAirline.ifPresentOrElse(
                     spottedAirline -> { 
-                    System.out.println("Esta es la información de la aerolinea encontrada:\n" + spottedAirline.getId() + " - " + spottedAirline.getName());
+                        System.out.println("Esta es la información de la aerolinea encontrada:");
+                        System.out.println(spottedAirline.toString());
                     },
                     ()-> {
                         Util.showWarning("ID no encontrado o aerolinea inexistente");
