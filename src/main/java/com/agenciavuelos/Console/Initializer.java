@@ -298,6 +298,7 @@ public class Initializer {
         return new TripBookingConsoleAdapter(tripBookingService);
     }
 
+    // RESERVAS (CLIENNTE)
     public TripBookingConsoleAdapterClient startTripBookingClientModule() {
         TripBookingService tripBookingService = new TripBookingService(tripRepository, planeRepository, tripBookingDetailRepository, tripBookingRepository, customerRepository, documentTypeRepository, flightFareRepository, paymentRepository, paymentFormRepository);
         return new TripBookingConsoleAdapterClient(tripBookingService);
@@ -323,6 +324,8 @@ public class Initializer {
         TripCrewService tripCrewService = new TripCrewService(tripCrewRepository, employeeRepository, tripRepository);
         return new TripCrewConsoleAdapter(tripCrewService);
     }
+
+    // UPDATE 
 
     public String getUser() {
         return user;

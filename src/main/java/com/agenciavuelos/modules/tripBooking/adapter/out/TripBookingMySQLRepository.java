@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.agenciavuelos.Console.Util;
+import com.agenciavuelos.modules.customer.domain.Customer;
 import com.agenciavuelos.modules.tripBooking.domain.TripBooking;
 import com.agenciavuelos.modules.tripBooking.infrastructure.TripBookingRepository;
 
@@ -277,7 +278,7 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
                 ON c.id = tbd.id_customer
                 INNER JOIN flight_fare ff
                 ON ff.id = tbd.id_fare
-                WHERE tp.id = ? AND c.id = ?;
+                WHERE tp.id = ? AND c.document_number = ?;
             """;
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, idTripBooking);
@@ -303,5 +304,35 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
             e.printStackTrace();
         }
         return Optional.empty();
+    }
+
+    public List<Customer> findPassengersOfBooking(int idTripBooking) {
+        List<Customer> passengers = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                SELECT c.id, c.name, c.age, c.document_number, dt.name FROM trip_booking_details AS tbd
+                INNER JOIN customer AS c ON c.id = tbd.id_customer
+                INNER JOIN document_type AS dt ON c.id_document_type = dt.id
+                WHERE tbd.id_trip_booking = ?;
+            """;
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, idTripBooking);
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        Customer customer = new Customer();
+                        customer.setId(  resultSet.getInt("c.id") );
+                        customer.setName( resultSet.getString("c.name") );
+                        customer.setAge(  resultSet.getInt("c.age") );  
+                        customer.settypeOfDoc( resultSet.getString("dt.name") );
+                        customer.setDocumentNumber(resultSet.getInt("c.document_number") );
+                        passengers.add(customer);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return passengers;
     }
 }

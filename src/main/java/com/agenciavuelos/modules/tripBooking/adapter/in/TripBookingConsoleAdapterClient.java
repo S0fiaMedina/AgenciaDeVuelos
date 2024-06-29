@@ -21,6 +21,7 @@ import com.agenciavuelos.modules.tripBookingDetail.domain.TripBookingDetail;
 
 public class TripBookingConsoleAdapterClient {
     private final TripBookingService tripBookingService;
+    private final UpdateTripBookingConsoleAdapter updateTripBookingConsoleAdapter;
 
     private final  String[] tripOptions = { 
         "1. Buscar Vuelo",
@@ -32,6 +33,7 @@ public class TripBookingConsoleAdapterClient {
 
     public TripBookingConsoleAdapterClient(TripBookingService tripBookingService) {
         this.tripBookingService = tripBookingService;
+        this.updateTripBookingConsoleAdapter = new UpdateTripBookingConsoleAdapter(tripBookingService);
     }
 
     /**
@@ -262,22 +264,8 @@ public class TripBookingConsoleAdapterClient {
     }
 
     public void updateTripBooking(){
-        String[] updateOptions = {
-            "1. Editar fecha."
-        };
-
-        // se obtiene id del cliente 
-        int updateCustomerId = Util.getIntInput(">> Ingrese el id del cliente: ");
-        int updateBookingId  = Util.getIntInput(">> Ingrese el id de la reserva: ");
-
-        Optional<TripBooking> foundBooking = this.tripBookingService.findTripBookingOfCustomer(updateCustomerId, updateBookingId);
-        foundBooking.ifPresentOrElse(
-            spottedBooking -> {
-
-            }, 
-            () -> {
-                Util.showWarning("Reserva no encontrada o inexistente");
-            });
+        this.updateTripBookingConsoleAdapter.updateTripBooking();
+        
     }
 
     public void cancelTripBooking() {

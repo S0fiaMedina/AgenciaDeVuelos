@@ -131,6 +131,10 @@ public class TripBookingService {
         return this.customerRepository.save(documentType);
     }
 
+    public void updateCustomer (Customer customer){
+        this.customerRepository.update(customer);
+    }
+
     public Optional<Plane> findByTrip(int idTrip) {
         return this.planeRepository.findByTrip(idTrip);
     }
@@ -146,6 +150,10 @@ public class TripBookingService {
     public Optional<PaymentForm>  findPaymentFormById(int id) {
         Optional<PaymentForm> optionalPaymentForm = this.paymentFormRepository.findById(id);
         return optionalPaymentForm;
+    }
+
+    public List<Customer> getPassangers(int idBooking){
+        return this.tripBookingRepository.findPassengersOfBooking(idBooking);
     }
 
     public int getDocumentTypeId(int id){

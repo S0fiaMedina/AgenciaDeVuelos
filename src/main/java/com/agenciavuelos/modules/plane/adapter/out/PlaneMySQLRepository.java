@@ -198,7 +198,7 @@ public class PlaneMySQLRepository implements PlaneRepository{
                 ON fc.plane_plates = p.plates
                 INNER JOIN trip t
                 ON t.id = fc.id_trip
-                WHERE t.departure_airport_id = fc.id_airport
+                WHERE t.arrival_airport_id = fc.id_airport
                 AND t.id = ?;
                 """;
             try (PreparedStatement statement = connection.prepareStatement(query)) {

@@ -3,6 +3,7 @@ package com.agenciavuelos.modules.tripBooking.infrastructure;
 import java.util.List;
 import java.util.Optional;
 
+import com.agenciavuelos.modules.customer.domain.Customer;
 import com.agenciavuelos.modules.tripBooking.domain.TripBooking;
 
 public interface TripBookingRepository {
@@ -25,4 +26,6 @@ public interface TripBookingRepository {
     public List<TripBooking> findBookingById(int id);
 
     public Optional<TripBooking> findTripBookingOfCustomer(int idCustomer, int idTripBooking);
+
+    public List<Customer> findPassengersOfBooking( int idTripBooking);
 }
