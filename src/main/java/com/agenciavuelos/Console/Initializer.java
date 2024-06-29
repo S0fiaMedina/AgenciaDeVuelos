@@ -69,9 +69,8 @@ import com.agenciavuelos.modules.status.adapter.in.StatusConsoleAdapter;
 import com.agenciavuelos.modules.status.adapter.out.StatusMySQLRepository;
 import com.agenciavuelos.modules.status.application.StatusService;
 import com.agenciavuelos.modules.status.infrastructure.StatusRepository;
-import com.agenciavuelos.modules.plane.adapter.out.PlaneMySQLRepository;
-import com.agenciavuelos.modules.plane.infrastructure.PlaneRepository;
 import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapter;
+import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapterAdmin;
 import com.agenciavuelos.modules.trip.adapter.out.TripMySQLRepository;
 import com.agenciavuelos.modules.trip.application.TripService;
 import com.agenciavuelos.modules.trip.infrastructure.TripRepository;
@@ -96,6 +95,8 @@ import com.agenciavuelos.modules.tripulationRole.infrastructure.TripulationRoleR
  * Como lo dice su nombre, esta clase sirve para inicializar todos los repositorios necesarios,
  * de esta forma, se separan responsabilidades y se unifica la url, el usuario y la contraseña de mysql
  * en tres variables y no tener que hacerlo que colocarlas explicitamente cada vez que se inicialice algo
+ * 
+ * la verdad, me siento muy mal por esta clase xd
 */
 public class Initializer {
     private String user;
@@ -303,17 +304,22 @@ public class Initializer {
         PaymentFormService paymentFormService = new PaymentFormService(paymentFormRepository);
         CustomerService customerService = new CustomerService(customerRepository, documentTypeRepository);
         FlightFareService flightFareService = new FlightFareService(flightFareRepository);
-        TripService tripService = new TripService(tripRepository, airportRepository);
+        TripService tripService = new TripService(tripRepository, airportRepository, flightConnectionRepository);
         TripBookingDetailService tripBookingDetailService = new TripBookingDetailService(tripBookingDetailRepository);
         TripBookingService tripBookingService = new TripBookingService(tripBookingRepository, tripRepository, customerRepository, flightFareRepository);
         return new TripConsoleAdapter(tripService, flightConnectionService, tripBookingService, tripBookingDetailService, customerService, planeService, flightFareService, paymentService, paymentFormService);
+    }
+    // VIAJES (ADMIN)
+    public TripConsoleAdapterAdmin startTripAdminModule(){
+        TripService tripService = new TripService(tripRepository, airportRepository, flightConnectionRepository);
+        return new TripConsoleAdapterAdmin(tripService);
     }
 
     // RESERVAS
     public TripBookingConsoleAdapter startTripBookingModule() {
         CustomerService customerService = new CustomerService(customerRepository, documentTypeRepository);
         FlightFareService flightFareService = new FlightFareService(flightFareRepository);
-        TripService tripService = new TripService(tripRepository, airportRepository);
+        TripService tripService = new TripService(tripRepository, airportRepository, flightConnectionRepository);
         TripBookingDetailService tripBookingDetailService = new TripBookingDetailService(tripBookingDetailRepository);
         TripBookingService tripBookingService = new TripBookingService(tripBookingRepository, tripRepository, customerRepository, flightFareRepository);
         return new TripBookingConsoleAdapter(tripBookingService, tripBookingDetailService, tripService, customerService, flightFareService);

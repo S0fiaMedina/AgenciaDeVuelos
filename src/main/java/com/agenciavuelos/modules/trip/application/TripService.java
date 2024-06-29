@@ -5,16 +5,20 @@ import java.util.Optional;
 
 import com.agenciavuelos.modules.airport.domain.Airport;
 import com.agenciavuelos.modules.airport.infrastructure.AirportRepository;
+import com.agenciavuelos.modules.flightConnection.domain.FlightConnection;
+import com.agenciavuelos.modules.flightConnection.infrastructure.FlightConnectionRepository;
 import com.agenciavuelos.modules.trip.domain.Trip;
 import com.agenciavuelos.modules.trip.infrastructure.TripRepository;
 
 public class TripService {
     private final TripRepository tripRepository;
     private final AirportRepository airportRepository;
+    private final FlightConnectionRepository flightConnectionRepository;
 
-    public TripService(TripRepository tripRepository, AirportRepository airportRepository) {
+    public TripService(TripRepository tripRepository, AirportRepository airportRepository, FlightConnectionRepository flightConnectionRepository) {
         this.tripRepository = tripRepository;
         this.airportRepository = airportRepository;
+        this.flightConnectionRepository = flightConnectionRepository;
     }
 
     public List<Trip> searchTrips(String nameCityD, String nameCityA, String departureDate) {
@@ -38,8 +42,12 @@ public class TripService {
         this.tripRepository.update(trip);
     }
 
-    public void createTrip(Trip trip){
-        this.tripRepository.save(trip);
+    public int createTrip(Trip trip){
+        return this.tripRepository.save(trip);
+    }
+
+    public void createDirectTrip( FlightConnection flightConnection){ 
+        this.flightConnectionRepository.save(flightConnection);
     }
     
     public TripRepository getTripRepositoryById() {
@@ -55,4 +63,6 @@ public class TripService {
         }
         return idF;
     }
+
+    
 }

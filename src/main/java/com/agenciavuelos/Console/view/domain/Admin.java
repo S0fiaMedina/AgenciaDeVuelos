@@ -5,11 +5,13 @@ import com.agenciavuelos.modules.airline.adapter.in.AirlineConsoleAdapter;
 import com.agenciavuelos.modules.airport.adapter.in.AirportConsoleAdapter;
 import com.agenciavuelos.modules.documentType.adapter.in.DocumentTypeConsoleAdapter;
 import com.agenciavuelos.modules.employee.adapter.in.EmployeeConsoleAdapter;
+import com.agenciavuelos.modules.flightConnection.adapter.in.FlightConnectionConsoleAdapter;
 import com.agenciavuelos.modules.flightFare.adapter.in.FlightFareConsoleAdapter;
 import com.agenciavuelos.modules.manufacturer.adapter.in.ManufacturerConsoleAdapter;
 import com.agenciavuelos.modules.model.adapter.in.ModelConsoleAdapter;
 import com.agenciavuelos.modules.plane.adapter.in.PlaneConsoleAdapter;
 import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapter;
+import com.agenciavuelos.modules.trip.adapter.in.TripConsoleAdapterAdmin;
 import com.agenciavuelos.modules.tripCrew.adapter.in.TripCrewConsoleAdapter;
 
 public class Admin {
@@ -25,6 +27,8 @@ public class Admin {
     private final DocumentTypeConsoleAdapter documentTypeConsoleAdapter;
     private final TripConsoleAdapter tripConsoleAdapter;
     private final TripCrewConsoleAdapter tripCrewConsoleAdapter;
+    private final TripConsoleAdapterAdmin tripConsoleAdapterAdmin;
+    private final FlightConnectionConsoleAdapter flightConnectionConsoleAdapter;
 
     public Admin(Initializer initializer){
         this.initializer = initializer;
@@ -38,6 +42,8 @@ public class Admin {
         this.documentTypeConsoleAdapter = initializer.startDocumentTypeModule();
         this.tripConsoleAdapter = initializer.startTripModule();
         this.tripCrewConsoleAdapter = initializer.startTripCrewConsoleAdapter();
+        this.tripConsoleAdapterAdmin = initializer.startTripAdminModule();
+        this.flightConnectionConsoleAdapter = initializer.startFlightConnectionModule();
 
     }
 
@@ -85,6 +91,12 @@ public class Admin {
         return tripCrewConsoleAdapter;
     }
 
-    
+    public TripConsoleAdapterAdmin getTripConsoleAdapterAdmin() {
+        return tripConsoleAdapterAdmin;
+    }
+
+    public FlightConnectionConsoleAdapter getFlightConnectionConsoleAdapter() {
+        return flightConnectionConsoleAdapter;
+    }
     
 }

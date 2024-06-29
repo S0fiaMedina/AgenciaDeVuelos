@@ -12,7 +12,7 @@ public interface TripRepository {
 
     public List<Trip> findAll();
 
-    public void save(Trip trip);
+    public int save(Trip trip);
 
     public void update(Trip trip);
 
