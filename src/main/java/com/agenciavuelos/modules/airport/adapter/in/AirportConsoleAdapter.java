@@ -6,12 +6,10 @@ import java.util.Optional;
 import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.airport.application.AirportService;
 import com.agenciavuelos.modules.airport.domain.Airport;
-import com.agenciavuelos.modules.city.application.CityService;
 import com.agenciavuelos.modules.city.domain.City;
 
 public class AirportConsoleAdapter {
     private final AirportService airportService;
-    private final CityService cityService;
 
     private final  String[] airportOptions = { 
         "1. Registrar Aeropuerto",
@@ -21,9 +19,8 @@ public class AirportConsoleAdapter {
         "5. Salir"
     };
 
-    public AirportConsoleAdapter(AirportService airportService, CityService cityService) {
+    public AirportConsoleAdapter(AirportService airportService) {
         this.airportService = airportService;
-        this.cityService = cityService;
     }
 
     /**
@@ -43,7 +40,7 @@ public class AirportConsoleAdapter {
         int idF;
         String idS = "";
         int optionSelected = getChoiceFromUser();
-        List<City> cities = cityService.findAllCities();
+        List<City> cities = airportService.findAllCities();
         switch (optionSelected) {
 
             case 1: // CREAR

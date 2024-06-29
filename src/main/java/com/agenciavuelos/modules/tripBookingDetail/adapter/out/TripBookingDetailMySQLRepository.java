@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.agenciavuelos.modules.tripBooking.domain.TripBooking;
 import com.agenciavuelos.modules.tripBookingDetail.domain.TripBookingDetail;
 import com.agenciavuelos.modules.tripBookingDetail.infrastructure.TripBookingDetailRepository;
 

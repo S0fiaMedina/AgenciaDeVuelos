@@ -6,12 +6,10 @@ import java.util.Optional;
 import com.agenciavuelos.modules.gate.application.GateService;
 import com.agenciavuelos.modules.gate.domain.Gate;
 import com.agenciavuelos.Console.Util;
-import com.agenciavuelos.modules.airport.application.AirportService;
 import com.agenciavuelos.modules.airport.domain.Airport;
 
 public class GateConsoleAdapter {
     private final GateService gateService;
-    private final AirportService airportService;
 
     // lista que contiene las opciones del menu
     private final  String[] gateOptions = { 
@@ -22,9 +20,8 @@ public class GateConsoleAdapter {
         "5. Salir"
     };
 
-    public GateConsoleAdapter(GateService gateService, AirportService airportService) {
+    public GateConsoleAdapter(GateService gateService) {
         this.gateService = gateService;
-        this.airportService = airportService;
     }
 
     /**
@@ -43,13 +40,12 @@ public class GateConsoleAdapter {
     public void run(){
         String idF;
         int optionSelected = getChoiceFromUser();
-        List<Airport> airports = airportService.findAllAirports();
+        List<Airport> airports = gateService.findAllAirports();
         switch (optionSelected) {
 
             case 1: // CREAR
                 // TODO: validacion de no repeticion de codigo de pais
                 String number = Util.getStringInput(">> Ingrese el número de la puerta de embarque:");
-                // System.out.println(airportService.findAllAirports().get(0).getId() + "" + airportService.findAllAirports().get(0).getName());
                 for (int i = 0; i <= airports.size() - 1; i++) {
                     System.out.println(airports.get(i).getId() + " - " + airports.get(i).getName());
                 }

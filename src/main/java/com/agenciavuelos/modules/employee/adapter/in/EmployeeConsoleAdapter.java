@@ -4,31 +4,22 @@ import java.util.List;
 // import java.util.Optional;
 
 import com.agenciavuelos.Console.Util;
-import com.agenciavuelos.modules.airline.application.AirlineService;
 import com.agenciavuelos.modules.airline.domain.Airline;
-import com.agenciavuelos.modules.airport.application.AirportService;
 import com.agenciavuelos.modules.airport.domain.Airport;
 import com.agenciavuelos.modules.employee.application.EmployeeService;
 import com.agenciavuelos.modules.employee.domain.Employee;
-import com.agenciavuelos.modules.tripulationRole.application.TripulationRoleService;
 import com.agenciavuelos.modules.tripulationRole.domain.TripulationRole;
 
 public class EmployeeConsoleAdapter {
     private final EmployeeService employeeService;
-    private final TripulationRoleService tripulationRoleService;
-    private final AirlineService airlineService;
-    private final AirportService airportService;
 
     private final  String[] employeeOptions = { 
         "1. Registrar Empleado",
         "2. Salir"
     };
 
-    public EmployeeConsoleAdapter(EmployeeService employeeService, TripulationRoleService tripulationRoleService, AirlineService airlineService, AirportService airportService) {
+    public EmployeeConsoleAdapter(EmployeeService employeeService) {
         this.employeeService = employeeService;
-        this.tripulationRoleService = tripulationRoleService;
-        this.airlineService = airlineService;
-        this.airportService = airportService;
     }
 
     /**
@@ -52,9 +43,9 @@ public class EmployeeConsoleAdapter {
         String idS = "";
         boolean isCorrect = true;
         int optionSelected = getChoiceFromUser();
-        List<TripulationRole> roles = tripulationRoleService.findAllTripulationRoles();
-        List<Airline> airlines = airlineService.findAllAirlines();
-        List<Airport> airports = airportService.findAllAirports();
+        List<TripulationRole> roles = employeeService.findAllTripulationRoles();
+        List<Airline> airlines = employeeService.findAllAirlines();
+        List<Airport> airports = employeeService.findAllAirports();
         switch (optionSelected) {
 
             case 1: 

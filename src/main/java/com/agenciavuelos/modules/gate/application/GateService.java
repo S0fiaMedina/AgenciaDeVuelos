@@ -27,6 +27,10 @@ public class GateService {
 
     }
 
+    public List<Airport> findAllAirports() {
+        return airportRepository.findAll();
+    }
+
     public void deleteGate(int id){
         this.gateRepository.delete(id);
     }

@@ -6,12 +6,10 @@ import java.util.Optional;
 import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.city.application.CityService;
 import com.agenciavuelos.modules.city.domain.City;
-import com.agenciavuelos.modules.country.application.CountryService;
 import com.agenciavuelos.modules.country.domain.Country;
 
 public class CityConsoleAdapter {
     private final CityService cityService;
-    private final CountryService countryService;
 
     // lista que contiene las opciones del menu
     private final  String[] cityOptions = { 
@@ -22,9 +20,8 @@ public class CityConsoleAdapter {
         "5. Salir"
     };
 
-    public CityConsoleAdapter(CityService cityService, CountryService countryService) {
+    public CityConsoleAdapter(CityService cityService) {
         this.cityService = cityService;
-        this.countryService = countryService;
     }
 
     /**
@@ -43,13 +40,12 @@ public class CityConsoleAdapter {
     public void run(){
         int idF;
         int optionSelected = getChoiceFromUser();
-        List<Country> countries = countryService.findAllCountries();
+        List<Country> countries = cityService.findAllCountries();
         switch (optionSelected) {
 
             case 1: // CREAR
                 // TODO: validacion de no repeticion de codigo de pais
                 String name = Util.getStringInput(">> Ingrese el nombre de la ciudad:");
-                // System.out.println(countryService.findAllCountries().get(0).getId() + "" + countryService.findAllCountries().get(0).getName());
                 for (int i = 0; i <= countries.size() - 1; i++) {
                     System.out.println(countries.get(i).getId() + " - " + countries.get(i).getName());
                 }

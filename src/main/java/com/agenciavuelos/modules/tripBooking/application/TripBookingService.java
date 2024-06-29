@@ -11,16 +11,20 @@ import com.agenciavuelos.modules.flightFare.infrastructure.FlightFareRepository;
 import com.agenciavuelos.modules.trip.domain.Trip;
 import com.agenciavuelos.modules.trip.infrastructure.TripRepository;
 import com.agenciavuelos.modules.tripBooking.infrastructure.TripBookingRepository;
+import com.agenciavuelos.modules.tripBookingDetail.domain.TripBookingDetail;
+import com.agenciavuelos.modules.tripBookingDetail.infrastructure.TripBookingDetailRepository;
 
 public class TripBookingService {
-    private final TripBookingRepository tripBookingRepository;
     private final TripRepository tripRepository;
+    private final TripBookingDetailRepository tripBookingDetailRepository;
+    private final TripBookingRepository tripBookingRepository;
     private final CustomerRepository customerRepository;
     private final FlightFareRepository flightFareRepository;
 
-    public TripBookingService(TripBookingRepository tripBookingRepository, TripRepository tripRepository, CustomerRepository customerRepository, FlightFareRepository flightFareRepository) {
-        this.tripBookingRepository = tripBookingRepository;
+    public TripBookingService(TripRepository tripRepository, TripBookingDetailRepository tripBookingDetailRepository, TripBookingRepository tripBookingRepository, CustomerRepository customerRepository, FlightFareRepository flightFareRepository) {
         this.tripRepository = tripRepository;
+        this.tripBookingDetailRepository = tripBookingDetailRepository;
+        this.tripBookingRepository = tripBookingRepository;
         this.customerRepository = customerRepository;
         this.flightFareRepository = flightFareRepository;
     }
@@ -61,6 +65,26 @@ public class TripBookingService {
 
     public List<Integer> findBookingsByCustomerId(int id) {
         return this.tripBookingRepository.findBookingsByCustomerId(id);
+    }
+
+    public List<Trip> findAllTrips() {
+        return this.tripRepository.findAll();
+    }
+
+    public List<Customer> findAllCustomers() {
+        return customerRepository.findAll();
+    }
+
+    public Optional<Customer> findByDocumentNumber(int docNumber) {
+        return customerRepository.findByDocumentNumber(docNumber);
+    }
+
+    public void createTripBookingDetail(TripBookingDetail tripBookingDetail) {
+        tripBookingDetailRepository.save(tripBookingDetail);
+    }
+
+    public List<FlightFare> findAllFlightFares() {
+        return flightFareRepository.findAll();
     }
 
     public int getTripId(int id) {

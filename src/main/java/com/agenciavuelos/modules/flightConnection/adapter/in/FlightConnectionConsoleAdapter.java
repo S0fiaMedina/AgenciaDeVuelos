@@ -180,7 +180,7 @@ public class FlightConnectionConsoleAdapter {
                 });
             break;
 
-            case 5: // ASIGNAR AERONAVE A TRAYEECTORIA
+            case 5: // ASIGNAR AERONAVE A TRAYECTORIA
 
             List<Plane> planes = this.flightConnectionService.getAllPlanes();
 

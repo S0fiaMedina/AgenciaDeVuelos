@@ -46,6 +46,18 @@ public class EmployeeService {
         this.employeeRepository.save(employee);
     }
 
+    public List<TripulationRole> findAllTripulationRoles() {
+        return tripulationRoleRepository.findAll();
+    }
+
+    public List<Airline> findAllAirlines() {
+        return airlineRepository.findAll();
+    }
+
+    public List<Airport> findAllAirports() {
+        return airportRepository.findAll();
+    }
+
     public int getTripulationRoleId(int id) {
         int idF = -1;
         Optional<TripulationRole> foundTripulationRole = tripulationRoleRepository.findById(id);

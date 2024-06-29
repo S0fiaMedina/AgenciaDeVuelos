@@ -8,21 +8,13 @@ import java.util.Optional;
 import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.tripBooking.application.TripBookingService;
 import com.agenciavuelos.modules.tripBooking.domain.TripBooking;
-import com.agenciavuelos.modules.tripBookingDetail.application.TripBookingDetailService;
 import com.agenciavuelos.modules.tripBookingDetail.domain.TripBookingDetail;
-import com.agenciavuelos.modules.customer.application.CustomerService;
 import com.agenciavuelos.modules.customer.domain.Customer;
-import com.agenciavuelos.modules.flightFare.application.FlightFareService;
 import com.agenciavuelos.modules.flightFare.domain.FlightFare;
-import com.agenciavuelos.modules.trip.application.TripService;
 import com.agenciavuelos.modules.trip.domain.Trip;
 
 public class TripBookingConsoleAdapter {
     private final TripBookingService tripBookingService;
-    private final TripBookingDetailService tripBookingDetailService;
-    private final TripService tripService;
-    private final CustomerService customerService;
-    private final FlightFareService flightFareService;
 
     // lista que contiene las opciones del menu
     private final  String[] tripBookingOptions = { 
@@ -35,12 +27,8 @@ public class TripBookingConsoleAdapter {
         "7. Salir"  
     };
 
-    public TripBookingConsoleAdapter(TripBookingService tripBookingService, TripBookingDetailService tripBookingDetailService, TripService tripService, CustomerService customerService, FlightFareService flightFareService) {
+    public TripBookingConsoleAdapter(TripBookingService tripBookingService) {
         this.tripBookingService = tripBookingService;
-        this.tripBookingDetailService = tripBookingDetailService;
-        this.tripService = tripService;
-        this.customerService = customerService;
-        this.flightFareService = flightFareService;
     }
 
     /**
@@ -61,9 +49,9 @@ public class TripBookingConsoleAdapter {
         int idF;
         int idTrip;
         int optionSelected = getChoiceFromUser();
-        List<Customer> customers = customerService.findAllCustomers();
-        List<Trip> trips = tripService.findAllTrips();
-        List<FlightFare> flightFares = flightFareService.findAllFlightFares();
+        List<Customer> customers = tripBookingService.findAllCustomers();
+        List<Trip> trips = tripBookingService.findAllTrips();
+        List<FlightFare> flightFares = tripBookingService.findAllFlightFares();
         switch (optionSelected) {
 
             case 1: // CREAR
@@ -92,7 +80,7 @@ public class TripBookingConsoleAdapter {
                 TripBooking tripBooking = new TripBooking(currentDate, idTrip);
                 int idTB = this.tripBookingService.createTripBooking(tripBooking);
                 TripBookingDetail tripBookingDetail = new TripBookingDetail(idTB, idCustomer, idFare);
-                this.tripBookingDetailService.createTripBookingDetail(tripBookingDetail);
+                this.tripBookingService.createTripBookingDetail(tripBookingDetail);
                 break;
         
             /* case 2: // ACTUALIZAR
@@ -184,7 +172,7 @@ public class TripBookingConsoleAdapter {
                     });
             case 4:
                 int documentNumber = Util.getIntInput(">> Ingrese su número de documento:");
-                Optional<Customer> foundC = this.customerService.findByDocumentNumber(documentNumber);
+                Optional<Customer> foundC = this.tripBookingService.findByDocumentNumber(documentNumber);
                 foundC.ifPresentOrElse(
                     spottedCustomer -> {
                         List<Integer> bookingsList = this.tripBookingService.findBookingsByCustomerId(spottedCustomer.getId());
@@ -210,7 +198,7 @@ public class TripBookingConsoleAdapter {
                 break;
             case 6:
                 int docNumber = Util.getIntInput(">> Ingrese su número de documento:");
-                    Optional<Customer> foundCustomer = this.customerService.findByDocumentNumber(docNumber);
+                    Optional<Customer> foundCustomer = this.tripBookingService.findByDocumentNumber(docNumber);
                     foundCustomer.ifPresentOrElse(
                         spottedCustomer -> {
                             List<Integer> bookingsList = this.tripBookingService.findBookingsByCustomerId(spottedCustomer.getId());

@@ -13,10 +13,10 @@ public class ManufacturerConsoleAdapter {
 
     // lista que contiene las opciones del menu
     private final  String[] manufacturerOptions = { 
-        "1. Crear fabricante",
-        "2. Actualizar fabricante",
-        "3. Buscar fabricante por ID",
-        "4. Eliminar fabricante",
+        "1. Registrar Fabricante",
+        "2. Actualizar Fabricante",
+        "3. Consultar Fabricante por ID",
+        "4. Eliminar Fabricante",
         "5. Salir"
     };
 
@@ -38,78 +38,83 @@ public class ManufacturerConsoleAdapter {
     }
 
     public void run(){
-        int optionSelected = getChoiceFromUser();
-        switch (optionSelected) {
+        int optionSelected;
+        do {
+            optionSelected = getChoiceFromUser();
+            switch (optionSelected) {
 
-            case 1: 
-                String name = Util.getStringInput(">> Ingrese el nombre del fabricante:");
-                Manufacturer manufacturer = new Manufacturer(name);
-                this.manufacturerService.createManufacturer(manufacturer);
-                break;
-        
-            case 2: 
-
-                List<Manufacturer> manufacturers = this.manufacturerService.findAllManufacturers();
-                
-
-                if (manufacturers == null || manufacturers.isEmpty()  ) 
-                    Util.showWarning("No hay fabricantes registrados");
-
-                else{
-                    int id = Util.getIntInput(">> Introduzca el id a buscar: ");
-                    Optional<Manufacturer> optionalManufacturer = this.manufacturerService.findManufacturerById(id);
-
-                
-                    optionalManufacturer.ifPresentOrElse( 
-
-                        
-                        updatedmManufacturer -> {
-                            System.out.println("Esta es la información actual del fabricante:\n " + updatedmManufacturer);
-                            String newName = Util.getStringInput(">> Ingrese el nuevo nombre del manufacturero: ");
-
-                            
-                            updatedmManufacturer.setName(newName);
-
-                            
-                            this.manufacturerService.updateManufacturer(updatedmManufacturer);
-                        },
-
-                        
-                        () -> {
-                            Util.showWarning("ID no encontrado");
-                        });
-                    }
-                break;
-
-            case 3: 
-
-                int id = Util.getIntInput(">> Introduzca el id a buscar: ");
-                Optional<Manufacturer> foundManufacturer = this.manufacturerService.findManufacturerById(id);
-                
-                
-                foundManufacturer.ifPresentOrElse(
-                    spottedManufacturer -> { // Si el fabricante fue encontrado...
-                    System.out.println("Esta es la información del fabricante encontrado:\n" + spottedManufacturer);
-                    },
-                    ()-> {
-                        Util.showWarning("Id no encontrado o fabricante inexistente");
-                    }
-                
-                );
-                break;
+                case 1: 
+                    String name = Util.getStringInput(">> Ingrese el nombre del fabricante:");
+                    Manufacturer manufacturer = new Manufacturer(name);
+                    this.manufacturerService.createManufacturer(manufacturer);
+                    break;
             
-            case 4: // ELIMINAR 
-                int deleteId = Util.getIntInput(">> Introduzca el id a buscar: ");
-                Optional<Manufacturer> manufacturerToDelete = this.manufacturerService.findManufacturerById(deleteId);
+                case 2: 
+                    List<Manufacturer> manufacturers = this.manufacturerService.findAllManufacturers();
+                    
 
-                manufacturerToDelete.ifPresentOrElse(
-                    spottedManufacturer -> {
-                        this.manufacturerService.deteleManufacturer(deleteId);
-                    },
-                    () -> {
-                        Util.showWarning("ID no encontrado o fabricante inexistente");
-                    }); 
-        }
+                    if (manufacturers == null || manufacturers.isEmpty()  ) 
+                        Util.showWarning("No hay fabricantes registrados");
+
+                    else{
+                        int id = Util.getIntInput(">> Introduzca el id a buscar: ");
+                        Optional<Manufacturer> optionalManufacturer = this.manufacturerService.findManufacturerById(id);
+
+                    
+                        optionalManufacturer.ifPresentOrElse( 
+
+                            
+                            updatedmManufacturer -> {
+                                System.out.println("Esta es la información actual del fabricante:\n " + updatedmManufacturer);
+                                String newName = Util.getStringInput(">> Ingrese el nuevo nombre del manufacturero: ");
+
+                                
+                                updatedmManufacturer.setName(newName);
+
+                                
+                                this.manufacturerService.updateManufacturer(updatedmManufacturer);
+                            },
+
+                            
+                            () -> {
+                                Util.showWarning("ID no encontrado");
+                            });
+                        }
+                    break;
+
+                case 3: 
+                    int id = Util.getIntInput(">> Introduzca el id a buscar: ");
+                    Optional<Manufacturer> foundManufacturer = this.manufacturerService.findManufacturerById(id);
+                    
+                    
+                    foundManufacturer.ifPresentOrElse(
+                        spottedManufacturer -> { // Si el fabricante fue encontrado...
+                        System.out.println("Esta es la información del fabricante encontrado:\n" + spottedManufacturer);
+                        },
+                        ()-> {
+                            Util.showWarning("Id no encontrado o fabricante inexistente");
+                        }
+                    
+                    );
+                    break;
+                
+                case 4:
+                    int deleteId = Util.getIntInput(">> Introduzca el id a buscar: ");
+                    Optional<Manufacturer> manufacturerToDelete = this.manufacturerService.findManufacturerById(deleteId);
+
+                    manufacturerToDelete.ifPresentOrElse(
+                        spottedManufacturer -> {
+                            this.manufacturerService.deteleManufacturer(deleteId);
+                        },
+                        () -> {
+                            Util.showWarning("ID no encontrado o fabricante inexistente");
+                        });
+                    break;
+                case 5:
+                    break;
+            }
+        } while (optionSelected != 5);
+        
     }
 
 }

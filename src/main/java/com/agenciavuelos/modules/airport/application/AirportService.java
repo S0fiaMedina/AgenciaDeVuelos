@@ -38,6 +38,10 @@ public class AirportService {
         this.airportRepository.save(airport);
     }
 
+    public List<City> findAllCities() {
+        return cityRepository.findAll();
+    }
+
     public int getCityId(int id) {
         int idF = -1;
         Optional<City> foundCity = cityRepository.findById(id);

@@ -211,16 +211,14 @@ public class Initializer {
 
     // CIUDADES
     public CityConsoleAdapter startCityConsoleAdapter(){
-        CountryService countryService = new CountryService(countryRepository);
         CityService cityService = new CityService(cityRepository, countryRepository);
-        return new CityConsoleAdapter(cityService, countryService);
+        return new CityConsoleAdapter(cityService);
     }
 
     // AEROPUERTOS
     public AirportConsoleAdapter startAirportConsoleAdapter() {
-        CityService cityService = new CityService(cityRepository, countryRepository);
         AirportService airportService = new AirportService(airportRepository, cityRepository);
-        return new AirportConsoleAdapter(airportService, cityService);
+        return new AirportConsoleAdapter(airportService);
     }
 
     // AEROLINEAS
@@ -244,9 +242,8 @@ public class Initializer {
 
     // PUERTAS DE EMBARQUE
     public GateConsoleAdapter startGateConsoleAdapter() {
-        AirportService airportService = new AirportService(airportRepository, cityRepository);
         GateService gateService = new GateService(gateRepository, airportRepository);
-        return new GateConsoleAdapter(gateService, airportService);
+        return new GateConsoleAdapter(gateService);
     }
 
     // ROLES DE TRIPULACION
@@ -257,11 +254,8 @@ public class Initializer {
 
     // EMPLEADOS
     public EmployeeConsoleAdapter startEmployeeConsoleAdapter() {
-        AirportService airportService = new AirportService(airportRepository, cityRepository);
-        AirlineService airlineService = new AirlineService(airlineRepository);
-        TripulationRoleService tripulationRoleService = new TripulationRoleService(tripulationRoleRepository);
         EmployeeService employeeService = new EmployeeService(employeeRepository, tripulationRoleRepository, airlineRepository, airportRepository);
-        return new EmployeeConsoleAdapter(employeeService, tripulationRoleService, airlineService, airportService);
+        return new EmployeeConsoleAdapter(employeeService);
     }
 
 
@@ -305,18 +299,14 @@ public class Initializer {
         FlightFareService flightFareService = new FlightFareService(flightFareRepository);
         TripService tripService = new TripService(tripRepository, airportRepository);
         TripBookingDetailService tripBookingDetailService = new TripBookingDetailService(tripBookingDetailRepository);
-        TripBookingService tripBookingService = new TripBookingService(tripBookingRepository, tripRepository, customerRepository, flightFareRepository);
+        TripBookingService tripBookingService = new TripBookingService(tripRepository, tripBookingDetailRepository, tripBookingRepository, customerRepository, flightFareRepository);
         return new TripConsoleAdapter(tripService, flightConnectionService, tripBookingService, tripBookingDetailService, customerService, planeService, flightFareService, paymentService, paymentFormService);
     }
 
     // RESERVAS
     public TripBookingConsoleAdapter startTripBookingModule() {
-        CustomerService customerService = new CustomerService(customerRepository, documentTypeRepository);
-        FlightFareService flightFareService = new FlightFareService(flightFareRepository);
-        TripService tripService = new TripService(tripRepository, airportRepository);
-        TripBookingDetailService tripBookingDetailService = new TripBookingDetailService(tripBookingDetailRepository);
-        TripBookingService tripBookingService = new TripBookingService(tripBookingRepository, tripRepository, customerRepository, flightFareRepository);
-        return new TripBookingConsoleAdapter(tripBookingService, tripBookingDetailService, tripService, customerService, flightFareService);
+        TripBookingService tripBookingService = new TripBookingService(tripRepository, tripBookingDetailRepository, tripBookingRepository, customerRepository, flightFareRepository);
+        return new TripBookingConsoleAdapter(tripBookingService);
     }
 
     // TARIFAS

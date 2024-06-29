@@ -41,6 +41,10 @@ public class CityService {
         this.cityRepository.save(city);
     }
 
+    public List<Country> findAllCountries() {
+        return countryRepository.findAll();
+    }
+
     public int getCountryId(int id) {
         int idF = -1;
         Optional<Country> foundCountry = countryRepository.findById(id);
