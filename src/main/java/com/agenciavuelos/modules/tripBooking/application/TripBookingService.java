@@ -39,6 +39,10 @@ public class TripBookingService {
 
     }
 
+    public Optional<TripBooking> findTripBookingOfCustomer(int idCustomer, int idTripBooking){
+        return this.tripBookingRepository.findTripBookingOfCustomer(idCustomer, idTripBooking);
+    }
+
     public void deleteTripBooking(int id){
         this.tripBookingRepository.delete(id);
     }

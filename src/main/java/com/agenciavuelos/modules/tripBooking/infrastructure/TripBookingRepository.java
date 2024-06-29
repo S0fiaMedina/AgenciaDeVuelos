@@ -23,4 +23,6 @@ public interface TripBookingRepository {
     public List<TripBooking> findByTripId(int id);
 
     public List<TripBooking> findBookingById(int id);
+
+    public Optional<TripBooking> findTripBookingOfCustomer(int idCustomer, int idTripBooking);
 }

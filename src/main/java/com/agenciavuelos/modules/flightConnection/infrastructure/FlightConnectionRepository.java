@@ -21,4 +21,6 @@ public interface FlightConnectionRepository {
 
     public void delete(int id);
 
+    public int verifyConnectionNumber(String connextionNumber);
+
 }

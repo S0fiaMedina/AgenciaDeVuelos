@@ -9,7 +9,8 @@ public class TechnicianConsoleAdapter {
 
 
     String[] gestionOptions = {
-        "▶ (1) Gestión de revisiones"
+        "▶ (1) Gestión de revisiones",
+        "▶ (2) Salir"
     };
 
     String header = """
@@ -22,18 +23,24 @@ public class TechnicianConsoleAdapter {
     }
 
     public void run(){
-        System.out.println(header);
-        Util.printOptions(gestionOptions);
-        System.out.println(">> Seleccione la opcion de su preferencia: ");
-        int selectedOption = Util.rangeValidator(1, gestionOptions.length);
+        boolean breaker = true;
+        while(breaker){
+            System.out.println(header);
+            Util.printOptions(gestionOptions);
+            System.out.println(">> Seleccione la opcion de su preferencia: ");
+            int selectedOption = Util.rangeValidator(1, gestionOptions.length);
 
-        switch (selectedOption) {
-            case 1:
-                this.technician.getRevisionConsoleAdapter().run();
-                break;
+            switch (selectedOption) {
+                case 1:
+                    this.technician.getRevisionConsoleAdapter().run();
+                    break;
+            
+                default:
+                    System.out.println("Adios, tecnico :)");
+                    breaker = false;
+                    break;
+            }
         
-            default:
-                break;
         }
     }
 }

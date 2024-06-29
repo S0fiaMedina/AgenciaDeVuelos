@@ -95,9 +95,16 @@ public class FlightConnectionService {
         return foundId;
     }
 
+    
+
     // traer todos loa aviones
     public List<Plane> getAllPlanes(){
         return this.planeRepository.findAll();
+    }
+
+    // verifica que los numeros de conexion NO sean iguales
+    public int verifyConnectionNumber(String connectionNumber){
+        return this.flightConnectionRepository.verifyConnectionNumber(connectionNumber);
     }
 
 

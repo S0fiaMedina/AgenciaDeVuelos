@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.agenciavuelos.Console.Util;
 import com.agenciavuelos.modules.flightConnection.domain.FlightConnection;
 import com.agenciavuelos.modules.flightConnection.infrastructure.FlightConnectionRepository;
 
@@ -177,11 +178,37 @@ public class FlightConnectionMySQLRepository implements FlightConnectionReposito
 
 
                 statement.executeUpdate();
+                Util.showSuccess("Vuelo eliminado. ");
             }
         } catch (SQLException e) {
             System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
         }
         
+    }
+
+    @Override
+    public int verifyConnectionNumber(String connectionNumber) {
+        int numberOfCoincidences = 0;
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                    SELECT COUNT(id) FROM flight_connection
+                    WHERE connection_number = ?
+                    """;
+            
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, connectionNumber);
+                
+
+                // Almacena el numero de coincidencias en una variable 
+                ResultSet rs = statement.executeQuery();
+                if(rs.next()) {
+                    numberOfCoincidences= rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Se ha producido un error :(. Motivo: \n" + e.getMessage());
+        }
+        return numberOfCoincidences;
     }
 
 

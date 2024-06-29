@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,20 +26,29 @@ public class TripMySQLRepository implements TripRepository{
     }
 
     @Override
-    public void save(Trip trip) {
+    public int save(Trip trip) {
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = "INSERT INTO trip (tripe_date, price_tripe, departure_airport_id, arrival_airport_id) VALUES (?,?,?,?)";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
+            try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, trip.getDate());
                 statement.setDouble(2, trip.getPrice());
                 statement.setString(3, trip.getIdAirportD());
                 statement.setString(4, trip.getIdAirportA());
                 statement.executeUpdate();
-                Util.showSuccess("Se ha registrado correctamente la información");
+
+                try(ResultSet generatedKeys = statement.getGeneratedKeys()){
+                    if(generatedKeys.next()){
+                        int newId = generatedKeys.getInt(1);
+                        Util.showSuccess("Se ha creado el viaje con el id: " + newId);
+                        return newId;
+                    }
+                }
+                
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return 0;
     }
 
     @Override

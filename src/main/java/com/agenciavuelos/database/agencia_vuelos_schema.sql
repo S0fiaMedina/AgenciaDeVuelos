@@ -269,7 +269,7 @@ CREATE TABLE flight_fare(
 	id INT NOT NULL AUTO_INCREMENT,
 	description VARCHAR(20) NOT NULL,
 	details TEXT,
-	value DOUBLE(7,3) NOT NULL,
+	value DOUBLE(10,3) NOT NULL,
 	CONSTRAINT flight_fare_pk PRIMARY KEY(id)
 )ENGINE = INNODB;
 
@@ -316,6 +316,7 @@ CREATE TABLE trip_booking_details(
 	id_trip_booking INT NOT NULL,
 	id_customer INT NOT NULL,
 	id_fare INT NOT NULL,
+	seat_number INT,
 	CONSTRAINT trip_booking_details_pk PRIMARY KEY(id),
 	CONSTRAINT booking_details_customers_fk FOREIGN KEY(id_customer) REFERENCES customer(id) ON DELETE CASCADE,
 	CONSTRAINT booking_details_flight_fares_fk FOREIGN KEY(id_fare) REFERENCES flight_fare(id),
@@ -387,3 +388,11 @@ CREATE TABLE trip_crew(
 )ENGINE = INNODB;
 
 
+
+
+
+
+/*
+- se pone id auto_incremental a clientes y se modifica el tipo de dato en las tablas con las que tiene enlace
+- se agrega constraint de unico al numero de documento del cliente
+*/

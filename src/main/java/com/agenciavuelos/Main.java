@@ -12,7 +12,7 @@ public class Main {
 
         String url = "jdbc:mysql://localhost:3306/AGENCIA_VUELOS";
         String user = "root";
-        String password = "root";
+        String password = "R00T_12345";
         
         Initializer initializer = new Initializer(url, user, password);
         AdminConsoleAdapter adminConsoleAdapter = new AdminConsoleAdapter(initializer);

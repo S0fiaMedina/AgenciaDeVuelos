@@ -165,7 +165,7 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
         List<TripBooking> tripBookings = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             String query = """
-                SELECT t.id, c.id, c.name, tp.booking_date, ff.value
+                SELECT tp.id, t.id, c.id, c.name, tp.booking_date, ff.value
                 FROM trip t
                 INNER JOIN trip_booking tp
                 ON tp.id_trip = t.id
@@ -182,11 +182,13 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         TripBooking tripBooking = new TripBooking();
+                        tripBooking.setId( resultSet.getInt("tp.id"));
                         tripBooking.setIdTrip(resultSet.getInt("t.id"));
                         tripBooking.setIdCustomer(resultSet.getInt("c.id"));
                         tripBooking.setNameCustomer(resultSet.getString("c.name"));
                         tripBooking.setBookingDate(resultSet.getString("tp.booking_date"));
                         tripBooking.setValueFare(resultSet.getInt("ff.value"));
+                        System.out.println(tripBooking.getId());
                         tripBookings.add(tripBooking);
                     }
                 }
@@ -259,5 +261,47 @@ public class TripBookingMySQLRepository implements TripBookingRepository{
             e.printStackTrace();
         }
         return tripBookings;
+    }
+
+    @Override
+    public Optional<TripBooking> findTripBookingOfCustomer(int idCustomer, int idTripBooking) {
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            String query = """
+                SELECT tp.id, t.id, c.id, c.name, tp.booking_date, c.document_number, t.tripe_date, tbd.seat_number
+                FROM trip t
+                INNER JOIN trip_booking tp
+                ON tp.id_trip = t.id
+                INNER JOIN trip_booking_details tbd
+                ON tp.id_trip = tbd.id_trip_booking
+                INNER JOIN customer c
+                ON c.id = tbd.id_customer
+                INNER JOIN flight_fare ff
+                ON ff.id = tbd.id_fare
+                WHERE tp.id = ? AND c.id = ?;
+            """;
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, idTripBooking);
+                statement.setInt(2, idCustomer);
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        TripBooking tripBooking = new TripBooking();
+                        tripBooking.setId( resultSet.getInt("tp.id"));
+                        tripBooking.setIdTrip(resultSet.getInt("t.id"));
+                        tripBooking.setIdCustomer(resultSet.getInt("c.id"));
+                        tripBooking.setNameCustomer(resultSet.getString("c.name"));
+                        tripBooking.setBookingDate(resultSet.getString("tp.booking_date"));
+                        tripBooking.setDocumentCustomer(resultSet.getString("c.document_number"));
+                        tripBooking.setTripDate( resultSet.getString("t.tripe_date"));
+                        tripBooking.setSeatNumber( resultSet.getInt("tbd.seat_number"));
+                        System.out.println(tripBooking.getId());
+                        return Optional.of(tripBooking);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
     }
 }

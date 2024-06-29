@@ -14,7 +14,8 @@ public class SalesAgentConsoleAdapter {
         "▶ (3) Gestión Reservas",
         "▶ (4) Gestión Clientes",
         "▶ (5) Consultar Tarifas de Vuelo",
-        "▶ (6) Consultar tipos de documento "
+        "▶ (6) Consultar tipos de documento ",
+        "▶ (7) Salir"
     };
 
     String header = """
@@ -29,10 +30,12 @@ public class SalesAgentConsoleAdapter {
     }
 
     public void run(){
-        System.out.println(header);
-        Util.printOptions(gestionOptions);
-        System.out.println(">> Escoja la opcion de su preferencia: ");
-        int selectedOption = Util.rangeValidator(1, gestionOptions.length);
+        boolean breaker = true;
+        while (breaker){
+            System.out.println(header);
+            Util.printOptions(gestionOptions);
+            System.out.println(">> Escoja la opcion de su preferencia: ");
+            int selectedOption = Util.rangeValidator(1, gestionOptions.length);
 
         switch (selectedOption) {
             case 1:
@@ -40,7 +43,7 @@ public class SalesAgentConsoleAdapter {
                 break;
         
             case 2:
-                // logica de gestion de vuelos
+                this.flightHandler();
                 break;
             
             case 3:
@@ -58,6 +61,36 @@ public class SalesAgentConsoleAdapter {
             case 6:
                 this.salesAgent.getDocumentTypeConsoleAdapter().searchDocumentDocumentType();
             break;
+
+            default: 
+                System.out.println("Adios, agente de venta$$");
+                breaker = false;
+            break;
+        }
+
+        }
+        
+
+    }
+
+    public void flightHandler(){
+        String[] options = {
+            "1. Consultar vuelo.",
+            "2. Consultar escalas de un trayecto."
+        };
+
+        System.out.println("********* GESTION DE VUELOS **********");
+        Util.printOptions(options);
+        int op = Util.getIntInput(">> Seleccione la opcion de su preferencia: ");
+
+        switch (op) {
+            case 1:
+                this.salesAgent.getFlightConnectionConsoleAdapter().searchFlightById();
+                break;
+        
+            case 2:
+                this.salesAgent.getFlightConnectionConsoleAdapter().searchFlightsByTrip();
+                break;
         }
 
     }

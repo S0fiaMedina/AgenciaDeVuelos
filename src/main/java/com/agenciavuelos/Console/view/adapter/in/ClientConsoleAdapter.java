@@ -28,7 +28,9 @@ public class ClientConsoleAdapter {
     }
 
     public void run(){
-        System.out.println(header);
+        boolean breaker = true;
+        while (true){
+            System.out.println(header);
         Util.printOptions(clientOptions);
         System.out.println(">> Digite la opcion de su preferencia: ");
         int optionSelected = Util.rangeValidator(1, clientOptions.length);
@@ -36,6 +38,7 @@ public class ClientConsoleAdapter {
         switch (optionSelected) {
             case 1:
                 // logica de buscar vuelos
+                // seria algo como this.client.get<Adaptador que necesites>.run() o una funcion en especifico si es compartido por otro rol
                 break;
         
             case 2:
@@ -49,7 +52,11 @@ public class ClientConsoleAdapter {
                 break;
                 
             default: 
+            System.out.println("Adios. cliente :D");
                 break;
+
+        }
+        
 
         }
     }
